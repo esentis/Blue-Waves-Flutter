@@ -31,6 +31,9 @@ dependencies:
   pedantic: ^1.9.2
   google_fonts: ^1.1.0
   lottie: ^0.6.0
+  dio: ^3.0.10
+  flutter_dotenv: ^2.1.0
+  logger: ^0.9.4
 
 dev_dependencies:
   flutter_test:
@@ -42,6 +45,7 @@ dev_dependencies:
 flutter:
   assets:
     - assets/images/
+    - .env
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
