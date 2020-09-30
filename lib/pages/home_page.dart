@@ -1,3 +1,4 @@
+import 'package:blue_waves_flutter/models/LoginMemberModel.dart';
 import 'package:blue_waves_flutter/models/RegisterMemberModel.dart';
 import 'package:blue_waves_flutter/pages/components/title.dart';
 import 'package:blue_waves_flutter/pages/components/tropical_island.dart';
@@ -40,17 +41,6 @@ class _BlueWavesState extends State<BlueWaves> {
           left: MediaQuery.of(context).size.width / 4,
           child: BlueWavesTitle(),
         ),
-        // Positioned(
-        //   left: MediaQuery.of(context).size.width / 4,
-        //   top: MediaQuery.of(context).size.height / 10,
-        //   bottom: 0,
-        //   child: Lottie.network(
-        //     'https://assets5.lottiefiles.com/datafiles/EkoZpNsbNMU956i/data.json',
-        //     animate: true,
-        //     repeat: true,
-        //     width: 250,
-        //   ),
-        // ),
         Positioned(
           bottom: 0,
           child: FlatButton(
@@ -78,6 +68,24 @@ class _BlueWavesState extends State<BlueWaves> {
             },
             child: const Text(
               'REGISTER MEMBER',
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 50,
+          left: 120,
+          child: FlatButton(
+            onPressed: () {
+              var lgnMember = LoginMemberModel(
+                userName: 'fff',
+                password: 'ffff!!',
+                rememberMe: false,
+              );
+
+              loginMember(lgnMember);
+            },
+            child: const Text(
+              'LOGIN MEMBER',
             ),
           ),
         ),
