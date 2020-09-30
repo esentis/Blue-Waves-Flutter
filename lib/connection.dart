@@ -1,3 +1,4 @@
+import 'package:blue_waves_flutter/models/LoginMemberModel.dart';
 import 'package:blue_waves_flutter/models/RegisterMemberModel.dart';
 import 'package:dio/dio.dart';
 import 'package:logger/logger.dart';
@@ -29,7 +30,7 @@ Future getBeaches() async {
   return response.data;
 }
 
-/// Returns all beaches.
+/// Registers a member. [rMember] has Username, Email, Password and ConfirmPassword
 Future registerMember(RegisterMemberModel rMember) async {
   Response response;
   try {
@@ -40,6 +41,24 @@ Future registerMember(RegisterMemberModel rMember) async {
       'confirmPassword': rMember.confirmPassword,
     });
     logger.i('Registering user.');
+    logger.i(response.data);
+  } on DioError catch (e) {
+    logger.i(e.response.data);
+    return e;
+  }
+  return response.data;
+}
+
+/// Logs in a user. [lgnMember] has Username, Password and RememberMe
+Future loginMember(LoginMemberModel lgnMember) async {
+  Response response;
+  try {
+    response = await blueWavesHttp.post('api/member/login', data: {
+      'userName': lgnMember.userName,
+      'password': lgnMember.password,
+      'rememberMe': lgnMember.rememberMe,
+    });
+    logger.i('Loging user.');
     logger.i(response.data);
   } on DioError catch (e) {
     logger.i(e.response.data);
