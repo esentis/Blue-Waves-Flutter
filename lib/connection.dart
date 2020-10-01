@@ -1,5 +1,3 @@
-import 'dart:convert';
-
 import 'package:blue_waves_flutter/models/BeacModel.dart';
 import 'package:blue_waves_flutter/models/LoginMemberModel.dart';
 import 'package:blue_waves_flutter/models/RegisterMemberModel.dart';
