@@ -1,3 +1,4 @@
+import 'package:blue_waves_flutter/models/BeacModel.dart';
 import 'package:blue_waves_flutter/models/LoginMemberModel.dart';
 import 'package:blue_waves_flutter/models/RegisterMemberModel.dart';
 import 'package:blue_waves_flutter/pages/components/title.dart';
@@ -77,15 +78,34 @@ class _BlueWavesState extends State<BlueWaves> {
           child: FlatButton(
             onPressed: () {
               var lgnMember = LoginMemberModel(
-                userName: 'fff',
-                password: 'ffff!!',
-                rememberMe: false,
+                userName: 'dummy',
+                password: 'dummy!!',
+                rememberMe: true,
               );
 
               loginMember(lgnMember);
             },
             child: const Text(
               'LOGIN MEMBER',
+            ),
+          ),
+        ),
+        Positioned(
+          bottom: 100,
+          left: 120,
+          child: FlatButton(
+            onPressed: () {
+              var beach = const Beach(
+                name: 'fff',
+                description: 'ffff!!',
+                latitude: 20,
+                longitute: 40,
+              );
+
+              addBeach(beach);
+            },
+            child: const Text(
+              'ADD BEACH',
             ),
           ),
         ),
