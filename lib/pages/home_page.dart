@@ -1,8 +1,8 @@
-import 'package:blue_waves_flutter/models/BeacModel.dart';
-import 'package:blue_waves_flutter/models/LoginMemberModel.dart';
-import 'package:blue_waves_flutter/models/RegisterMemberModel.dart';
+import 'package:blue_waves_flutter/models/BeachModel.dart';
+import 'package:blue_waves_flutter/models/MemberModel.dart';
 import 'package:blue_waves_flutter/pages/components/title.dart';
 import 'package:blue_waves_flutter/pages/components/tropical_island.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:blue_waves_flutter/connection.dart';
 
@@ -16,6 +16,19 @@ class BlueWaves extends StatefulWidget {
 }
 
 class _BlueWavesState extends State<BlueWaves> {
+  FirebaseAuth auth = FirebaseAuth.instance;
+  @override
+  void initState() {
+    super.initState();
+    auth.authStateChanges().listen((User user) {
+      if (user == null) {
+        logger.w('User is currently signed out');
+      } else {
+        logger.w('User is signed in');
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -57,15 +70,14 @@ class _BlueWavesState extends State<BlueWaves> {
           bottom: 0,
           left: 200,
           child: FlatButton(
-            onPressed: () {
-              var newMember = RegisterMemberModel(
-                userName: 'dummy',
-                email: 'dummy@dummy.gr',
+            onPressed: () async {
+              var newMember = Member(
+                email: '1@1.gr',
                 password: 'Dummy1!!',
-                confirmPassword: 'Dummy1!!',
+                displayName: 'Macho man',
+                photoUrl: 'www.google.com',
               );
-
-              registerMember(newMember);
+              await registerMember(newMember);
             },
             child: const Text(
               'REGISTER MEMBER',
@@ -77,13 +89,11 @@ class _BlueWavesState extends State<BlueWaves> {
           left: 120,
           child: FlatButton(
             onPressed: () {
-              var lgnMember = LoginMemberModel(
-                userName: 'dummy',
-                password: 'dummy!!',
-                rememberMe: true,
+              var lgnMember = Member(
+                email: '1@1.gr',
+                password: 'Dummy1!!',
               );
-
-              loginMember(lgnMember);
+              signInMember(lgnMember);
             },
             child: const Text(
               'LOGIN MEMBER',
@@ -109,6 +119,19 @@ class _BlueWavesState extends State<BlueWaves> {
             ),
           ),
         ),
+        Center(
+          child: TextButton(
+            onPressed: () {
+              signOutMember();
+            },
+            child: const Text(
+              'Sign out',
+              style: TextStyle(
+                fontSize: 45,
+              ),
+            ),
+          ),
+        )
       ],
     );
   }
