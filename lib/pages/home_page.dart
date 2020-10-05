@@ -1,5 +1,6 @@
-import 'package:blue_waves_flutter/models/BeachModel.dart';
-import 'package:blue_waves_flutter/models/MemberModel.dart';
+import 'package:blue_waves_flutter/controllers/beach_controller.dart';
+import 'package:blue_waves_flutter/models/Beach.dart';
+import 'package:blue_waves_flutter/models/Member.dart';
 import 'package:blue_waves_flutter/pages/components/title.dart';
 import 'package:blue_waves_flutter/pages/components/tropical_island.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -57,17 +58,6 @@ class _BlueWavesState extends State<BlueWaves> {
         ),
         Positioned(
           bottom: 0,
-          child: FlatButton(
-            onPressed: () {
-              getBeaches();
-            },
-            child: const Text(
-              'GET ALL BEACHES',
-            ),
-          ),
-        ),
-        Positioned(
-          bottom: 0,
           left: 200,
           child: FlatButton(
             onPressed: () async {
@@ -100,25 +90,6 @@ class _BlueWavesState extends State<BlueWaves> {
             ),
           ),
         ),
-        Positioned(
-          bottom: 100,
-          left: 120,
-          child: FlatButton(
-            onPressed: () {
-              var beach = const Beach(
-                name: 'fff',
-                description: 'ffff!!',
-                latitude: 20,
-                longitute: 40,
-              );
-
-              addBeach(beach);
-            },
-            child: const Text(
-              'ADD BEACH',
-            ),
-          ),
-        ),
         Center(
           child: TextButton(
             onPressed: () {
@@ -127,11 +98,46 @@ class _BlueWavesState extends State<BlueWaves> {
             child: const Text(
               'Sign out',
               style: TextStyle(
-                fontSize: 45,
+                fontSize: 20,
               ),
             ),
           ),
-        )
+        ),
+        Align(
+          alignment: Alignment.centerLeft,
+          child: TextButton(
+            onPressed: () {
+              addBeach(
+                const Beach(
+                  description: 'Thisss comes from flutter',
+                  name: 'esentis',
+                  latitude: 40.5,
+                  longitude: 24.5,
+                ),
+              );
+            },
+            child: const Text(
+              'Add Beach',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+        Align(
+          alignment: Alignment.centerRight,
+          child: TextButton(
+            onPressed: () {
+              getBeaches();
+            },
+            child: const Text(
+              'Get Beaches',
+              style: TextStyle(
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
       ],
     );
   }
