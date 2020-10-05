@@ -1,5 +1,5 @@
-import 'package:blue_waves_flutter/models/BeachModel.dart';
-import 'package:blue_waves_flutter/models/MemberModel.dart';
+import 'package:blue_waves_flutter/models/Beach.dart';
+import 'package:blue_waves_flutter/models/Member.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
@@ -15,41 +15,41 @@ BaseOptions httpOptions = BaseOptions(
     );
 Dio blueWavesHttp = Dio(httpOptions);
 
-/// Returns all beaches.
-Future getBeaches() async {
-  Response response;
-  try {
-    response = await blueWavesHttp.get('api/beach', queryParameters: {
-      'page': 1,
-      'itemsPerPage': 10,
-    });
-    logger.i('Getting all beaches.');
-    logger.i(response.data);
-  } on DioError catch (e) {
-    logger.i(e);
-    return e.type;
-  }
-  return response.data;
-}
+// /// Returns all beaches.
+// Future getBeaches() async {
+//   Response response;
+//   try {
+//     response = await blueWavesHttp.get('api/beach', queryParameters: {
+//       'page': 1,
+//       'itemsPerPage': 10,
+//     });
+//     logger.i('Getting all beaches.');
+//     logger.i(response.data);
+//   } on DioError catch (e) {
+//     logger.i(e);
+//     return e.type;
+//   }
+//   return response.data;
+// }
 
-/// Adds a beach. [beach] has Name, Description , Latitude and Longitude
-Future addBeach(Beach beach) async {
-  Response response;
-  try {
-    response = await blueWavesHttp.post('api/beach', data: {
-      'name': beach.name,
-      'description': beach.description,
-      'latitude': beach.latitude,
-      'longitude': beach.longitute,
-    });
-    logger.i('Adding beach.');
-    logger.i(response.data);
-  } on DioError catch (e) {
-    logger.i(e.response.data);
-    return e;
-  }
-  return response.data;
-}
+// /// Adds a beach. [beach] has Name, Description , Latitude and Longitude
+// Future addBeach(Beach beach) async {
+//   Response response;
+//   try {
+//     response = await blueWavesHttp.post('api/beach', data: {
+//       'name': beach.name,
+//       'description': beach.description,
+//       'latitude': beach.latitude,
+//       'longitude': beach.longitute,
+//     });
+//     logger.i('Adding beach.');
+//     logger.i(response.data);
+//   } on DioError catch (e) {
+//     logger.i(e.response.data);
+//     return e;
+//   }
+//   return response.data;
+// }
 
 /// Registers a member. [rMember] has Username, Email, Password and ConfirmPassword
 Future registerMember(Member rMember) async {
