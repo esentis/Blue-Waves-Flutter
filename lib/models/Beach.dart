@@ -4,7 +4,7 @@ class Beach {
   const Beach({
     @required this.description,
     @required this.latitude,
-    @required this.longitute,
+    @required this.longitude,
     @required this.name,
   })  : assert(
           description != null,
@@ -15,7 +15,7 @@ class Beach {
           'Latitude must not be null',
         ),
         assert(
-          longitute != null,
+          longitude != null,
           'Longitude must not be null',
         ),
         assert(
@@ -25,5 +25,5 @@ class Beach {
   final String name;
   final String description;
   final double latitude;
-  final double longitute;
+  final double longitude;
 }
