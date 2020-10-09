@@ -10,7 +10,7 @@ class BlueWavesTitle extends StatelessWidget {
         style: GoogleFonts.adventPro(
           fontWeight: FontWeight.bold,
           fontSize: 45,
-          color: const Color(0xff18A6EC),
+          color: const Color(0xff005295),
         ),
         children: <TextSpan>[
           TextSpan(
@@ -18,7 +18,7 @@ class BlueWavesTitle extends StatelessWidget {
             style: GoogleFonts.adventPro(
               fontWeight: FontWeight.bold,
               fontSize: 45,
-              color: const Color(0xff005295),
+              color: const Color(0xff18A6EC),
             ),
           ),
         ],
