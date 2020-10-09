@@ -1,19 +1,19 @@
-import 'package:blue_waves_flutter/models/Beach.dart';
-import 'package:blue_waves_flutter/models/Member.dart';
-import 'package:dio/dio.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:blue_waves_flutter/models/Beach.dart';
+// import 'package:blue_waves_flutter/models/Member.dart';
+// import 'package:dio/dio.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:logger/logger.dart';
 
 var logger = Logger();
 
-BaseOptions httpOptions = BaseOptions(
-    baseUrl: 'http://10.0.2.2:5000/',
-    receiveDataWhenStatusError: true,
-    connectTimeout: 6 * 1000, // 6 seconds
-    receiveTimeout: 6 * 1000,
-    headers: {'Content-Type': 'application/json'} // 6 seconds
-    );
-Dio blueWavesHttp = Dio(httpOptions);
+// BaseOptions httpOptions = BaseOptions(
+//     baseUrl: 'http://10.0.2.2:5000/',
+//     receiveDataWhenStatusError: true,
+//     connectTimeout: 6 * 1000, // 6 seconds
+//     receiveTimeout: 6 * 1000,
+//     headers: {'Content-Type': 'application/json'} // 6 seconds
+//     );
+// Dio blueWavesHttp = Dio(httpOptions);
 
 // /// Returns all beaches.
 // Future getBeaches() async {
@@ -24,6 +24,7 @@ Dio blueWavesHttp = Dio(httpOptions);
 //       'itemsPerPage': 10,
 //     });
 //     logger.i('Getting all beaches.');
+
 //     logger.i(response.data);
 //   } on DioError catch (e) {
 //     logger.i(e);
@@ -40,7 +41,7 @@ Dio blueWavesHttp = Dio(httpOptions);
 //       'name': beach.name,
 //       'description': beach.description,
 //       'latitude': beach.latitude,
-//       'longitude': beach.longitute,
+//       'longitude': beach.longitude,
 //     });
 //     logger.i('Adding beach.');
 //     logger.i(response.data);
@@ -51,37 +52,37 @@ Dio blueWavesHttp = Dio(httpOptions);
 //   return response.data;
 // }
 
-/// Registers a member. [rMember] has Username, Email, Password and ConfirmPassword
-Future registerMember(Member rMember) async {
-  UserCredential user;
-  try {
-    user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: rMember.email, password: rMember.password);
-    await user.user.updateProfile(
-        displayName: rMember.displayName, photoURL: rMember.photoUrl);
-    logger.i('Registering user.');
-    logger.i(user.user);
-  } catch (e) {
-    logger.i(e.toString());
-    return e;
-  }
-}
+// /// Registers a member. [rMember] has Username, Email, Password and ConfirmPassword
+// Future registerMember(Member rMember) async {
+//   UserCredential user;
+//   try {
+//     user = await FirebaseAuth.instance.createUserWithEmailAndPassword(
+//         email: rMember.email, password: rMember.password);
+//     await user.user.updateProfile(
+//         displayName: rMember.displayName, photoURL: rMember.photoUrl);
+//     logger.i('Registering user.');
+//     logger.i(user.user);
+//   } catch (e) {
+//     logger.i(e.toString());
+//     return e;
+//   }
+// }
 
-/// Registers a member. [rMember] has Username, Email, Password and ConfirmPassword
-Future signInMember(Member rMember) async {
-  UserCredential user;
-  try {
-    user = await FirebaseAuth.instance.signInWithEmailAndPassword(
-        email: rMember.email, password: rMember.password);
+// /// Registers a member. [rMember] has Username, Email, Password and ConfirmPassword
+// Future signInMember(Member rMember) async {
+//   UserCredential user;
+//   try {
+//     user = await FirebaseAuth.instance.signInWithEmailAndPassword(
+//         email: rMember.email, password: rMember.password);
 
-    logger.i('Logging user.');
-    logger.i(user.user);
-  } catch (e) {
-    logger.i(e.toString());
-    return e;
-  }
-}
+//     logger.i('Logging user.');
+//     logger.i(user.user);
+//   } catch (e) {
+//     logger.i(e.toString());
+//     return e;
+//   }
+// }
 
-Future signOutMember() async {
-  await FirebaseAuth.instance.signOut();
-}
+// Future signOutMember() async {
+//   await FirebaseAuth.instance.signOut();
+// }
