@@ -1,21 +1,19 @@
-import 'package:blue_waves_flutter/pages/components/title.dart';
-import 'package:blue_waves_flutter/pages/components/tropical_island.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:blue_waves_flutter/connection.dart';
 
-import 'components/abyss.dart';
-import 'components/birds.dart';
-import 'components/sun.dart';
-import 'components/waves.dart';
+import '../controllers/beach_controller.dart';
 
-class BlueWaves extends StatefulWidget {
+import 'components/animated_background/animated_background.dart';
+
+class HomePage extends StatefulWidget {
   @override
-  _BlueWavesState createState() => _BlueWavesState();
+  _HomePageState createState() => _HomePageState();
 }
 
-class _BlueWavesState extends State<BlueWaves> {
+class _HomePageState extends State<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
+
   @override
   void initState() {
     super.initState();
@@ -30,32 +28,25 @@ class _BlueWavesState extends State<BlueWaves> {
 
   @override
   Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        Container(
-          color: Colors.orange[50],
+    return SafeArea(
+      child: Scaffold(
+        floatingActionButton: GestureDetector(
+          onTap: () {
+            logger.i(getBeaches());
+            Navigator.pushNamed(context, '/beach');
+          },
+          child: const Icon(
+            Icons.description_outlined,
+            size: 50,
+          ),
         ),
-        Positioned(
-          left: 50,
-          child: Sun(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+        body: Stack(
+          children: [
+            const AnimatedBackground(),
+          ],
         ),
-        Positioned(
-          top: 0,
-          child: Birds(),
-        ),
-        Positioned(
-          child: TropicalIsland(),
-        ),
-        Positioned(
-          child: Waves(),
-        ),
-        Positioned(
-          top: MediaQuery.of(context).size.height / 13,
-          left: MediaQuery.of(context).size.width / 4,
-          child: BlueWavesTitle(),
-        ),
-        const Abyss(),
-      ],
+      ),
     );
   }
 }
