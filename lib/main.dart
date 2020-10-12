@@ -1,3 +1,4 @@
+import 'package:blue_waves_flutter/pages/beach_page.dart';
 import 'package:blue_waves_flutter/pages/home_page.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -23,15 +24,15 @@ class MyApp extends StatelessWidget {
       navigatorObservers: [
         FirebaseAnalyticsObserver(analytics: analytics),
       ],
+      routes: {
+        '/': (context) => HomePage(),
+        '/beach': (context) => BeachPage()
+      },
       theme: ThemeData(
         primarySwatch: Colors.blue,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: SafeArea(
-        child: Scaffold(
-          body: BlueWaves(),
-        ),
-      ),
+      initialRoute: '/',
     );
   }
 }
