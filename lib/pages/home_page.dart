@@ -1,9 +1,9 @@
+import 'package:blue_waves_flutter/controllers/beach_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:blue_waves_flutter/connection.dart';
 
-import '../controllers/beach_controller.dart';
-
+import 'beach_page.dart';
 import 'components/animated_background/animated_background.dart';
 
 class HomePage extends StatefulWidget {
@@ -31,9 +31,15 @@ class _HomePageState extends State<HomePage> {
     return SafeArea(
       child: Scaffold(
         floatingActionButton: GestureDetector(
-          onTap: () {
-            logger.i(getBeaches());
-            Navigator.pushNamed(context, '/beach');
+          onTap: () async {
+            var beaches = await getBeaches();
+            logger.i(beaches[0]['name']);
+            await Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => BeachPage(
+                          beach: beaches[2],
+                        )));
           },
           child: const Icon(
             Icons.description_outlined,

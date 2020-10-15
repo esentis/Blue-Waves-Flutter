@@ -32,7 +32,7 @@ class MyApp extends StatelessWidget {
       ],
       routes: {
         '/': (context) => HomePage(),
-        '/beach': (context) => BeachPage()
+        '/beach': (context) => const BeachPage()
       },
       theme: ThemeData(
         primarySwatch: Colors.blue,
