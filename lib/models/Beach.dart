@@ -6,6 +6,7 @@ class Beach {
     @required this.latitude,
     @required this.longitude,
     @required this.name,
+    @required this.images,
   })  : assert(
           description != null,
           'Description must not be null',
@@ -21,9 +22,14 @@ class Beach {
         assert(
           name != null,
           'Name must not be null',
+        ),
+        assert(
+          images != null,
+          'Images must not be null',
         );
   final String name;
   final String description;
   final double latitude;
   final double longitude;
+  final List<String> images;
 }
