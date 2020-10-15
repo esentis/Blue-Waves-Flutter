@@ -22,18 +22,18 @@ Future<void> addBeach(Beach beach) async {
         'description': beach.description,
         'longitude': beach.latitude,
         'latitude': beach.longitude,
+        'images': beach.images
       })
       .then((value) => logger.i('Beach Added'))
       .catchError((error) => logger.e('Failed to add beach: $error'));
 }
 
-Future<void> getBeaches() async {
+Future<List<Map<String, dynamic>>> getBeaches() async {
   var mappedBeaches = await beaches
       .orderBy('name')
       .startAfter(['Flutter'])
       .limit(5)
       .get()
       .then((querySnapshot) => querySnapshot.toBeach());
-  logger.i(mappedBeaches);
   return mappedBeaches;
 }
