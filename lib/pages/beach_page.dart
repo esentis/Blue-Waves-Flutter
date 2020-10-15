@@ -5,29 +5,29 @@ import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 class BeachPage extends StatefulWidget {
+  const BeachPage({this.beach});
+  final Map<String, dynamic> beach;
   @override
   _BeachPageState createState() => _BeachPageState();
 }
 
 class _BeachPageState extends State<BeachPage> {
   final Completer<GoogleMapController> _controller = Completer();
+  CameraPosition beachPlace;
+  Marker beachMarker;
+  @override
+  void initState() {
+    beachPlace = CameraPosition(
+      target: LatLng(widget.beach['latitude'], widget.beach['longitude']),
+      zoom: 14.4746,
+    );
+    beachMarker = Marker(
+      markerId: MarkerId('beachMarker'),
+      position: LatLng(widget.beach['latitude'], widget.beach['longitude']),
+    );
+    super.initState();
+  }
 
-  static final CameraPosition _kGooglePlex = const CameraPosition(
-    target: LatLng(40.0356861, 23.4733686),
-    zoom: 14.4746,
-  );
-
-  // var newCameraPosition = CameraPosition(
-  //   bearing: 192.8334901395799,
-  //   target: LatLng(40.0356861, 23.4733686),
-  //   tilt: 59.440717697143555,
-  //   zoom: 19.151926040649414,
-  // );
-  // static final CameraPosition _kLake = const CameraPosition(
-  //     bearing: 192.8334901395799,
-  //     target: LatLng(40.0356861, 23.4733686),
-  //     tilt: 59.440717697143555,
-  //     zoom: 19.151926040649414);
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -44,8 +44,8 @@ class _BeachPageState extends State<BeachPage> {
                   elevation: 40,
                   floating: true,
                   forceElevated: true,
-                  flexibleSpace: Image.asset(
-                    'assets/images/kryopigi.jpg',
+                  flexibleSpace: Image.network(
+                    widget.beach['images'][0],
                     fit: BoxFit.cover,
                   ),
                 ),
@@ -58,17 +58,12 @@ class _BeachPageState extends State<BeachPage> {
                           height: MediaQuery.of(context).size.height / 2,
                           child: GoogleMap(
                             mapType: MapType.normal,
-                            markers: {
-                              Marker(
-                                markerId: MarkerId('beachMarker'),
-                                position: const LatLng(40.0356861, 23.4733686),
-                              ),
-                            },
+                            markers: {beachMarker},
                             zoomControlsEnabled: true,
                             zoomGesturesEnabled: true,
                             mapToolbarEnabled: true,
                             myLocationButtonEnabled: false,
-                            initialCameraPosition: _kGooglePlex,
+                            initialCameraPosition: beachPlace,
                             onMapCreated: (GoogleMapController controller) {
                               _controller.complete(controller);
                             },
