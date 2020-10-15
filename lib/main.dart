@@ -1,5 +1,6 @@
 import 'package:blue_waves_flutter/pages/beach_page.dart';
 import 'package:blue_waves_flutter/pages/home_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -18,6 +19,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     var analytics = FirebaseAnalytics();
+    // 100 mb max cache memory.
+    FirebaseFirestore.instance.settings = const Settings(
+      persistenceEnabled: true,
+      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
+    );
     return MaterialApp(
       title: 'Blue Waves',
       debugShowCheckedModeBanner: false,
