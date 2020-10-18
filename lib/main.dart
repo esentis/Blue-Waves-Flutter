@@ -1,10 +1,12 @@
 import 'package:blue_waves_flutter/pages/beach_page.dart';
 import 'package:blue_waves_flutter/pages/home_page.dart';
+import 'package:blue_waves_flutter/states/loading_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -24,21 +26,30 @@ class MyApp extends StatelessWidget {
       persistenceEnabled: true,
       cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
     );
-    return MaterialApp(
-      title: 'Blue Waves',
-      debugShowCheckedModeBanner: false,
-      navigatorObservers: [
-        FirebaseAnalyticsObserver(analytics: analytics),
+    return MultiProvider(
+      providers: [
+        ListenableProvider<LoadingState>(
+          create: (_) => LoadingState(
+            isLoading: false,
+          ),
+        )
       ],
-      routes: {
-        '/': (context) => HomePage(),
-        '/beach': (context) => const BeachPage()
-      },
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-        visualDensity: VisualDensity.adaptivePlatformDensity,
+      child: MaterialApp(
+        title: 'Blue Waves',
+        debugShowCheckedModeBanner: false,
+        navigatorObservers: [
+          FirebaseAnalyticsObserver(analytics: analytics),
+        ],
+        routes: {
+          '/': (context) => HomePage(),
+          '/beach': (context) => const BeachPage()
+        },
+        theme: ThemeData(
+          primarySwatch: Colors.blue,
+          visualDensity: VisualDensity.adaptivePlatformDensity,
+        ),
+        initialRoute: '/',
       ),
-      initialRoute: '/',
     );
   }
 }
