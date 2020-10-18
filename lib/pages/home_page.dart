@@ -1,10 +1,11 @@
-import 'package:blue_waves_flutter/controllers/beach_controller.dart';
+import 'package:blue_waves_flutter/pages/beaches_stream.dart';
+import 'package:blue_waves_flutter/states/loading_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:blue_waves_flutter/connection.dart';
-
-import 'beach_page.dart';
 import 'components/animated_background/animated_background.dart';
+import 'components/loader.dart';
+import 'package:provider/provider.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -13,7 +14,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
-
+  bool isLoading = false;
   @override
   void initState() {
     super.initState();
@@ -28,28 +29,14 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+    var loader = context.watch<LoadingState>();
     return SafeArea(
       child: Scaffold(
-        floatingActionButton: GestureDetector(
-          onTap: () async {
-            var beaches = await getBeaches();
-            logger.i(beaches[0]['name']);
-            await Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) => BeachPage(
-                          beach: beaches[2],
-                        )));
-          },
-          child: const Icon(
-            Icons.description_outlined,
-            size: 50,
-          ),
-        ),
-        floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
         body: Stack(
           children: [
             const AnimatedBackground(),
+            AllBeaches(),
+            loader.isLoading ? const Loader() : const SizedBox(),
           ],
         ),
       ),
