@@ -29,11 +29,7 @@ Future<void> addBeach(Beach beach) async {
 }
 
 Future<List<Map<String, dynamic>>> getBeaches() async {
-  var mappedBeaches = await beaches
-      .orderBy('name')
-      .startAfter(['Flutter'])
-      .limit(5)
-      .get()
-      .then((querySnapshot) => querySnapshot.toBeach());
+  var mappedBeaches =
+      await beaches.get().then((querySnapshot) => querySnapshot.toBeach());
   return mappedBeaches;
 }
