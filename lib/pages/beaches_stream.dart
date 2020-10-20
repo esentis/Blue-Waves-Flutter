@@ -1,6 +1,7 @@
 import 'package:blue_waves_flutter/helpers/image_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import '../connection.dart';
 import 'beach_page.dart';
 
@@ -11,6 +12,7 @@ class AllBeaches extends StatefulWidget {
 
 class _AllBeachesState extends State<AllBeaches> {
   Query query = FirebaseFirestore.instance.collection('beaches');
+
   @override
   Widget build(BuildContext context) {
     var md = MediaQuery.of(context).size;
@@ -47,8 +49,41 @@ class _AllBeachesState extends State<AllBeaches> {
                     ),
                   );
                 },
-                child: BWavesImage(
-                  url: querySnapshot.docs[index].data()['images'][0],
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(
+                    vertical: 38.0,
+                    horizontal: 20,
+                  ),
+                  child: Column(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(120),
+                          boxShadow: [
+                            const BoxShadow(
+                              blurRadius: 40,
+                              spreadRadius: 5,
+                              color: Color(0xff18A6EC),
+                            ),
+                          ],
+                        ),
+                        child: Card(
+                          elevation: 40,
+                          child: BWavesImage(
+                            url: querySnapshot.docs[index].data()['images'][0],
+                          ),
+                        ),
+                      ),
+                      Text(
+                        querySnapshot.docs[index].data()['name'],
+                        style: GoogleFonts.adventPro(
+                          fontSize: 25,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white.withOpacity(0.8),
+                        ),
+                      )
+                    ],
+                  ),
                 ),
               ),
             ),
