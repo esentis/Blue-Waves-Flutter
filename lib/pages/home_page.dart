@@ -3,16 +3,19 @@ import 'dart:typed_data';
 
 import 'package:blue_waves_flutter/controllers/beach_controller.dart';
 import 'package:blue_waves_flutter/pages/beach_page.dart';
-import 'package:blue_waves_flutter/pages/beaches_stream.dart';
-import 'package:blue_waves_flutter/states/loading_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:blue_waves_flutter/connection.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:animate_do/animate_do.dart';
+
 import 'components/animated_background/animated_background.dart';
 import 'components/loader.dart';
-import 'package:provider/provider.dart';
+
+import 'dart:ui' as ui;
 
 class HomePage extends StatefulWidget {
   @override
@@ -22,16 +25,39 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isLoading = true;
+
   final Completer<GoogleMapController> _controller = Completer();
+  GoogleMapController mapController;
   CameraPosition greeceCamera;
   Marker beachMarker;
   var markers = [];
   BitmapDescriptor myMarker;
+  String _mapStyle;
+  User currentUser;
+  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
+    var data = await rootBundle.load(path);
+    var codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
+        targetWidth: width);
+    var fi = await codec.getNextFrame();
+    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))
+        .buffer
+        .asUint8List();
+  }
 
   Future<void> getAllMarkers() async {
-    var beaches = await getBeaches();
-    myMarker = await BitmapDescriptor.fromAssetImage(
-        const ImageConfiguration(size: Size(48, 48)), 'assets/marker.bmp');
+    var beaches;
+    try {
+      beaches = await getBeaches();
+    } catch (e) {
+      setState(() {
+        isLoading = false;
+      });
+      return logger.e(e);
+    }
+
+    var assetBytes = await getBytesFromAsset('assets/images/marker.png', 64);
+    myMarker = BitmapDescriptor.fromBytes(assetBytes);
+
     beaches.forEach(
       (beach) {
         markers.add(
@@ -41,8 +67,8 @@ class _HomePageState extends State<HomePage> {
             icon: myMarker,
             infoWindow: InfoWindow(
               title: beach['name'],
-              onTap: () {
-                Navigator.push(
+              onTap: () async {
+                await Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (context) => BeachPage(
@@ -64,63 +90,132 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
-
+    rootBundle.loadString('map_styles.txt').then((string) {
+      _mapStyle = string;
+    });
     getAllMarkers();
     auth.authStateChanges().listen((User user) {
       if (user == null) {
         logger.w('User is currently signed out');
       } else {
         logger.w('User is signed in');
+        currentUser = user;
       }
     });
     beachMarker = Marker(
       markerId: MarkerId('beachMarker'),
       position: const LatLng(39, 23),
     );
-
-    greeceCamera = const CameraPosition(
-      target: LatLng(38.2, 24.1),
-      zoom: 6,
-    );
+    auth.signOut();
   }
 
   @override
   Widget build(BuildContext context) {
-    var loader = context.watch<LoadingState>();
     return SafeArea(
       child: Scaffold(
         body: Stack(
           children: [
             const AnimatedBackground(),
-            // AllBeaches(),
-
-            loader.isLoading
-                ? const Loader()
-                : Positioned(
-                    bottom: 0,
-                    child: ClipRRect(
-                      borderRadius: const BorderRadius.only(
-                        topRight: Radius.circular(60),
-                        topLeft: Radius.circular(60),
-                      ),
-                      child: Container(
-                        height: MediaQuery.of(context).size.height / 1.8,
-                        width: MediaQuery.of(context).size.width,
-                        child: GoogleMap(
-                          mapType: MapType.normal,
-                          markers: {...markers},
-                          zoomControlsEnabled: true,
-                          zoomGesturesEnabled: true,
-                          mapToolbarEnabled: true,
-                          myLocationButtonEnabled: false,
-                          initialCameraPosition: greeceCamera,
-                          onMapCreated: (GoogleMapController controller) {
-                            _controller.complete(controller);
+            isLoading
+                ? const SizedBox()
+                : currentUser != null
+                    ? Positioned(
+                        left: MediaQuery.of(context).size.width / 3,
+                        top: MediaQuery.of(context).size.height / 5,
+                        child: FadeInDown(
+                          duration: const Duration(milliseconds: 900),
+                          child: Column(
+                            children: [
+                              Text(
+                                'Welcome back',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.adventPro(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                              ),
+                              Text(
+                                currentUser.displayName ?? 'No display name',
+                                textAlign: TextAlign.center,
+                                style: GoogleFonts.adventPro(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: const Color(0xff18A6EC),
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                      )
+                    : Center(
+                        child: TextButton(
+                          onPressed: () async {
+                            setState(() {
+                              isLoading = true;
+                            });
+                            try {
+                              // await auth.signInWithEmailAndPassword(
+                              //     email: 'dummy@dummy.gr', password: 'dummy');
+                              await auth.signInWithEmailAndPassword(
+                                  email: DotEnv().env['VAR_EMAIL'],
+                                  password: DotEnv().env['VAR_PASSWORD']);
+                              setState(() {
+                                isLoading = false;
+                                currentUser = auth.currentUser;
+                              });
+                            } catch (e) {
+                              setState(() {
+                                isLoading = false;
+                              });
+                              logger.e(e);
+                            }
                           },
+                          child: Text(
+                            'Sign in',
+                            style: GoogleFonts.adventPro(
+                              fontSize: 35,
+                            ),
+                          ),
                         ),
                       ),
-                    ),
-                  ),
+            isLoading
+                ? const Center(child: Loader())
+                : currentUser != null
+                    ? Positioned(
+                        bottom: 0,
+                        child: FadeInUp(
+                          delay: const Duration(milliseconds: 600),
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(60),
+                              topLeft: Radius.circular(60),
+                            ),
+                            child: Container(
+                              height: MediaQuery.of(context).size.height / 1.8,
+                              width: MediaQuery.of(context).size.width,
+                              child: GoogleMap(
+                                mapType: MapType.normal,
+                                markers: {...markers},
+                                zoomControlsEnabled: true,
+                                zoomGesturesEnabled: true,
+                                mapToolbarEnabled: true,
+                                myLocationButtonEnabled: false,
+                                initialCameraPosition: const CameraPosition(
+                                  target: LatLng(38.2, 24.1),
+                                  zoom: 6,
+                                ),
+                                onMapCreated: (GoogleMapController controller) {
+                                  mapController = controller;
+                                  mapController.setMapStyle(_mapStyle);
+                                  _controller.complete(controller);
+                                },
+                              ),
+                            ),
+                          ),
+                        ),
+                      )
+                    : const SizedBox(),
           ],
         ),
       ),
