@@ -106,7 +106,6 @@ class _HomePageState extends State<HomePage> {
       markerId: MarkerId('beachMarker'),
       position: const LatLng(39, 23),
     );
-    auth.signOut();
   }
 
   @override
