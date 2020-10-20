@@ -10,7 +10,7 @@ class Loader extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      color: Colors.black.withOpacity(0.4),
+      color: Colors.transparent,
       child: Transform.scale(
         scale: 0.5,
         child: Column(
