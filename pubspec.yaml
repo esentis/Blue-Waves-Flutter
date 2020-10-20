@@ -23,6 +23,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  animate_do: ^1.7.3
   cloud_firestore: ^0.14.1+2
   cupertino_icons: ^1.0.0
   dio: ^3.0.10
@@ -50,6 +51,7 @@ flutter:
   assets:
     - assets/images/
     - .env
+    - map_styles.txt
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
