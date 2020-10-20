@@ -1,5 +1,4 @@
 import 'package:blue_waves_flutter/helpers/image_provider.dart';
-import 'package:blue_waves_flutter/pages/components/my_shape.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,6 +12,7 @@ class AllBeaches extends StatefulWidget {
 
 class _AllBeachesState extends State<AllBeaches> {
   Query query = FirebaseFirestore.instance.collection('beaches');
+
   @override
   Widget build(BuildContext context) {
     var md = MediaQuery.of(context).size;
@@ -67,15 +67,10 @@ class _AllBeachesState extends State<AllBeaches> {
                             ),
                           ],
                         ),
-                        child: ClipPath(
-                          clipper: MyClipper(),
-                          clipBehavior: Clip.antiAliasWithSaveLayer,
-                          child: Card(
-                            elevation: 40,
-                            child: BWavesImage(
-                              url: querySnapshot.docs[index].data()['images']
-                                  [0],
-                            ),
+                        child: Card(
+                          elevation: 40,
+                          child: BWavesImage(
+                            url: querySnapshot.docs[index].data()['images'][0],
                           ),
                         ),
                       ),
