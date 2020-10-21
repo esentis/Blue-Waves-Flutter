@@ -1,5 +1,7 @@
 import 'package:blue_waves_flutter/pages/beach_page.dart';
 import 'package:blue_waves_flutter/pages/home_page.dart';
+import 'package:blue_waves_flutter/pages/login_page.dart';
+import 'package:blue_waves_flutter/pages/register_page/register_page.dart';
 import 'package:blue_waves_flutter/states/loading_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
@@ -44,7 +46,9 @@ class MyApp extends StatelessWidget {
         ],
         routes: {
           '/': (context) => HomePage(),
-          '/beach': (context) => const BeachPage()
+          '/beach': (context) => const BeachPage(),
+          '/register': (context) => RegisterPage(),
+          '/login': (context) => LoginPage(),
         },
         theme: ThemeData(
           primarySwatch: Colors.blue,

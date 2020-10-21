@@ -462,6 +462,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.2.0"
+  string_extensions:
+    dependency: "direct main"
+    description:
+      name: string_extensions
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.0.21"
   string_scanner:
     dependency: transitive
     description:

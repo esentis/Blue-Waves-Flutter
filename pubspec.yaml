@@ -38,6 +38,7 @@ dependencies:
   lottie: ^0.6.0
   pedantic: ^1.9.2
   provider: ^4.3.2+2
+  string_extensions: ^0.0.21
   wave: ^0.1.0
 
 dev_dependencies:
