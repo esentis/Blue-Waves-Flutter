@@ -1,7 +1,12 @@
 import 'dart:async';
+import 'package:blue_waves_flutter/controllers/beach_controller.dart';
+import 'package:blue_waves_flutter/models/Review.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+import '../connection.dart';
 
 class BeachPage extends StatefulWidget {
   const BeachPage({this.beach});
@@ -14,6 +19,36 @@ class _BeachPageState extends State<BeachPage> {
   final Completer<GoogleMapController> _controller = Completer();
   CameraPosition beachPlace;
   Marker beachMarker;
+  bool hasUserReviewed = false;
+  int ratingSum = 0;
+  double actualRating = 0;
+  List foundReviews = [];
+  int totalRatings = 0;
+
+  Future<void> getReviews() async {
+    await reviews
+        .where('beachId', isEqualTo: widget.beach['id'])
+        .get()
+        .then((value) => foundReviews = value.docs);
+
+    if (foundReviews.isNotEmpty) {
+      logger.wtf('Ratings found iterating on them');
+      foundReviews.forEach((element) {
+        ratingSum += element['rating'];
+      });
+      actualRating = ratingSum / foundReviews.length;
+      totalRatings = foundReviews.length;
+    }
+
+    logger.i('Found ${foundReviews.length} reviews');
+    logger.i('Actual rating is $actualRating');
+
+    hasUserReviewed = foundReviews.any((element) =>
+        element['username'] == FirebaseAuth.instance.currentUser.displayName);
+    logger.i('Has user reviewed the beach ? $hasUserReviewed');
+    setState(() {});
+  }
+
   @override
   void initState() {
     beachPlace = CameraPosition(
@@ -24,6 +59,8 @@ class _BeachPageState extends State<BeachPage> {
       markerId: MarkerId('beachMarker'),
       position: LatLng(widget.beach['latitude'], widget.beach['longitude']),
     );
+
+    getReviews();
     super.initState();
   }
 
@@ -72,16 +109,49 @@ class _BeachPageState extends State<BeachPage> {
                                 ),
                               ],
                             ),
-                            child: Text(
-                              widget.beach['description'],
-                              style: GoogleFonts.adventPro(
-                                fontSize: 22,
-                              ),
+                            child: Column(
+                              children: [
+                                Text(
+                                    'Rating : $actualRating out of $totalRatings '),
+                                Text(
+                                  widget.beach['description'],
+                                  style: GoogleFonts.adventPro(
+                                    fontSize: 22,
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         );
                       } else if (index == 1) {
-                        return const SizedBox();
+                        return GestureDetector(
+                          onTap: () {
+                            addReview(Review(
+                              beachId: widget.beach['id'],
+                              cons: 'A bit hard to get there',
+                              pros: 'Cleanest beach ever',
+                              rating: 10,
+                              userID: FirebaseAuth.instance.currentUser.uid,
+                              username:
+                                  FirebaseAuth.instance.currentUser.displayName,
+                            ));
+                            hasUserReviewed = true;
+                            actualRating =
+                                (ratingSum + 10) / (totalRatings + 1);
+                            totalRatings += 1;
+
+                            setState(() {});
+                          },
+                          child: hasUserReviewed
+                              ? const Center(
+                                  child: Text(
+                                      'YOU HAVE ALREADY REVIEWED THE BEACH'))
+                              : const Icon(
+                                  Icons.star,
+                                  size: 70,
+                                  color: Colors.red,
+                                ),
+                        );
                         // return Container(
                         //   width: 150,
                         //   height: 150,
