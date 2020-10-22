@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'package:blue_waves_flutter/controllers/beach_controller.dart';
+import 'package:blue_waves_flutter/models/Favorite.dart';
 import 'package:blue_waves_flutter/models/Review.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -20,6 +21,7 @@ class _BeachPageState extends State<BeachPage> {
   CameraPosition beachPlace;
   Marker beachMarker;
   bool hasUserReviewed = false;
+  bool isBeachFavorited = false;
   int ratingSum = 0;
   double actualRating = 0;
   List foundReviews = [];
@@ -30,6 +32,23 @@ class _BeachPageState extends State<BeachPage> {
         .where('beachId', isEqualTo: widget.beach['id'])
         .get()
         .then((value) => foundReviews = value.docs);
+
+    await favorites
+        .where(
+          'userId',
+          isEqualTo: FirebaseAuth.instance.currentUser.uid,
+        )
+        .where(
+          'beachId',
+          isEqualTo: widget.beach['id'],
+        )
+        .get()
+        .then((value) {
+      if (value.docs.isNotEmpty) {
+        logger.wtf('BEACH WAS FAVORITED AND IT SHOULD SHOW TO REMOVE');
+        isBeachFavorited = true;
+      }
+    });
 
     if (foundReviews.isNotEmpty) {
       logger.wtf('Ratings found iterating on them');
@@ -124,33 +143,56 @@ class _BeachPageState extends State<BeachPage> {
                           ),
                         );
                       } else if (index == 1) {
-                        return GestureDetector(
-                          onTap: () {
-                            addReview(Review(
-                              beachId: widget.beach['id'],
-                              cons: 'A bit hard to get there',
-                              pros: 'Cleanest beach ever',
-                              rating: 10,
-                              userID: FirebaseAuth.instance.currentUser.uid,
-                              username:
-                                  FirebaseAuth.instance.currentUser.displayName,
-                            ));
-                            hasUserReviewed = true;
-                            actualRating =
-                                (ratingSum + 10) / (totalRatings + 1);
-                            totalRatings += 1;
+                        return Row(
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                addReview(Review(
+                                  beachId: widget.beach['id'],
+                                  cons: 'A bit hard to get there',
+                                  pros: 'Cleanest beach ever',
+                                  rating: 10,
+                                  userID: FirebaseAuth.instance.currentUser.uid,
+                                  username: FirebaseAuth
+                                      .instance.currentUser.displayName,
+                                ));
+                                hasUserReviewed = true;
+                                actualRating =
+                                    (ratingSum + 10) / (totalRatings + 1);
+                                totalRatings += 1;
 
-                            setState(() {});
-                          },
-                          child: hasUserReviewed
-                              ? const Center(
-                                  child: Text(
-                                      'YOU HAVE ALREADY REVIEWED THE BEACH'))
-                              : const Icon(
-                                  Icons.star,
-                                  size: 70,
-                                  color: Colors.red,
-                                ),
+                                setState(() {});
+                              },
+                              child: hasUserReviewed
+                                  ? const Center(
+                                      child: Text(
+                                          'YOU HAVE ALREADY REVIEWED THE BEACH'))
+                                  : const Icon(
+                                      Icons.star,
+                                      size: 70,
+                                      color: Colors.red,
+                                    ),
+                            ),
+                            TextButton(
+                              onPressed: () async {
+                                await addFavorite(
+                                  Favorite(
+                                    beachId: widget.beach['id'],
+                                    userId:
+                                        FirebaseAuth.instance.currentUser.uid,
+                                  ),
+                                );
+                                setState(() {
+                                  isBeachFavorited
+                                      ? isBeachFavorited = false
+                                      : isBeachFavorited = true;
+                                });
+                              },
+                              child: isBeachFavorited
+                                  ? Text('Remove from favorites ?')
+                                  : Text('Add to favorites'),
+                            ),
+                          ],
                         );
                         // return Container(
                         //   width: 150,

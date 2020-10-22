@@ -1,4 +1,5 @@
 import 'package:blue_waves_flutter/models/Beach.dart';
+import 'package:blue_waves_flutter/models/Favorite.dart';
 import 'package:blue_waves_flutter/models/Member.dart';
 import 'package:blue_waves_flutter/models/Review.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,6 +16,10 @@ CollectionReference reviews = FirebaseFirestore.instance.collection('reviews');
 
 // Users DB references
 CollectionReference users = FirebaseFirestore.instance.collection('users');
+
+// Favorites DB references
+CollectionReference favorites =
+    FirebaseFirestore.instance.collection('favorites');
 
 /// Registers a user with the following parameters.
 /// ### Member model
@@ -78,6 +83,44 @@ Future<void> addReview(Review review) async {
         'rating': review.rating,
       })
       .then((value) => logger.i('Beach review added'))
+      .catchError((onError) => logger.e(onError));
+}
+
+Future<void> addFavorite(Favorite favorite) async {
+  QuerySnapshot querySnapshot;
+  DocumentReference docRef;
+  // Checking if user has already reviewed the beach
+  await favorites
+      .where(
+        'userId',
+        isEqualTo: favorite.userId,
+      )
+      .where('beachId', isEqualTo: favorite.beachId)
+      .get()
+      .then((snapshot) => querySnapshot = snapshot);
+
+  if (querySnapshot.docs.isNotEmpty) {
+    await favorites
+        .doc(querySnapshot.docs.first.data()['id'])
+        .delete()
+        .then((value) => logger.e('Favorite removed'));
+    return logger.e('Beach removed from favorites.');
+  }
+
+  // If we are ok to procceed we add the review.
+  await favorites.add({
+    'beachId': favorite.beachId,
+    'userId': favorite.userId,
+  }).then((value) {
+    logger.i('Beach added to favorites!');
+    docRef = value;
+  }).catchError((onError) => logger.e(onError));
+
+  await favorites
+      .doc(docRef.id)
+      // ignore: unnecessary_string_interpolations
+      .update({'id': '${docRef.id}'})
+      .then((value) => logger.i('Favorite beach id UPDATED'))
       .catchError((onError) => logger.e(onError));
 }
 

@@ -1,34 +1,30 @@
 import 'package:animate_do/animate_do.dart';
-import 'package:blue_waves_flutter/controllers/beach_controller.dart';
-import 'package:blue_waves_flutter/models/Member.dart';
+import 'package:blue_waves_flutter/pages/components/loader.dart';
 import 'package:blue_waves_flutter/pages/register_page/components/blue_waves_textfield.dart';
+import 'package:blue_waves_flutter/states/loading_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'home_page.dart';
 
-import 'package:string_extensions/string_extensions.dart';
+import 'package:provider/provider.dart';
 
 import '../connection.dart';
 import 'components/animated_background/animated_background.dart';
 
-class LoginPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     var auth = FirebaseAuth.instance;
     var emailController = TextEditingController();
     var passwordController = TextEditingController();
-    var usernameController = TextEditingController();
-    void checkCredentials() {
-      if (!emailController.text.isMail()) {
-        return logger.i('Email is not valid');
-      }
-      registerUser(Member(
-        displayName: usernameController.text,
-        email: emailController.text,
-        password: passwordController.text,
-      ));
-      Navigator.popAndPushNamed(context, '/');
-    }
+    var loadingState = context.watch<LoadingState>();
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -51,11 +47,15 @@ class LoginPage extends StatelessWidget {
                 ),
                 TextButton(
                   onPressed: () async {
+                    loadingState.toggleLoading();
                     try {
+                      // await auth.signInWithEmailAndPassword(
+                      //     email: emailController.text,
+                      //     password: passwordController.text);
                       await auth.signInWithEmailAndPassword(
-                          email: emailController.text,
-                          password: passwordController.text);
-                      await Navigator.popAndPushNamed(context, '/');
+                          email: 'esentakos@yahoo.gr', password: 'lammerz88!!');
+                      loadingState.toggleLoading();
+                      await Get.to(HomePage());
                     } catch (e) {
                       logger.e(e);
                     }
@@ -83,6 +83,7 @@ class LoginPage extends StatelessWidget {
               ],
             ),
           ),
+          loadingState.isLoading ? const Loader() : const SizedBox(),
         ]),
       ),
     );
