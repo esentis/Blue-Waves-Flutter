@@ -32,11 +32,13 @@ dependencies:
   firebase_auth: ^0.18.1+1
   firebase_core: ^0.5.0
   flutter_dotenv: ^2.1.0
+  get: ^3.13.2
   google_fonts: ^1.1.0
   google_maps_flutter: ^1.0.2
   logger: ^0.9.4
   lottie: ^0.6.0
   pedantic: ^1.9.2
+  permission_handler: ^5.0.1+1
   provider: ^4.3.2+2
   string_extensions: ^0.0.21
   wave: ^0.1.0

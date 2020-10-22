@@ -5,6 +5,7 @@ class Review {
   final int rating;
   final String userID;
   final String username;
+
   const Review({
     this.beachId,
     this.cons,

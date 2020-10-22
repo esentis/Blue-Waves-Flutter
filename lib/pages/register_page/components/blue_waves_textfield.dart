@@ -3,8 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 
 class BWTextField extends StatelessWidget {
   const BWTextField({
-    @required this.emailController,
     @required this.labelText,
+    this.emailController,
     this.obscureText = false,
     Key key,
   }) : super(key: key);

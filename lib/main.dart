@@ -1,5 +1,6 @@
 import 'package:blue_waves_flutter/pages/beach_page.dart';
 import 'package:blue_waves_flutter/pages/home_page.dart';
+import 'package:blue_waves_flutter/pages/landing_page.dart';
 import 'package:blue_waves_flutter/pages/login_page.dart';
 import 'package:blue_waves_flutter/pages/register_page/register_page.dart';
 import 'package:blue_waves_flutter/states/loading_state.dart';
@@ -9,6 +10,7 @@ import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 void main() async {
@@ -38,23 +40,37 @@ class MyApp extends StatelessWidget {
           ),
         )
       ],
-      child: MaterialApp(
+      child: GetMaterialApp(
         title: 'Blue Waves',
         debugShowCheckedModeBanner: false,
         navigatorObservers: [
           FirebaseAnalyticsObserver(analytics: analytics),
         ],
-        routes: {
-          '/': (context) => HomePage(),
-          '/beach': (context) => const BeachPage(),
-          '/register': (context) => RegisterPage(),
-          '/login': (context) => LoginPage(),
-        },
         theme: ThemeData(
           primarySwatch: Colors.blue,
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         initialRoute: '/',
+        getPages: [
+          GetPage(name: '/', page: () => LandingPage()),
+          GetPage(
+            name: '/home',
+            page: () => HomePage(),
+          ),
+          GetPage(
+            name: '/beach',
+            page: () => const BeachPage(),
+            transition: Transition.fadeIn,
+          ),
+          GetPage(
+            name: '/register',
+            page: () => RegisterPage(),
+          ),
+          GetPage(
+            name: '/login',
+            page: () => LoginPage(),
+          ),
+        ],
       ),
     );
   }
