@@ -1,8 +1,4 @@
 import 'dart:async';
-import 'dart:typed_data';
-
-import 'package:blue_waves_flutter/controllers/beach_controller.dart';
-import 'package:blue_waves_flutter/pages/beach_page.dart';
 import 'package:blue_waves_flutter/pages/components/animated_background/animated_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
