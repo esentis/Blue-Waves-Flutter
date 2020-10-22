@@ -49,11 +49,10 @@ class _LoginPageState extends State<LoginPage> {
                   onPressed: () async {
                     loadingState.toggleLoading();
                     try {
-                      // await auth.signInWithEmailAndPassword(
-                      //     email: emailController.text,
-                      //     password: passwordController.text);
                       await auth.signInWithEmailAndPassword(
-                          email: 'esentakos@yahoo.gr', password: 'lammerz88!!');
+                          email: emailController.text,
+                          password: passwordController.text);
+
                       loadingState.toggleLoading();
                       await Get.to(HomePage());
                     } catch (e) {
