@@ -45,7 +45,7 @@ Future<void> registerUser(Member user) async {
       'id': userCredential.user.uid,
       'reviews': [],
     });
-  }).catchError((onError) => logger.e(onError));
+  });
 }
 
 /// Adds a review with the following parameters.

@@ -25,6 +25,8 @@ lib/generated_plugin_registrant.dart
 **/android/local.properties
 **/android/app/google-services.json
 **/android/**/GeneratedPluginRegistrant.java
+**/android/app/src/main/AndroidManifest.xml
+
 
 # iOS/XCode related
 **/ios/**/*.mode1v3

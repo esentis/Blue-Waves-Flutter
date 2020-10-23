@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:blue_waves_flutter/controllers/beach_controller.dart';
+import 'package:blue_waves_flutter/models/Beach.dart';
 import 'package:blue_waves_flutter/pages/beach_page.dart';
 import 'package:blue_waves_flutter/states/loading_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -13,7 +14,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:lottie/lottie.dart' as lottie;
-import 'package:permission_handler/permission_handler.dart';
 
 import 'package:provider/provider.dart';
 
@@ -39,7 +39,6 @@ class _HomePageState extends State<HomePage> {
   var markers = [];
   BitmapDescriptor myMarker;
   String _mapStyle;
-  User currentUser;
 
   /// Method to magically create custom marker !!
   static Future<Uint8List> getBytesFromAsset(String path, int width) async {
@@ -54,13 +53,13 @@ class _HomePageState extends State<HomePage> {
 
   /// Method to create a list of Markers and set them to the map.
   Future<void> getAllMarkers() async {
+    await rootBundle.loadString('map_styles.txt').then((string) {
+      _mapStyle = string;
+    });
     var beaches;
     try {
       beaches = await getBeaches();
     } catch (e) {
-      setState(() {
-        isLoading = false;
-      });
       return logger.e(e);
     }
 
@@ -91,17 +90,7 @@ class _HomePageState extends State<HomePage> {
   void initState() {
     super.initState();
 
-    rootBundle.loadString('map_styles.txt').then((string) {
-      _mapStyle = string;
-    });
     getAllMarkers();
-    // Checking if there is currently user logged
-    if (FirebaseAuth.instance.currentUser == null) {
-      logger.e('no user logged');
-    } else {
-      logger.wtf('user is logged');
-      currentUser = FirebaseAuth.instance.currentUser;
-    }
   }
 
   @override
@@ -128,30 +117,28 @@ class _HomePageState extends State<HomePage> {
                               onPressed: () {
                                 // addReview('0gaLkHoKgjeBovoMj76l');
 
-                                // addBeach(
-                                //   Beach(
-                                //     description:
-                                //         'Στη χερσόνησο της Σιθωνίας, στην ανατολική πλευρά, υπάρχει ένα σύμπλεγμα από παραλίες, γνωστές ως Καβουρότρυπες. Πρόκειται για μικρούς κολπίσκους, κρυμμένους πίσω από ένα υπέροχο πευκοδάσος, με κάτασπρες μικρές αμμουδιές, με κρυστάλλινα τιρκουάζ νερά, με λευκά βράχια και πυκνά πεύκα που φτάνουν μέχρι το κύμα.',
-                                //     images: [
-                                //       'https://i.imgur.com/qqahW7S.jpg',
-                                //       'https://i.imgur.com/B08wCht.jpg',
-                                //       'https://i.imgur.com/jRpHwLG.jpg',
-                                //       'https://i.imgur.com/A2O0qU7.jpg',
-                                //     ],
-                                //     latitude: 40.1255055,
-                                //     longitude: 23.9700915,
-                                //     name: 'Καβουρότρυπες',
-                                //   ),
-                                // );
+                                addBeach(
+                                  // ignore: missing_required_param
+                                  const Beach(
+                                    description:
+                                        'Σε απόσταση 4 χιλιομέτρων από τον οικισμό της Ελαφονήσου, στη νότια πλευρά του νησιού βρίσκονται οι δίδυμες παραλίες του Σίμου (μικρή παραλία) και του Σαρακήνικου (μεγάλη παραλία ή Τσερατσίνικο για τους ντόπιους). Η πρόσβαση γίνεται με αυτοκίνητο ενώ κατά τους καλοκαιρινούς μήνες εκτελούνται δρομολόγια με καΐκι από το παλιό λιμάνι της Ελαφονήσου (Σκάλα).',
+                                    images: [
+                                      'https://i.imgur.com/czFwk0y.jpg',
+                                      'https://i.imgur.com/lNKmoXb.jpg',
+                                      'https://i.imgur.com/hj5LcIp.jpg',
+                                    ],
+                                    latitude: 36.46733558,
+                                    longitude: 22.98053384,
+                                    name: 'Σίμος',
+                                  ),
+                                );
                               },
                               child: const Text('TestButton'),
                             ),
                             GestureDetector(
-                              onTap: () {
-                                setState(() async {
-                                  await auth.signOut();
-                                  await Get.to(LandingPage());
-                                });
+                              onTap: () async {
+                                await auth.signOut();
+                                await Get.to(LandingPage());
                                 // Navigator.popAndPushNamed(context, '/');
                               },
                               child: lottie.Lottie.asset(
@@ -169,15 +156,6 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                               ),
                             ),
-                            Text(
-                              currentUser?.displayName ?? 'No display name',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.adventPro(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: const Color(0xff18A6EC),
-                              ),
-                            )
                           ],
                         ),
                       ),

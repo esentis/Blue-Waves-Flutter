@@ -1,32 +1,27 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves_flutter/controllers/beach_controller.dart';
 import 'package:blue_waves_flutter/models/Member.dart';
+import 'package:blue_waves_flutter/pages/components/loader.dart';
+import 'package:blue_waves_flutter/states/loading_state.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import '../../connection.dart';
 import '../components/animated_background/animated_background.dart';
 import 'package:string_extensions/string_extensions.dart';
 
+import 'package:provider/provider.dart';
+
 import 'components/blue_waves_textfield.dart';
 
 class RegisterPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    var loadingState = context.watch<LoadingState>();
     var emailController = TextEditingController();
     var passwordController = TextEditingController();
     var usernameController = TextEditingController();
-    void checkCredentials() async {
-      if (!emailController.text.isMail()) {
-        return logger.i('Email is not valid');
-      }
-      await registerUser(Member(
-        displayName: usernameController.text,
-        email: emailController.text,
-        password: passwordController.text,
-      ));
-      await Navigator.popAndPushNamed(context, '/');
-    }
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
@@ -52,8 +47,25 @@ class RegisterPage extends StatelessWidget {
                   obscureText: true,
                 ),
                 FlatButton(
-                  onPressed: () {
-                    checkCredentials();
+                  onPressed: () async {
+                    loadingState.toggleLoading();
+                    if (!emailController.text.isMail()) {
+                      return logger.i('Email is not valid');
+                    }
+                    try {
+                      await registerUser(
+                        Member(
+                          displayName: usernameController.text,
+                          email: emailController.text,
+                          password: passwordController.text,
+                        ),
+                      );
+                      loadingState.toggleLoading();
+                      await Get.offAllNamed('/home');
+                    } catch (e) {
+                      loadingState.toggleLoading();
+                      logger.e(e);
+                    }
                   },
                   child: Text(
                     'Εγγραφή',
@@ -80,6 +92,7 @@ class RegisterPage extends StatelessWidget {
               ],
             ),
           ),
+          loadingState.isLoading ? const Loader() : const SizedBox(),
         ]),
       ),
     );

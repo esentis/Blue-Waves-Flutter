@@ -6,7 +6,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'home_page.dart';
 
 import 'package:provider/provider.dart';
 
@@ -48,14 +47,16 @@ class _LoginPageState extends State<LoginPage> {
                 TextButton(
                   onPressed: () async {
                     loadingState.toggleLoading();
+
                     try {
                       await auth.signInWithEmailAndPassword(
                           email: emailController.text,
                           password: passwordController.text);
 
                       loadingState.toggleLoading();
-                      await Get.to(HomePage());
+                      await Get.offAllNamed('/home');
                     } catch (e) {
+                      loadingState.toggleLoading();
                       logger.e(e);
                     }
                   },
@@ -68,7 +69,7 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 FlatButton(
                   onPressed: () {
-                    Navigator.popAndPushNamed(context, '/');
+                    Get.back();
                   },
                   child: Text(
                     'Επιστροφή στην αρχική',

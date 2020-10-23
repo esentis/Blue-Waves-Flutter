@@ -189,8 +189,8 @@ class _BeachPageState extends State<BeachPage> {
                                 });
                               },
                               child: isBeachFavorited
-                                  ? Text('Remove from favorites ?')
-                                  : Text('Add to favorites'),
+                                  ? const Text('Remove from favorites ?')
+                                  : const Text('Add to favorites'),
                             ),
                           ],
                         );
