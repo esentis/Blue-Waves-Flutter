@@ -1,8 +1,6 @@
-import 'dart:async';
 import 'package:blue_waves_flutter/pages/components/animated_background/animated_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:blue_waves_flutter/connection.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:animate_do/animate_do.dart';
 
@@ -14,21 +12,9 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future redirectUser() async {
-    await Navigator.popAndPushNamed(context, '/home');
-  }
-
   @override
   void initState() {
     super.initState();
-    auth.authStateChanges().listen((User user) {
-      if (user == null) {
-        logger.w('User is currently signed out');
-      } else {
-        logger.w('${user.displayName} is signed in ');
-        redirectUser();
-      }
-    });
   }
 
   @override
