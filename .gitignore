@@ -23,6 +23,7 @@ lib/generated_plugin_registrant.dart
 **/android/gradlew.bat
 **/android/key.properties
 **/android/local.properties
+**/android/app/google-services.json
 **/android/**/GeneratedPluginRegistrant.java
 
 # iOS/XCode related
