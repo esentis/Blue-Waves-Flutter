@@ -117,21 +117,21 @@ class _HomePageState extends State<HomePage> {
                               onPressed: () {
                                 // addReview('0gaLkHoKgjeBovoMj76l');
 
-                                addBeach(
-                                  // ignore: missing_required_param
-                                  const Beach(
-                                    description:
-                                        'Σε απόσταση 4 χιλιομέτρων από τον οικισμό της Ελαφονήσου, στη νότια πλευρά του νησιού βρίσκονται οι δίδυμες παραλίες του Σίμου (μικρή παραλία) και του Σαρακήνικου (μεγάλη παραλία ή Τσερατσίνικο για τους ντόπιους). Η πρόσβαση γίνεται με αυτοκίνητο ενώ κατά τους καλοκαιρινούς μήνες εκτελούνται δρομολόγια με καΐκι από το παλιό λιμάνι της Ελαφονήσου (Σκάλα).',
-                                    images: [
-                                      'https://i.imgur.com/czFwk0y.jpg',
-                                      'https://i.imgur.com/lNKmoXb.jpg',
-                                      'https://i.imgur.com/hj5LcIp.jpg',
-                                    ],
-                                    latitude: 36.46733558,
-                                    longitude: 22.98053384,
-                                    name: 'Σίμος',
-                                  ),
-                                );
+                                // addBeach(
+                                //   // ignore: missing_required_param
+                                //   const Beach(
+                                //     description:
+                                //         'Σε απόσταση 4 χιλιομέτρων από τον οικισμό της Ελαφονήσου, στη νότια πλευρά του νησιού βρίσκονται οι δίδυμες παραλίες του Σίμου (μικρή παραλία) και του Σαρακήνικου (μεγάλη παραλία ή Τσερατσίνικο για τους ντόπιους). Η πρόσβαση γίνεται με αυτοκίνητο ενώ κατά τους καλοκαιρινούς μήνες εκτελούνται δρομολόγια με καΐκι από το παλιό λιμάνι της Ελαφονήσου (Σκάλα).',
+                                //     images: [
+                                //       'https://i.imgur.com/czFwk0y.jpg',
+                                //       'https://i.imgur.com/lNKmoXb.jpg',
+                                //       'https://i.imgur.com/hj5LcIp.jpg',
+                                //     ],
+                                //     latitude: 36.46733558,
+                                //     longitude: 22.98053384,
+                                //     name: 'Σίμος',
+                                //   ),
+                                // );
                               },
                               child: const Text('TestButton'),
                             ),
