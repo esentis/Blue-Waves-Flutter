@@ -1,22 +1,19 @@
 import 'dart:async';
 import 'dart:typed_data';
 
-import 'package:blue_waves_flutter/controllers/beach_controller.dart';
-import 'package:blue_waves_flutter/models/Beach.dart';
-import 'package:blue_waves_flutter/pages/beach_page.dart';
-import 'package:blue_waves_flutter/states/loading_state.dart';
+import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:blue_waves_flutter/connection.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:lottie/lottie.dart' as lottie;
 
-import 'package:provider/provider.dart';
+import 'package:Blue_Waves/connection.dart';
 
+import '../connection.dart';
+import 'beach_page.dart';
 import 'components/animated_background/animated_background.dart';
 import 'components/loader.dart';
 
@@ -53,9 +50,7 @@ class _HomePageState extends State<HomePage> {
 
   /// Method to create a list of Markers and set them to the map.
   Future<void> getAllMarkers() async {
-    await rootBundle.loadString('map_styles.txt').then((string) {
-      _mapStyle = string;
-    });
+    _mapStyle = await rootBundle.loadString('map_styles.txt');
     var beaches;
     try {
       beaches = await getBeaches();
@@ -83,28 +78,30 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
-    setState(() {});
+    setState(() {
+      isLoading = false;
+    });
   }
 
   @override
   void initState() {
     super.initState();
-
-    getAllMarkers();
   }
 
   @override
   Widget build(BuildContext context) {
     var _controller = Completer();
-    var loadingState = context.watch<LoadingState>();
+    getAllMarkers();
     return SafeArea(
       child: Scaffold(
         body: FadeIn(
           duration: const Duration(milliseconds: 700),
           child: Stack(
             children: [
-              const AnimatedBackground(),
-              loadingState.isLoading
+              const AnimatedBackground(
+                showTitle: true,
+              ),
+              isLoading
                   ? const SizedBox()
                   : Positioned(
                       left: MediaQuery.of(context).size.width / 3,
@@ -113,40 +110,28 @@ class _HomePageState extends State<HomePage> {
                         duration: const Duration(milliseconds: 900),
                         child: Column(
                           children: [
-                            FlatButton(
-                              onPressed: () {
-                                // addReview('0gaLkHoKgjeBovoMj76l');
+                            // FlatButton(
+                            //   onPressed: () {
+                            //     // addReview('0gaLkHoKgjeBovoMj76l');
 
-                                // addBeach(
-                                //   // ignore: missing_required_param
-                                //   const Beach(
-                                //     description:
-                                //         'Σε απόσταση 4 χιλιομέτρων από τον οικισμό της Ελαφονήσου, στη νότια πλευρά του νησιού βρίσκονται οι δίδυμες παραλίες του Σίμου (μικρή παραλία) και του Σαρακήνικου (μεγάλη παραλία ή Τσερατσίνικο για τους ντόπιους). Η πρόσβαση γίνεται με αυτοκίνητο ενώ κατά τους καλοκαιρινούς μήνες εκτελούνται δρομολόγια με καΐκι από το παλιό λιμάνι της Ελαφονήσου (Σκάλα).',
-                                //     images: [
-                                //       'https://i.imgur.com/czFwk0y.jpg',
-                                //       'https://i.imgur.com/lNKmoXb.jpg',
-                                //       'https://i.imgur.com/hj5LcIp.jpg',
-                                //     ],
-                                //     latitude: 36.46733558,
-                                //     longitude: 22.98053384,
-                                //     name: 'Σίμος',
-                                //   ),
-                                // );
-                              },
-                              child: const Text('TestButton'),
-                            ),
-                            GestureDetector(
-                              onTap: () async {
-                                await auth.signOut();
-                                await Get.to(LandingPage());
-                                // Navigator.popAndPushNamed(context, '/');
-                              },
-                              child: lottie.Lottie.asset(
-                                'assets/images/logout.json',
-                                height: 50,
-                                width: 50,
-                              ),
-                            ),
+                            //     // addBeach(
+                            //     //   // ignore: missing_required_param
+                            //     //   const Beach(
+                            //     //     description:
+                            //     //         'Σε απόσταση 4 χιλιομέτρων από τον οικισμό της Ελαφονήσου, στη νότια πλευρά του νησιού βρίσκονται οι δίδυμες παραλίες του Σίμου (μικρή παραλία) και του Σαρακήνικου (μεγάλη παραλία ή Τσερατσίνικο για τους ντόπιους). Η πρόσβαση γίνεται με αυτοκίνητο ενώ κατά τους καλοκαιρινούς μήνες εκτελούνται δρομολόγια με καΐκι από το παλιό λιμάνι της Ελαφονήσου (Σκάλα).',
+                            //     //     images: [
+                            //     //       'https://i.imgur.com/czFwk0y.jpg',
+                            //     //       'https://i.imgur.com/lNKmoXb.jpg',
+                            //     //       'https://i.imgur.com/hj5LcIp.jpg',
+                            //     //     ],
+                            //     //     latitude: 36.46733558,
+                            //     //     longitude: 22.98053384,
+                            //     //     name: 'Σίμος',
+                            //     //   ),
+                            //     // );
+                            //   },
+                            //   child: const Text('TestButton'),
+                            // ),
                             Text(
                               'Welcome back',
                               textAlign: TextAlign.center,
@@ -156,11 +141,23 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                               ),
                             ),
+                            GestureDetector(
+                              onTap: () async {
+                                await auth.signOut();
+                                await Get.to(LandingPage());
+                                // Navigator.popAndPushNamed(context, '/');
+                              },
+                              child: const Icon(
+                                Icons.logout,
+                                size: 40,
+                                color: Colors.red,
+                              ),
+                            ),
                           ],
                         ),
                       ),
                     ),
-              loadingState.isLoading
+              isLoading
                   ? const Center(child: Loader())
                   : Positioned(
                       bottom: 0,
