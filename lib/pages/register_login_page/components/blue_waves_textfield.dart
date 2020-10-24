@@ -6,12 +6,14 @@ class BWTextField extends StatelessWidget {
     @required this.labelText,
     this.emailController,
     this.obscureText = false,
+    this.type,
     Key key,
   }) : super(key: key);
 
   final TextEditingController emailController;
   final String labelText;
   final bool obscureText;
+  final TextInputType type;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -20,6 +22,7 @@ class BWTextField extends StatelessWidget {
         autocorrect: false,
         obscureText: obscureText,
         controller: emailController,
+        keyboardType: type,
         showCursor: true,
         decoration: InputDecoration(
           labelText: labelText,

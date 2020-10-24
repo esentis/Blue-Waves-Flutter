@@ -1,65 +1,61 @@
+import 'package:Blue_Waves/pages/components/loader.dart';
+import 'package:Blue_Waves/states/loading_state.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:blue_waves_flutter/controllers/beach_controller.dart';
-import 'package:blue_waves_flutter/models/Member.dart';
-import 'package:blue_waves_flutter/pages/components/loader.dart';
-import 'package:blue_waves_flutter/states/loading_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../connection.dart';
-import '../components/animated_background/animated_background.dart';
-import 'package:string_extensions/string_extensions.dart';
-
 import 'package:provider/provider.dart';
 
+import '../../connection.dart';
+import '../components/animated_background/animated_background.dart';
 import 'components/blue_waves_textfield.dart';
 
-class RegisterPage extends StatelessWidget {
+class LoginPage extends StatefulWidget {
+  @override
+  _LoginPageState createState() => _LoginPageState();
+}
+
+class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
-    var loadingState = context.watch<LoadingState>();
+    var auth = FirebaseAuth.instance;
     var emailController = TextEditingController();
     var passwordController = TextEditingController();
-    var usernameController = TextEditingController();
+    var loadingState = context.watch<LoadingState>();
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: FadeIn(
         duration: const Duration(milliseconds: 700),
         child: Stack(children: [
-          const AnimatedBackground(),
+          const AnimatedBackground(
+            showTitle: true,
+          ),
           Center(
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 BWTextField(
-                  emailController: usernameController,
-                  labelText: 'Username',
-                ),
-                BWTextField(
                   emailController: emailController,
                   labelText: 'Email',
+                  type: TextInputType.emailAddress,
                 ),
                 BWTextField(
                   emailController: passwordController,
                   labelText: 'Password',
                   obscureText: true,
                 ),
-                FlatButton(
+                TextButton(
                   onPressed: () async {
                     loadingState.toggleLoading();
-                    if (!emailController.text.isMail()) {
-                      return logger.i('Email is not valid');
-                    }
+
                     try {
-                      await registerUser(
-                        Member(
-                          displayName: usernameController.text,
+                      await auth.signInWithEmailAndPassword(
                           email: emailController.text,
-                          password: passwordController.text,
-                        ),
-                      );
+                          password: passwordController.text);
+
                       loadingState.toggleLoading();
                       await Get.offAllNamed('/home');
                     } catch (e) {
@@ -68,17 +64,15 @@ class RegisterPage extends StatelessWidget {
                     }
                   },
                   child: Text(
-                    'Εγγραφή',
+                    'Sign in',
                     style: GoogleFonts.adventPro(
-                      fontSize: 25,
-                      color: Colors.orange[50].withOpacity(0.8),
-                      fontWeight: FontWeight.bold,
+                      fontSize: 35,
                     ),
                   ),
                 ),
                 FlatButton(
                   onPressed: () {
-                    Navigator.pop(context);
+                    Get.back();
                   },
                   child: Text(
                     'Επιστροφή στην αρχική',
