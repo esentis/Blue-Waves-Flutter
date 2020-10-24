@@ -1,15 +1,11 @@
-class Review {
+class Rating {
   final String beachId;
-  final String cons;
-  final String pros;
-  final int rating;
+  final double rating;
   final String userID;
   final String username;
 
-  const Review({
+  const Rating({
     this.beachId,
-    this.cons,
-    this.pros,
     this.rating,
     this.userID,
     this.username,
