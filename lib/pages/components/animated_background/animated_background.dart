@@ -10,7 +10,10 @@ import 'waves.dart';
 class AnimatedBackground extends StatelessWidget {
   const AnimatedBackground({
     Key key,
+    this.showTitle,
   }) : super(key: key);
+
+  final bool showTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -28,16 +31,19 @@ class AnimatedBackground extends StatelessWidget {
           child: Birds(),
         ),
         Positioned(
+          top: 10,
           child: TropicalIsland(),
         ),
         Positioned(
           child: Waves(),
         ),
-        Positioned(
-          top: MediaQuery.of(context).size.height / 13,
-          left: MediaQuery.of(context).size.width / 4,
-          child: BlueWavesTitle(),
-        ),
+        showTitle
+            ? Positioned(
+                top: MediaQuery.of(context).size.height / 13,
+                left: MediaQuery.of(context).size.width / 4,
+                child: BlueWavesTitle(),
+              )
+            : const SizedBox(),
         const Abyss(),
       ],
     );

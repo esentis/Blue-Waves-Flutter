@@ -1,9 +1,9 @@
-import 'package:blue_waves_flutter/pages/beach_page.dart';
-import 'package:blue_waves_flutter/pages/home_page.dart';
-import 'package:blue_waves_flutter/pages/landing_page.dart';
-import 'package:blue_waves_flutter/pages/login_page.dart';
-import 'package:blue_waves_flutter/pages/register_page/register_page.dart';
-import 'package:blue_waves_flutter/states/loading_state.dart';
+import 'package:Blue_Waves/pages/beach_page.dart';
+import 'package:Blue_Waves/pages/landing_page.dart';
+import 'package:Blue_Waves/pages/register_login_page/login_page.dart';
+import 'package:Blue_Waves/pages/register_login_page/register_page.dart';
+import 'package:Blue_Waves/states/loading_state.dart';
+import 'package:Blue_Waves/pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';

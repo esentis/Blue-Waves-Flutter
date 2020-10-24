@@ -1,4 +1,3 @@
-import 'package:blue_waves_flutter/helpers/image_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -67,12 +66,12 @@ class _AllBeachesState extends State<AllBeaches> {
                             ),
                           ],
                         ),
-                        child: Card(
-                          elevation: 40,
-                          child: BWavesImage(
-                            url: querySnapshot.docs[index].data()['images'][0],
-                          ),
-                        ),
+                        // child: Card(
+                        //   elevation: 40,
+                        //   child: BWavesImage(
+                        //     url: querySnapshot.docs[index].data()['images'][0],
+                        //   ),
+                        // ),
                       ),
                       Text(
                         querySnapshot.docs[index].data()['name'],

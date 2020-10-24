@@ -1,7 +1,7 @@
-import 'package:blue_waves_flutter/models/Beach.dart';
-import 'package:blue_waves_flutter/models/Favorite.dart';
-import 'package:blue_waves_flutter/models/Member.dart';
-import 'package:blue_waves_flutter/models/Review.dart';
+import 'package:Blue_Waves/models/Beach.dart';
+import 'package:Blue_Waves/models/Favorite.dart';
+import 'package:Blue_Waves/models/Member.dart';
+import 'package:Blue_Waves/models/Review.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -12,7 +12,7 @@ import '../connection.dart';
 CollectionReference beaches = FirebaseFirestore.instance.collection('beaches');
 
 // Reviews DB reference
-CollectionReference reviews = FirebaseFirestore.instance.collection('reviews');
+CollectionReference ratings = FirebaseFirestore.instance.collection('ratings');
 
 // Users DB references
 CollectionReference users = FirebaseFirestore.instance.collection('users');
@@ -56,33 +56,31 @@ Future<void> registerUser(Member user) async {
 /// * rating : int
 /// * userID : String
 /// * username : String
-Future<void> addReview(Review review) async {
+Future<void> addRating(Rating rating) async {
   QuerySnapshot querySnapshot;
 
   // Checking if user has already reviewed the beach
-  await reviews
+  await ratings
       .where(
         'username',
-        isEqualTo: review.username,
+        isEqualTo: rating.username,
       )
-      .where('beachId', isEqualTo: review.beachId)
+      .where('beachId', isEqualTo: rating.beachId)
       .get()
       .then((snapshot) => querySnapshot = snapshot);
   if (querySnapshot.docs.isNotEmpty) {
-    return logger.e('You have already reviewed this beach');
+    return logger.e('You have already rated this beach');
   }
 
   // If we are ok to procceed we add the review.
-  await reviews
+  await ratings
       .add({
-        'beachId': review.beachId,
-        'cons': review.cons,
-        'pros': review.pros,
-        'userID': review.userID,
-        'username': review.username,
-        'rating': review.rating,
+        'beachId': rating.beachId,
+        'userID': rating.userID,
+        'username': rating.username,
+        'rating': rating.rating,
       })
-      .then((value) => logger.i('Beach review added'))
+      .then((value) => logger.i('Beach rating added'))
       .catchError((onError) => logger.e(onError));
 }
 
