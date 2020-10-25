@@ -7,7 +7,8 @@
         {
             "name": "blue_waves_flutter",
             "request": "launch",
-            "type": "dart"
+            "type": "dart",
+            "flutterMode": "release"
         }
     ]
 }
