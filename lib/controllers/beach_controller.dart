@@ -150,8 +150,6 @@ Future<void> addBeach(Beach beach) async {
     'longitude': beach.longitude,
     'latitude': beach.latitude,
     'images': beach.images,
-    'totalRatings': 0,
-    'rating': 0,
   }).then((docRef) {
     logger.i('Beach Added');
     documentReference = docRef;
