@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -46,6 +48,7 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       body: Container(
         decoration: widget.backgroundDecoration,
         constraints: BoxConstraints.expand(
@@ -64,15 +67,33 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
               onPageChanged: onPageChanged,
               scrollDirection: widget.scrollDirection,
             ),
-            Container(
-              padding: const EdgeInsets.all(20.0),
-              child: Text(
-                'Image ${currentIndex + 1}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 17.0,
-                  decoration: null,
-                ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Get.back();
+                    },
+                    child: Icon(
+                      Icons.arrow_back_ios,
+                      size: 40,
+                      color: Colors.orange[50],
+                    ),
+                  ),
+                  Container(
+                    padding: const EdgeInsets.all(20.0),
+                    child: Text(
+                      '${currentIndex + 1}η φωτογραφία',
+                      style: GoogleFonts.adventPro(
+                        color: Colors.orange[50],
+                        fontSize: 35.0,
+                        decoration: null,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             )
           ],
