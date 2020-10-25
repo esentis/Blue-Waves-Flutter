@@ -27,7 +27,7 @@ class Waves extends StatelessWidget {
           ]
         ],
         durations: [35000, 19440, 10800, 6000],
-        heightPercentages: [0.04, 0.05, 0.06, 0.07],
+        heightPercentages: [0.02, 0.03, 0.04, 0.05],
         blur: const MaskFilter.blur(
           BlurStyle.inner,
           14,
