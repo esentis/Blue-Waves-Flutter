@@ -2,6 +2,8 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:Blue_Waves/controllers/beach_controller.dart';
+import 'package:Blue_Waves/models/Beach.dart';
+import 'package:Blue_Waves/pages/admin_panel.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -86,12 +88,21 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      getAllMarkers();
+    });
+  }
+
+  @override
+  void dispose() {
+    mapController.dispose();
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     var _controller = Completer();
-    getAllMarkers();
+
     return SafeArea(
       child: Scaffold(
         body: FadeIn(
@@ -110,28 +121,6 @@ class _HomePageState extends State<HomePage> {
                         duration: const Duration(milliseconds: 900),
                         child: Column(
                           children: [
-                            // FlatButton(
-                            //   onPressed: () {
-                            //     // addReview('0gaLkHoKgjeBovoMj76l');
-
-                            //     // addBeach(
-                            //     //   // ignore: missing_required_param
-                            //     //   const Beach(
-                            //     //     description:
-                            //     //         'Σε απόσταση 4 χιλιομέτρων από τον οικισμό της Ελαφονήσου, στη νότια πλευρά του νησιού βρίσκονται οι δίδυμες παραλίες του Σίμου (μικρή παραλία) και του Σαρακήνικου (μεγάλη παραλία ή Τσερατσίνικο για τους ντόπιους). Η πρόσβαση γίνεται με αυτοκίνητο ενώ κατά τους καλοκαιρινούς μήνες εκτελούνται δρομολόγια με καΐκι από το παλιό λιμάνι της Ελαφονήσου (Σκάλα).',
-                            //     //     images: [
-                            //     //       'https://i.imgur.com/czFwk0y.jpg',
-                            //     //       'https://i.imgur.com/lNKmoXb.jpg',
-                            //     //       'https://i.imgur.com/hj5LcIp.jpg',
-                            //     //     ],
-                            //     //     latitude: 36.46733558,
-                            //     //     longitude: 22.98053384,
-                            //     //     name: 'Σίμος',
-                            //     //   ),
-                            //     // );
-                            //   },
-                            //   child: const Text('TestButton'),
-                            // ),
                             Text(
                               'Welcome back',
                               textAlign: TextAlign.center,
@@ -153,6 +142,23 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.red,
                               ),
                             ),
+                            FirebaseAuth.instance.currentUser.displayName ==
+                                    'esen'
+                                ? Padding(
+                                    padding: const EdgeInsets.all(15.0),
+                                    child: GestureDetector(
+                                      onTap: () async {
+                                        await Get.to(AdminPanel());
+                                        // Navigator.popAndPushNamed(context, '/');
+                                      },
+                                      child: const Icon(
+                                        Icons.admin_panel_settings,
+                                        size: 60,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  )
+                                : const SizedBox(),
                           ],
                         ),
                       ),
