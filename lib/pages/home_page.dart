@@ -2,8 +2,8 @@ import 'dart:async';
 import 'dart:typed_data';
 
 import 'package:Blue_Waves/controllers/beach_controller.dart';
-import 'package:Blue_Waves/models/Beach.dart';
 import 'package:Blue_Waves/pages/admin_panel.dart';
+import 'package:Blue_Waves/pages/favorites_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,7 +31,7 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isLoading = true;
-
+  bool isAdmin = false;
   GoogleMapController mapController;
   CameraPosition greeceCamera;
   Marker beachMarker;
@@ -80,14 +80,27 @@ class _HomePageState extends State<HomePage> {
         );
       },
     );
+    await isAdminCheck();
     setState(() {
       isLoading = false;
+    });
+  }
+
+  Future<void> isAdminCheck() async {
+    isAdmin = await users
+        .where('id', isEqualTo: FirebaseAuth.instance.currentUser.uid)
+        .where('role', isEqualTo: 'admin')
+        .get()
+        .then((value) {
+      // Returns false as the user is not admin
+      return value.docs.isNotEmpty;
     });
   }
 
   @override
   void initState() {
     super.initState();
+
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getAllMarkers();
     });
@@ -130,35 +143,51 @@ class _HomePageState extends State<HomePage> {
                                 color: Colors.white,
                               ),
                             ),
-                            GestureDetector(
-                              onTap: () async {
-                                await auth.signOut();
-                                await Get.to(LandingPage());
-                                // Navigator.popAndPushNamed(context, '/');
-                              },
-                              child: const Icon(
-                                Icons.logout,
-                                size: 40,
-                                color: Colors.red,
-                              ),
+                            Row(
+                              children: [
+                                GestureDetector(
+                                  onTap: () async {
+                                    await auth.signOut();
+                                    await Get.to(LandingPage());
+                                    // Navigator.popAndPushNamed(context, '/');
+                                  },
+                                  child: const Icon(
+                                    Icons.logout,
+                                    size: 40,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                GestureDetector(
+                                  onTap: () async {
+                                    await Get.to(FavoritesPage());
+                                    // Navigator.popAndPushNamed(context, '/');
+                                  },
+                                  child: const Icon(
+                                    Icons.beach_access,
+                                    size: 40,
+                                    color: Colors.red,
+                                  ),
+                                ),
+                                // FirebaseAuth.instance.currentUser.displayName ==
+                                //         'esen'
+                                isAdmin
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(15.0),
+                                        child: GestureDetector(
+                                          onTap: () async {
+                                            await Get.to(AdminPanel());
+                                            // Navigator.popAndPushNamed(context, '/');
+                                          },
+                                          child: const Icon(
+                                            Icons.admin_panel_settings,
+                                            size: 60,
+                                            color: Colors.green,
+                                          ),
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                              ],
                             ),
-                            FirebaseAuth.instance.currentUser.displayName ==
-                                    'esen'
-                                ? Padding(
-                                    padding: const EdgeInsets.all(15.0),
-                                    child: GestureDetector(
-                                      onTap: () async {
-                                        await Get.to(AdminPanel());
-                                        // Navigator.popAndPushNamed(context, '/');
-                                      },
-                                      child: const Icon(
-                                        Icons.admin_panel_settings,
-                                        size: 60,
-                                        color: Colors.green,
-                                      ),
-                                    ),
-                                  )
-                                : const SizedBox(),
                           ],
                         ),
                       ),
