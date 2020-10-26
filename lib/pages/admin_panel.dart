@@ -2,8 +2,6 @@ import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:Blue_Waves/models/Beach.dart';
 import 'package:flutter/material.dart';
 
-import '../connection.dart';
-
 class AdminPanel extends StatelessWidget {
   final _nameController = TextEditingController();
   final _descriptionController = TextEditingController();

@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:Blue_Waves/models/Favorite.dart';
-import 'package:Blue_Waves/models/Review.dart';
+import 'package:Blue_Waves/models/Rating.dart';
 import 'package:animate_do/animate_do.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -169,6 +169,7 @@ class _BeachPageState extends State<BeachPage> {
                                     await addFavorite(
                                       Favorite(
                                         beachId: widget.beach['id'],
+                                        beachName: widget.beach['name'],
                                         userId: FirebaseAuth
                                             .instance.currentUser.uid,
                                       ),
@@ -303,6 +304,8 @@ class _BeachPageState extends State<BeachPage> {
                                                       beachId:
                                                           widget.beach['id'],
                                                       rating: rating,
+                                                      beachName:
+                                                          widget.beach['name'],
                                                       userID: FirebaseAuth
                                                           .instance
                                                           .currentUser
