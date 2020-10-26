@@ -1,7 +1,7 @@
 import 'package:Blue_Waves/models/Beach.dart';
 import 'package:Blue_Waves/models/Favorite.dart';
 import 'package:Blue_Waves/models/Member.dart';
-import 'package:Blue_Waves/models/Review.dart';
+import 'package:Blue_Waves/models/Rating.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -79,6 +79,7 @@ Future<void> addRating(Rating rating) async {
         'userID': rating.userID,
         'username': rating.username,
         'rating': rating.rating,
+        'beachName': rating.beachName,
       })
       .then((value) => logger.i('Beach rating added'))
       .catchError((onError) => logger.e(onError));
@@ -87,7 +88,7 @@ Future<void> addRating(Rating rating) async {
 Future<void> addFavorite(Favorite favorite) async {
   QuerySnapshot querySnapshot;
   DocumentReference docRef;
-  // Checking if user has already reviewed the beach
+  // Checking if user has already favorited the beach
   await favorites
       .where(
         'userId',
@@ -109,6 +110,7 @@ Future<void> addFavorite(Favorite favorite) async {
   await favorites.add({
     'beachId': favorite.beachId,
     'userId': favorite.userId,
+    'beachName': favorite.beachName,
   }).then((value) {
     logger.i('Beach added to favorites!');
     docRef = value;
@@ -170,4 +172,11 @@ Future<List<Map<String, dynamic>>> getBeaches() async {
       await beaches.get().then((querySnapshot) => querySnapshot.toBeach());
 
   return mappedBeaches;
+}
+
+/// Gets a beach with an ID
+Future getBeach(String id) async {
+  var beach = await beaches.doc(id).get().then((value) => value.data());
+  logger.wtf(beach);
+  return beach;
 }
