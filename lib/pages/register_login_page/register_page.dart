@@ -1,6 +1,7 @@
 import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:Blue_Waves/models/Member.dart';
 import 'package:Blue_Waves/pages/components/loader.dart';
+import 'package:Blue_Waves/pages/components/snack_bar.dart';
 import 'package:Blue_Waves/states/loading_state.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:flutter/material.dart';
@@ -25,77 +26,94 @@ class RegisterPage extends StatelessWidget {
 
     return Scaffold(
       resizeToAvoidBottomPadding: false,
-      body: FadeIn(
-        duration: const Duration(milliseconds: 700),
-        child: Stack(children: [
-          const AnimatedBackground(
-            showTitle: true,
-          ),
-          Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                BWTextField(
-                  emailController: usernameController,
-                  labelText: 'Username',
-                ),
-                BWTextField(
-                  emailController: emailController,
-                  labelText: 'Email',
-                ),
-                BWTextField(
-                  emailController: passwordController,
-                  labelText: 'Password',
-                  obscureText: true,
-                ),
-                FlatButton(
-                  onPressed: () async {
-                    loadingState.toggleLoading();
-                    if (!emailController.text.isMail()) {
-                      return logger.i('Email is not valid');
-                    }
-                    try {
-                      await registerUser(
-                        Member(
-                          displayName: usernameController.text,
-                          email: emailController.text,
-                          password: passwordController.text,
-                        ),
-                      );
-                      loadingState.toggleLoading();
-                      await Get.offAllNamed('/home');
-                    } catch (e) {
-                      loadingState.toggleLoading();
-                      logger.e(e);
-                    }
-                  },
-                  child: Text(
-                    'Εγγραφή',
-                    style: GoogleFonts.adventPro(
-                      fontSize: 25,
-                      color: Colors.orange[50].withOpacity(0.8),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ),
-                FlatButton(
-                  onPressed: () {
-                    Navigator.pop(context);
-                  },
-                  child: Text(
-                    'Επιστροφή στην αρχική',
-                    style: GoogleFonts.adventPro(
-                      fontSize: 20,
-                      color: Colors.red[400].withOpacity(0.8),
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                )
-              ],
+      body: SafeArea(
+        child: FadeIn(
+          duration: const Duration(milliseconds: 700),
+          child: Stack(children: [
+            const AnimatedBackground(
+              showTitle: true,
             ),
-          ),
-          loadingState.isLoading ? const Loader() : const SizedBox(),
-        ]),
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  BWTextField(
+                    emailController: usernameController,
+                    labelText: 'Όνομα χρήστη',
+                  ),
+                  BWTextField(
+                    emailController: emailController,
+                    type: TextInputType.emailAddress,
+                    labelText: 'Email',
+                  ),
+                  BWTextField(
+                    emailController: passwordController,
+                    labelText: 'Κωδικός',
+                    obscureText: true,
+                  ),
+                  FlatButton(
+                    onPressed: () async {
+                      loadingState.toggleLoading();
+                      if (!emailController.text.isMail()) {
+                        loadingState.toggleLoading();
+                        return showSnack(
+                          title: 'Κάτι πήγε στραβά',
+                          message: 'Το email που δώσατε δεν είναι σωστό',
+                          firstColor: Colors.red,
+                          secondColor: Colors.red[800],
+                          duration: 2800,
+                        );
+                      }
+                      try {
+                        await registerUser(
+                          Member(
+                            displayName: usernameController.text,
+                            email: emailController.text,
+                            password: passwordController.text,
+                          ),
+                        );
+                        loadingState.toggleLoading();
+                        await Get.offAllNamed('/home');
+                      } catch (e) {
+                        loadingState.toggleLoading();
+                        showSnack(
+                          title: 'Κάτι πήγε στραβά',
+                          message: e.message,
+                          firstColor: Colors.red,
+                          secondColor: Colors.red[800],
+                          duration: 2800,
+                        );
+                        logger.e(e);
+                      }
+                    },
+                    child: Text(
+                      'Εγγραφή',
+                      style: GoogleFonts.adventPro(
+                        fontSize: 25,
+                        color: Colors.orange[50].withOpacity(0.8),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                  FlatButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: Text(
+                      'Επιστροφή στην αρχική',
+                      style: GoogleFonts.adventPro(
+                        fontSize: 20,
+                        color: Colors.red[400].withOpacity(0.8),
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            loadingState.isLoading ? const Loader() : const SizedBox(),
+          ]),
+        ),
       ),
     );
   }

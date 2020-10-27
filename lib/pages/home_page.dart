@@ -18,12 +18,13 @@ import 'package:animate_do/animate_do.dart';
 import 'package:Blue_Waves/connection.dart';
 
 import '../connection.dart';
-import 'beach_page.dart';
+import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
 import 'components/loader.dart';
 
 import 'dart:ui' as ui;
 
+import 'edit_profile_page.dart';
 import 'landing_page.dart';
 
 class HomePage extends StatefulWidget {
@@ -119,9 +120,9 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     var _controller = Completer();
 
-    return SafeArea(
-      child: Scaffold(
-        body: FadeIn(
+    return Scaffold(
+      body: SafeArea(
+        child: FadeIn(
           duration: const Duration(milliseconds: 700),
           child: Stack(
             children: [
@@ -134,14 +135,10 @@ class _HomePageState extends State<HomePage> {
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height / 4.3),
+                            top: MediaQuery.of(context).size.height / 5),
                         child: Container(
-                          height: MediaQuery.of(context).size.height / 5,
-                          width: MediaQuery.of(context).size.width / 4,
-                          decoration: BoxDecoration(
-                            color: Colors.red.withOpacity(0.7),
-                            shape: BoxShape.circle,
-                          ),
+                          height: MediaQuery.of(context).size.height / 6.1,
+                          width: MediaQuery.of(context).size.width / 2.5,
                           child: StreamBuilder(
                             stream: users
                                 .where('id',
@@ -151,34 +148,49 @@ class _HomePageState extends State<HomePage> {
                             builder: (BuildContext context,
                                 AsyncSnapshot<QuerySnapshot> snapshot) {
                               if (snapshot.hasData) {
-                                return Padding(
-                                  padding: const EdgeInsets.all(18.0),
-                                  child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Flexible(
-                                        child: Text(
-                                          'Karma',
-                                          style: GoogleFonts.adventPro(
-                                            fontSize: 25,
-                                            color: Colors.orange[50],
+                                return GestureDetector(
+                                  onTap: () {
+                                    showSnack(
+                                      title: 'Τι είναι οι πόντοι;',
+                                      duration: 2300,
+                                      message:
+                                          'Κάθε φορά που βαθμολογείς μια παραλία κερδίζεις πόντους !',
+                                      firstColor:
+                                          Colors.blueAccent.withOpacity(0.8),
+                                      secondColor: Colors.blue.withOpacity(0.7),
+                                    );
+                                  },
+                                  child: Padding(
+                                    padding: const EdgeInsets.all(18.0),
+                                    child: Column(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Flexible(
+                                          child: Text(
+                                            'Πόντοι',
+                                            style: GoogleFonts.adventPro(
+                                              fontSize: 20,
+                                              color: Colors.orange[50],
+                                            ),
+                                            textAlign: TextAlign.center,
                                           ),
-                                          textAlign: TextAlign.center,
                                         ),
-                                      ),
-                                      Flexible(
-                                        child: Text(
-                                          snapshot.data.docs.first
-                                              .data()['karma']
-                                              .toString(),
-                                          style: GoogleFonts.adventPro(
-                                            fontSize: 25,
-                                            color: Colors.orange[50],
+                                        Flexible(
+                                          child: Text(
+                                            snapshot.data.docs.first
+                                                .data()['karma']
+                                                .toString(),
+                                            style: GoogleFonts.adventPro(
+                                              fontSize: 25,
+                                              color: Colors.orange[50],
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                            textAlign: TextAlign.center,
                                           ),
-                                          textAlign: TextAlign.center,
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
                                 );
                               }
@@ -222,14 +234,7 @@ class _HomePageState extends State<HomePage> {
                               ),
                               GestureDetector(
                                 onTap: () async {
-                                  showSnack(
-                                    title: 'Coming soon...',
-                                    message:
-                                        'Η λειτουργία προσωρινά δεν είναι διαθέσιμη',
-                                    firstColor: Colors.red.withOpacity(0.5),
-                                    secondColor: Colors.blue.withOpacity(0.8),
-                                    duration: 1700,
-                                  );
+                                  await Get.to(EditProfilePage());
                                 },
                                 child: Icon(
                                   Icons.settings,

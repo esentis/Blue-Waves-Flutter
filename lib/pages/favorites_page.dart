@@ -1,4 +1,4 @@
-import 'package:Blue_Waves/pages/beach_page.dart';
+import 'package:Blue_Waves/pages/beach_page/beach_page.dart';
 import 'package:Blue_Waves/pages/components/animated_background/animated_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';

@@ -5,7 +5,7 @@ class TropicalIsland extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(
       './assets/images/tropical_island.png',
-      scale: 4,
+      scale: 3.8,
     );
   }
 }
