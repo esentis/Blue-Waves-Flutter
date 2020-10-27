@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:Blue_Waves/models/Favorite.dart';
 import 'package:Blue_Waves/models/Rating.dart';
+import 'package:Blue_Waves/pages/components/snack_bar.dart';
 import 'package:animate_do/animate_do.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
@@ -39,6 +40,7 @@ class _BeachPageState extends State<BeachPage> {
   int currentIndex = 0;
   bool verticalGallery = false;
   bool isLoading = true;
+
   final PageController _pageController = PageController();
 
   void open(BuildContext context, int index) async {
@@ -134,21 +136,20 @@ class _BeachPageState extends State<BeachPage> {
                     child: Scaffold(
                       backgroundColor: Colors.transparent,
                       appBar: AppBar(
-                        elevation: 20,
+                        elevation: 25,
                         leading: GestureDetector(
                           onTap: () {
                             Get.back();
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.arrow_back,
-                            color: Colors.orange[50],
+                            color: Colors.blue,
                             size: 40,
                           ),
                         ),
-                        shadowColor: Colors.black.withOpacity(0.5),
+                        shadowColor: Colors.black,
                         toolbarHeight: MediaQuery.of(context).size.height / 10,
-                        backgroundColor:
-                            const Color(0xff18A6EC).withOpacity(0.7),
+                        backgroundColor: Colors.orange[50].withOpacity(0.8),
                         title: Column(
                           mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.start,
@@ -160,7 +161,7 @@ class _BeachPageState extends State<BeachPage> {
                                   widget.beach['name'],
                                   style: GoogleFonts.adventPro(
                                     fontSize: 25,
-                                    color: Colors.orange[50],
+                                    color: Colors.blue,
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
@@ -175,9 +176,28 @@ class _BeachPageState extends State<BeachPage> {
                                       ),
                                     );
                                     setState(() {
-                                      isBeachFavorited
-                                          ? isBeachFavorited = false
-                                          : isBeachFavorited = true;
+                                      if (isBeachFavorited) {
+                                        isBeachFavorited = false;
+                                        showSnack(
+                                            title:
+                                                'Αφαιρέθηκε απο τα αγαπημένα',
+                                            duration: 1500,
+                                            firstColor:
+                                                Colors.red.withOpacity(0.6),
+                                            secondColor: Colors.blue,
+                                            message:
+                                                'Η παραλία αφαιρέθηκε απο τη λιστα με τις αγαπημένες σας παραλίες');
+                                      } else {
+                                        showSnack(
+                                            title: 'Προστέθηκε στα αγαπημενα',
+                                            duration: 1500,
+                                            firstColor:
+                                                Colors.green.withOpacity(0.6),
+                                            secondColor: Colors.blue,
+                                            message:
+                                                'Μπορείτε να βρείτε τη λίστα με τις αγαπημένες σας παραλίες στο προφίλ σας.');
+                                        isBeachFavorited = true;
+                                      }
                                     });
                                   },
                                   child: isBeachFavorited
@@ -306,7 +326,7 @@ class _BeachPageState extends State<BeachPage> {
                                                       rating: rating,
                                                       beachName:
                                                           widget.beach['name'],
-                                                      userID: FirebaseAuth
+                                                      userUid: FirebaseAuth
                                                           .instance
                                                           .currentUser
                                                           .uid,
