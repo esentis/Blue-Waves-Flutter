@@ -1,4 +1,4 @@
-import 'package:Blue_Waves/pages/beach_page.dart';
+import 'package:Blue_Waves/pages/beach_page/beach_page.dart';
 import 'package:Blue_Waves/pages/landing_page.dart';
 import 'package:Blue_Waves/pages/register_login_page/login_page.dart';
 import 'package:Blue_Waves/pages/register_login_page/register_page.dart';
