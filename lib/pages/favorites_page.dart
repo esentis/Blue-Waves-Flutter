@@ -11,30 +11,45 @@ class FavoritesPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        leading: GestureDetector(
+          onTap: () {
+            Get.back();
+          },
+          child: const Icon(
+            Icons.arrow_back,
+            color: Colors.blue,
+            size: 40,
+          ),
+        ),
+        backgroundColor: Colors.orange[50].withOpacity(0.8),
+        shape: const RoundedRectangleBorder(
+          borderRadius: BorderRadius.only(
+            bottomRight: Radius.circular(20),
+            bottomLeft: Radius.circular(20),
+          ),
+        ),
+        centerTitle: true,
+        title: Text(
+          'Αγαπημένες παραλίες',
+          style: GoogleFonts.adventPro(
+            fontSize: 25,
+            fontWeight: FontWeight.bold,
+            color: Colors.blue,
+          ),
+        ),
+      ),
       body: Stack(
         children: [
           const AnimatedBackground(
             showTitle: false,
           ),
-          Align(
-            alignment: Alignment.topCenter,
-            child: Padding(
-              padding:
-                  EdgeInsets.only(top: MediaQuery.of(context).size.height / 5),
-              child: Text(
-                'Αγαπημένες παραλίες',
-                style: GoogleFonts.adventPro(
-                  fontSize: 35,
-                  fontWeight: FontWeight.bold,
-                  color: Colors.orange[50],
-                ),
-              ),
-            ),
-          ),
-          Center(
+          Padding(
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height / 8),
             child: Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height / 2,
+              height: MediaQuery.of(context).size.height,
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('favorites')
@@ -54,8 +69,8 @@ class FavoritesPage extends StatelessWidget {
                   return ListView(
                     children:
                         snapshot.data.docs.map((DocumentSnapshot document) {
-                      return TextButton(
-                        onPressed: () async {
+                      return ListTile(
+                        onTap: () async {
                           var beach =
                               await getBeach(document.data()['beachId']);
                           await Get.to(
@@ -64,10 +79,20 @@ class FavoritesPage extends StatelessWidget {
                             ),
                           );
                         },
-                        child: Text(
+                        title: Text(
                           document.data()['beachName'],
                           style: GoogleFonts.adventPro(
-                            fontSize: 35,
+                            fontSize: 30,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.orange[50],
+                          ),
+                        ),
+                        subtitle: Text(
+                          document.data()['date'],
+                          style: GoogleFonts.adventPro(
+                            fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.orange[50],
                           ),
                         ),
                       );
