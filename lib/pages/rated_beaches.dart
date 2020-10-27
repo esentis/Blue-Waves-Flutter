@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'beach_page.dart';
+import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
 
 class RatedBeaches extends StatelessWidget {
