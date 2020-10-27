@@ -1,13 +1,14 @@
-import 'package:Blue_Waves/pages/beach_page.dart';
-import 'package:Blue_Waves/pages/components/animated_background/animated_background.dart';
+import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:Blue_Waves/controllers/beach_controller.dart';
 
-class FavoritesPage extends StatelessWidget {
+import 'beach_page.dart';
+import 'components/animated_background/animated_background.dart';
+
+class RatedBeaches extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,7 +32,7 @@ class FavoritesPage extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Αγαπημένες παραλίες',
+          'Βαθμολογημένες παραλίες',
           style: GoogleFonts.adventPro(
             fontSize: 25,
             fontWeight: FontWeight.bold,
@@ -52,7 +53,7 @@ class FavoritesPage extends StatelessWidget {
               height: MediaQuery.of(context).size.height,
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
-                    .collection('favorites')
+                    .collection('ratings')
                     .where('userId',
                         isEqualTo: FirebaseAuth.instance.currentUser.uid)
                     .snapshots(),
@@ -91,6 +92,14 @@ class FavoritesPage extends StatelessWidget {
                           document.data()['date'],
                           style: GoogleFonts.adventPro(
                             fontSize: 15,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.orange[50],
+                          ),
+                        ),
+                        trailing: Text(
+                          document.data()['rating'].toString(),
+                          style: GoogleFonts.adventPro(
+                            fontSize: 40,
                             fontWeight: FontWeight.w600,
                             color: Colors.orange[50],
                           ),

@@ -3,7 +3,10 @@ import 'dart:typed_data';
 
 import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:Blue_Waves/pages/admin_panel.dart';
+import 'package:Blue_Waves/pages/components/snack_bar.dart';
 import 'package:Blue_Waves/pages/favorites_page.dart';
+import 'package:Blue_Waves/pages/rated_beaches.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -127,68 +130,140 @@ class _HomePageState extends State<HomePage> {
               ),
               isLoading
                   ? const SizedBox()
-                  : Positioned(
-                      left: MediaQuery.of(context).size.width / 3,
-                      top: MediaQuery.of(context).size.height / 7,
+                  : Align(
+                      alignment: Alignment.topCenter,
+                      child: Padding(
+                        padding: EdgeInsets.only(
+                            top: MediaQuery.of(context).size.height / 4.3),
+                        child: Container(
+                          height: MediaQuery.of(context).size.height / 5,
+                          width: MediaQuery.of(context).size.width / 4,
+                          decoration: BoxDecoration(
+                            color: Colors.red.withOpacity(0.7),
+                            shape: BoxShape.circle,
+                          ),
+                          child: StreamBuilder(
+                            stream: users
+                                .where('id',
+                                    isEqualTo:
+                                        FirebaseAuth.instance.currentUser.uid)
+                                .snapshots(),
+                            builder: (BuildContext context,
+                                AsyncSnapshot<QuerySnapshot> snapshot) {
+                              if (snapshot.hasData) {
+                                return Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          'Karma',
+                                          style: GoogleFonts.adventPro(
+                                            fontSize: 25,
+                                            color: Colors.orange[50],
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          snapshot.data.docs.first
+                                              .data()['karma']
+                                              .toString(),
+                                          style: GoogleFonts.adventPro(
+                                            fontSize: 25,
+                                            color: Colors.orange[50],
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                );
+                              }
+                              return const CircularProgressIndicator();
+                            },
+                          ),
+                        ),
+                      ),
+                    ),
+              isLoading
+                  ? const SizedBox()
+                  : Align(
+                      alignment: Alignment.topCenter,
                       child: FadeInDown(
                         duration: const Duration(milliseconds: 900),
-                        child: Column(
-                          children: [
-                            Text(
-                              'Welcome back',
-                              textAlign: TextAlign.center,
-                              style: GoogleFonts.adventPro(
-                                fontSize: 25,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height / 6),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              GestureDetector(
+                                onTap: () async {
+                                  await Get.to(FavoritesPage());
+                                },
+                                child: const Icon(
+                                  Icons.favorite,
+                                  size: 40,
+                                  color: Colors.red,
+                                ),
                               ),
-                            ),
-                            Row(
-                              children: [
-                                GestureDetector(
-                                  onTap: () async {
-                                    await auth.signOut();
-                                    await Get.to(LandingPage());
-                                    // Navigator.popAndPushNamed(context, '/');
-                                  },
-                                  child: const Icon(
-                                    Icons.logout,
-                                    size: 40,
-                                    color: Colors.red,
-                                  ),
+                              GestureDetector(
+                                onTap: () async {
+                                  await Get.to(RatedBeaches());
+                                },
+                                child: const Icon(
+                                  Icons.rate_review_outlined,
+                                  size: 40,
+                                  color: Colors.red,
                                 ),
-                                GestureDetector(
-                                  onTap: () async {
-                                    await Get.to(FavoritesPage());
-                                    // Navigator.popAndPushNamed(context, '/');
-                                  },
-                                  child: const Icon(
-                                    Icons.beach_access,
-                                    size: 40,
-                                    color: Colors.red,
-                                  ),
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  showSnack(
+                                    title: 'Coming soon...',
+                                    message:
+                                        'Η λειτουργία προσωρινά δεν είναι διαθέσιμη',
+                                    firstColor: Colors.red.withOpacity(0.5),
+                                    secondColor: Colors.blue.withOpacity(0.8),
+                                    duration: 1700,
+                                  );
+                                },
+                                child: Icon(
+                                  Icons.settings,
+                                  size: 40,
+                                  color: Colors.orange[50],
                                 ),
-                                // FirebaseAuth.instance.currentUser.displayName ==
-                                //         'esen'
-                                isAdmin
-                                    ? Padding(
-                                        padding: const EdgeInsets.all(15.0),
-                                        child: GestureDetector(
-                                          onTap: () async {
-                                            await Get.to(AdminPanel());
-                                            // Navigator.popAndPushNamed(context, '/');
-                                          },
-                                          child: const Icon(
-                                            Icons.admin_panel_settings,
-                                            size: 60,
-                                            color: Colors.green,
-                                          ),
-                                        ),
-                                      )
-                                    : const SizedBox(),
-                              ],
-                            ),
-                          ],
+                              ),
+                              GestureDetector(
+                                onTap: () async {
+                                  await auth.signOut();
+                                  await Get.to(LandingPage());
+                                  // Navigator.popAndPushNamed(context, '/');
+                                },
+                                child: const Icon(
+                                  Icons.logout,
+                                  size: 40,
+                                  color: Colors.red,
+                                ),
+                              ),
+                              isAdmin
+                                  ? GestureDetector(
+                                      onTap: () async {
+                                        await Get.to(AdminPanel());
+                                        // Navigator.popAndPushNamed(context, '/');
+                                      },
+                                      child: Icon(
+                                        Icons.add_moderator,
+                                        size: 40,
+                                        color: Colors.green[200],
+                                      ),
+                                    )
+                                  : const SizedBox(),
+                            ],
+                          ),
                         ),
                       ),
                     ),

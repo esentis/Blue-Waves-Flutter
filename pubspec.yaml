@@ -37,6 +37,7 @@ dependencies:
   get: ^3.13.2
   google_fonts: ^1.1.0
   google_maps_flutter: ^1.0.2
+  intl: ^0.16.1
   logger: ^0.9.4
   lottie: ^0.6.0
   pedantic: ^1.9.2
