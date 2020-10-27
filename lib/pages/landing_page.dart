@@ -32,9 +32,9 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: FadeIn(
+    return Scaffold(
+      body: SafeArea(
+        child: FadeIn(
             duration: const Duration(milliseconds: 700),
             child: Stack(
               children: [
@@ -50,7 +50,7 @@ class _LandingPageState extends State<LandingPage> {
                           await Navigator.pushNamed(context, '/register');
                         },
                         child: Text(
-                          'Register',
+                          'Εγγραφή',
                           style: GoogleFonts.adventPro(
                             fontSize: 35,
                           ),
@@ -61,7 +61,7 @@ class _LandingPageState extends State<LandingPage> {
                           await Navigator.pushNamed(context, '/login');
                         },
                         child: Text(
-                          'Sign in',
+                          'Είσοδος',
                           style: GoogleFonts.adventPro(
                             fontSize: 35,
                           ),

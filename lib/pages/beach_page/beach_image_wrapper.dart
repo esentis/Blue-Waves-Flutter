@@ -82,14 +82,16 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
                       color: Colors.orange[50],
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsets.all(20.0),
-                    child: Text(
-                      '${currentIndex + 1}η φωτογραφία',
-                      style: GoogleFonts.adventPro(
-                        color: Colors.orange[50],
-                        fontSize: 35.0,
-                        decoration: null,
+                  Flexible(
+                    child: Container(
+                      padding: const EdgeInsets.all(20.0),
+                      child: Text(
+                        '${currentIndex + 1}η φωτογραφία',
+                        style: GoogleFonts.adventPro(
+                          color: Colors.orange[50],
+                          fontSize: 25.0,
+                          decoration: null,
+                        ),
                       ),
                     ),
                   ),

@@ -14,10 +14,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-import '../connection.dart';
+import '../../connection.dart';
 import 'beach_image_wrapper.dart';
-import 'components/animated_background/animated_background.dart';
-import 'components/loader.dart';
+import '../components/animated_background/animated_background.dart';
+import '../components/loader.dart';
 
 class BeachPage extends StatefulWidget {
   const BeachPage({this.beach});
@@ -122,9 +122,9 @@ class _BeachPageState extends State<BeachPage> {
 
   @override
   Widget build(BuildContext context) {
-    return SafeArea(
-      child: Scaffold(
-        body: Stack(
+    return Scaffold(
+      body: SafeArea(
+        child: Stack(
           children: [
             const AnimatedBackground(
               showTitle: false,

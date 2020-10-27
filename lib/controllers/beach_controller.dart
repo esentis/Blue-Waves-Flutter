@@ -101,7 +101,7 @@ Future<void> addRating(Rating rating) async {
     (value) {
       showSnack(
         title: 'Συγχαρητήρια',
-        message: 'Κέρδισες 15 karma points!',
+        message: 'Κέρδισες 15 πόντους!',
         firstColor: Colors.orange,
         secondColor: Colors.blue,
       );

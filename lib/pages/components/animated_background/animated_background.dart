@@ -38,11 +38,7 @@ class AnimatedBackground extends StatelessWidget {
           child: Waves(),
         ),
         showTitle
-            ? Positioned(
-                top: MediaQuery.of(context).size.height / 13,
-                left: MediaQuery.of(context).size.width / 3,
-                child: BlueWavesTitle(),
-              )
+            ? Align(alignment: Alignment.topCenter, child: BlueWavesTitle())
             : const SizedBox(),
         const Abyss(),
       ],
