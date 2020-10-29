@@ -8,6 +8,7 @@ import 'package:Blue_Waves/pages/favorites_page.dart';
 import 'package:Blue_Waves/pages/rated_beaches.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
@@ -56,33 +57,36 @@ class _HomePageState extends State<HomePage> {
 
   /// Method to create a list of Markers and set them to the map.
   Future<void> getAllMarkers() async {
-    _mapStyle = await rootBundle.loadString('map_styles.txt');
-    var beaches;
-    try {
-      beaches = await getBeaches();
-    } catch (e) {
-      return logger.e(e);
-    }
-
     var assetBytes = await getBytesFromAsset('assets/images/marker.png', 64);
     myMarker = BitmapDescriptor.fromBytes(assetBytes);
+    _mapStyle = await rootBundle.loadString('map_styles.txt');
 
-    beaches.forEach(
-      (beach) {
-        markers.add(
-          Marker(
-            markerId: MarkerId(beach['name']),
-            position: LatLng(beach['latitude'], beach['longitude']),
-            icon: myMarker,
-            infoWindow: InfoWindow(
-              title: beach['name'],
-              onTap: () async {
-                await Get.to(BeachPage(beach: beach));
-              },
+    await FirebaseDatabase.instance
+        .reference()
+        .child('beaches')
+        .once()
+        .then((snapshot) {
+      Map<dynamic, dynamic> beaches = snapshot.value;
+
+      beaches.forEach(
+        (key, value) {
+          markers.add(
+            Marker(
+              markerId: MarkerId(value['name']),
+              position: LatLng(value['latitude'], value['longitude']),
+              icon: myMarker,
+              infoWindow: InfoWindow(
+                title: value['name'],
+                onTap: () async {
+                  await Get.to(BeachPage(beach: value));
+                },
+              ),
             ),
-          ),
-        );
-      },
+          );
+        },
+      );
+    }).catchError(
+      (onError) => logger.e(onError),
     );
     await isAdminCheck();
     setState(() {
