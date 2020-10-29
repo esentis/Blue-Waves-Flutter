@@ -31,6 +31,7 @@ dependencies:
   firebase_auth: ^0.18.1+1
   firebase_core: ^0.5.0
   firebase_crashlytics: ^0.2.1+1
+  firebase_database: ^4.2.0
   flutter_dotenv: ^2.1.0
   flutter_launcher_icons: ^0.8.1
   flutter_rating_bar: ^3.0.1+1
