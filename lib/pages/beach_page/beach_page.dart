@@ -21,7 +21,7 @@ import '../components/loader.dart';
 
 class BeachPage extends StatefulWidget {
   const BeachPage({this.beach});
-  final Map<String, dynamic> beach;
+  final Map<dynamic, dynamic> beach;
   @override
   _BeachPageState createState() => _BeachPageState();
 }

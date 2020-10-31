@@ -5,10 +5,10 @@ import 'package:Blue_Waves/models/Rating.dart';
 import 'package:Blue_Waves/pages/components/snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
-import '../helpers/mapping_extensions.dart';
 import '../connection.dart';
 
 // Beaches DB reference
@@ -23,6 +23,9 @@ CollectionReference users = FirebaseFirestore.instance.collection('users');
 // Favorites DB references
 CollectionReference favorites =
     FirebaseFirestore.instance.collection('favorites');
+
+// Neaches reference in Realtime Database
+var _beachesRef = FirebaseDatabase.instance.reference().child('beaches');
 
 /// Registers a user with the following parameters.
 /// ### Member model
@@ -180,31 +183,24 @@ Future<void> addBeach(Beach beach) async {
     'longitude': beach.longitude,
     'latitude': beach.latitude,
     'images': beach.images,
-  }).then((docRef) {
+  }).then((docRef) async {
     logger.i('Beach Added');
     documentReference = docRef;
+    await _beachesRef.child(documentReference.id).set({
+      'name': beach.name,
+      'description': beach.description,
+      'longitude': beach.longitude,
+      'latitude': beach.latitude,
+      'images': beach.images,
+      'id': documentReference.id,
+    });
   }).catchError((error) => logger.e('Failed to add beach: $error'));
-
-  // We add the document's id to a seperate field to access it easily.
-  await beaches
-      .doc(documentReference.id)
-      // ignore: unnecessary_string_interpolations
-      .update({'id': '${documentReference.id}'})
-      .then((value) => logger.i('Beach id UPDATED'))
-      .catchError((onError) => logger.e(onError));
-}
-
-/// Gets all beaches from db, used only in homepage to draw markers on the map.
-Future<List<Map<String, dynamic>>> getBeaches() async {
-  var mappedBeaches =
-      await beaches.get().then((querySnapshot) => querySnapshot.toBeach());
-
-  return mappedBeaches;
 }
 
 /// Gets a beach with an ID
 Future getBeach(String id) async {
-  var beach = await beaches.doc(id).get().then((value) => value.data());
-  logger.wtf(beach);
+  var beach = await _beachesRef.child(id).once().then((snapshot) {
+    return snapshot.value;
+  });
   return beach;
 }
