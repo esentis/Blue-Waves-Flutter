@@ -74,6 +74,7 @@ class RatedBeaches extends StatelessWidget {
                         onTap: () async {
                           var beach =
                               await getBeach(document.data()['beachId']);
+
                           await Get.to(
                             BeachPage(
                               beach: beach,
