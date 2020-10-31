@@ -2,7 +2,7 @@
 
 **Functionalities**
 
-* Integrates Realtime Database.
+* Integrates Realtime Database to reduce Firestore load.
 
 ## 0.0.6
 
