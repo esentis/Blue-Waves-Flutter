@@ -13,6 +13,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/services.dart';
 // import 'package:flutter/foundation.dart' show kDebugMode;
 
 void main() async {
@@ -32,11 +33,15 @@ void main() async {
 }
 
 class MyApp extends StatelessWidget {
-  // Create the initialization Future outside of `build`:
+  // LOCK THE ORIENTATION
 
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    SystemChrome.setPreferredOrientations([
+      DeviceOrientation.portraitUp,
+      DeviceOrientation.portraitDown,
+    ]);
     var analytics = FirebaseAnalytics();
     // 100 mb max cache memory.
     FirebaseFirestore.instance.settings = const Settings(
