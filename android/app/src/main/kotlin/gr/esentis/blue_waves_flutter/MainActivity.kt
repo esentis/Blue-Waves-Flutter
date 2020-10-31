@@ -1,4 +1,4 @@
-package com.example.blue_waves_flutter
+package gr.esentis.blue_waves_flutter
 
 import io.flutter.embedding.android.FlutterActivity
 
