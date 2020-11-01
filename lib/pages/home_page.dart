@@ -6,10 +6,12 @@ import 'package:Blue_Waves/pages/admin_panel.dart';
 import 'package:Blue_Waves/pages/favorites_page.dart';
 import 'package:Blue_Waves/pages/rated_beaches.dart';
 import 'package:circular_menu/circular_menu.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:animate_do/animate_do.dart';
@@ -51,6 +53,16 @@ class _HomePageState extends State<HomePage> {
         .buffer
         .asUint8List();
   }
+
+  BannerAd myBanner = BannerAd(
+    adUnitId: DotEnv().env['VAR_ADUNIT_ID'],
+    // adUnitId: BannerAd.testAdUnitId,
+    size: AdSize.smartBanner,
+    targetingInfo: const MobileAdTargetingInfo(childDirected: true),
+    listener: (MobileAdEvent event) {
+      print('BannerAd event is $event');
+    },
+  );
 
   /// Method to create a list of Markers and set them to the map.
   Future<void> getAllMarkers() async {
@@ -109,6 +121,17 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getAllMarkers();
     });
+    myBanner
+      // typically this happens well before the ad is shown
+      ..load()
+      ..show(
+        // Positions the banner ad 60 pixels from the bottom of the screen
+        anchorOffset: 60.0,
+        // Positions the banner ad 10 pixels from the center of the screen to the right
+        horizontalCenterOffset: 10.0,
+        // Banner Position
+        anchorType: AnchorType.bottom,
+      );
   }
 
   @override
