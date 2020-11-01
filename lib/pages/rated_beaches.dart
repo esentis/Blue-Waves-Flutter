@@ -64,7 +64,9 @@ class RatedBeaches extends StatelessWidget {
                   }
 
                   if (snapshot.connectionState == ConnectionState.waiting) {
-                    return const Text('Loading');
+                    return const Center(
+                      child: CircularProgressIndicator(),
+                    );
                   }
 
                   return ListView(
