@@ -1,5 +1,6 @@
 import 'package:Blue_Waves/connection.dart';
 import 'package:Blue_Waves/pages/components/animated_background/animated_background.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -9,6 +10,8 @@ import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import 'components/loader.dart';
+import 'components/snack_bar.dart';
+import 'landing_page.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -74,6 +77,91 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
+                      Align(
+                        alignment: Alignment.topCenter,
+                        child: Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).size.height / 5),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height / 6.1,
+                            width: MediaQuery.of(context).size.width / 2.5,
+                            child: StreamBuilder(
+                              stream: users
+                                  .where('id',
+                                      isEqualTo:
+                                          FirebaseAuth.instance.currentUser.uid)
+                                  .snapshots(),
+                              builder: (BuildContext context,
+                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                                if (snapshot.hasData) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      showSnack(
+                                        title: 'Τι είναι οι πόντοι;',
+                                        duration: 2300,
+                                        message:
+                                            'Κάθε φορά που βαθμολογείς μια παραλία κερδίζεις πόντους !',
+                                        firstColor:
+                                            Colors.blueAccent.withOpacity(0.8),
+                                        secondColor:
+                                            Colors.blue.withOpacity(0.7),
+                                      );
+                                    },
+                                    child: Padding(
+                                      padding: const EdgeInsets.all(18.0),
+                                      child: Column(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        children: [
+                                          Flexible(
+                                            child: Text(
+                                              'Πόντοι',
+                                              style: GoogleFonts.adventPro(
+                                                fontSize: 20,
+                                                color: Colors.orange[50],
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                          Flexible(
+                                            child: Text(
+                                              snapshot.data.docs.first
+                                                  .data()['karma']
+                                                  .toString(),
+                                              style: GoogleFonts.adventPro(
+                                                fontSize: 25,
+                                                color: Colors.orange[50],
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  );
+                                }
+                                return const Center(
+                                    child: CircularProgressIndicator());
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () async {
+                          await FirebaseAuth.instance.signOut();
+                          await Get.to(LandingPage());
+                        },
+                        child: Text(
+                          'Αποσύνδεση',
+                          style: GoogleFonts.adventPro(
+                            fontSize: 25,
+                            color: Colors.orange[50].withOpacity(0.8),
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
                       TextButton(
                         onPressed: () async {
                           await Get.defaultDialog(
@@ -136,6 +224,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           style: GoogleFonts.adventPro(
                             fontSize: 25,
                             color: Colors.red.withOpacity(0.8),
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
                       ),
