@@ -3,14 +3,14 @@
 ![Made with love in Greece](https://madewithlove.now.sh/gr?heart=true&colorB=%23537aee)
 
 ![Flutter/Dart](https://badgen.net/pub/flutter-platform/xml)
-![Flutter/Dart](https://img.shields.io/badge/version-0.0.8-orange)
+![Flutter/Dart](https://img.shields.io/badge/version-0.0.9-orange)
 
 ![Last commit](https://img.shields.io/github/last-commit/esentis/Blue-Waves-Flutter?style=for-the-badge)
 
 <a href="https://play.google.com/store/apps/details?id=gr.esentis.blue_waves_flutter"><img src="https://steverichey.github.io/google-play-badge-svg/img/el_get.svg" width="250" title="Blue Waves Open Beta" alt="Blue Waves Open Beta"></a>
 
 <a href="https://github.com/esentis/Blue-Waves-API"><img src="bluewaves.png" width="150" title="Blue Waves" alt="Blue Waves Logo"></a>  is about discovering and sharing new beaches ! Travel around the world and discover new and exotic beaches (currently only Greece).
->In this phase the App is serverless (Firebase/Firestore/Realtime Database). Hopefully in the future I will deploy a proper backend.
+>In this phase, the App is in Beta and it's serverless (Firebase/Firestore/Realtime Database). Hopefully in the future I will deploy a proper backend.
 
 ## Screenshots
 
