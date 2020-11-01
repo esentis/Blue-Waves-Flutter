@@ -3,16 +3,14 @@ import 'dart:typed_data';
 
 import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:Blue_Waves/pages/admin_panel.dart';
-import 'package:Blue_Waves/pages/components/snack_bar.dart';
 import 'package:Blue_Waves/pages/favorites_page.dart';
 import 'package:Blue_Waves/pages/rated_beaches.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:circular_menu/circular_menu.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:animate_do/animate_do.dart';
 
@@ -26,7 +24,6 @@ import 'components/loader.dart';
 import 'dart:ui' as ui;
 
 import 'edit_profile_page.dart';
-import 'landing_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -135,145 +132,90 @@ class _HomePageState extends State<HomePage> {
               ),
               isLoading
                   ? const SizedBox()
-                  : Align(
-                      alignment: Alignment.topCenter,
-                      child: Padding(
-                        padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height / 5),
-                        child: Container(
-                          height: MediaQuery.of(context).size.height / 6.1,
-                          width: MediaQuery.of(context).size.width / 2.5,
-                          child: StreamBuilder(
-                            stream: users
-                                .where('id',
-                                    isEqualTo:
-                                        FirebaseAuth.instance.currentUser.uid)
-                                .snapshots(),
-                            builder: (BuildContext context,
-                                AsyncSnapshot<QuerySnapshot> snapshot) {
-                              if (snapshot.hasData) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    showSnack(
-                                      title: 'Τι είναι οι πόντοι;',
-                                      duration: 2300,
-                                      message:
-                                          'Κάθε φορά που βαθμολογείς μια παραλία κερδίζεις πόντους !',
-                                      firstColor:
-                                          Colors.blueAccent.withOpacity(0.8),
-                                      secondColor: Colors.blue.withOpacity(0.7),
-                                    );
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(18.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            'Πόντοι',
-                                            style: GoogleFonts.adventPro(
-                                              fontSize: 20,
-                                              color: Colors.orange[50],
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                        Flexible(
-                                          child: Text(
-                                            snapshot.data.docs.first
-                                                .data()['karma']
-                                                .toString(),
-                                            style: GoogleFonts.adventPro(
-                                              fontSize: 25,
-                                              color: Colors.orange[50],
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                );
-                              }
-                              return const CircularProgressIndicator();
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-              isLoading
-                  ? const SizedBox()
-                  : Align(
-                      alignment: Alignment.topCenter,
-                      child: FadeInDown(
-                        duration: const Duration(milliseconds: 900),
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height / 6),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
-                              GestureDetector(
-                                onTap: () async {
-                                  await Get.to(FavoritesPage());
-                                },
-                                child: const Icon(
-                                  Icons.favorite,
-                                  size: 40,
-                                  color: Colors.red,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  await Get.to(RatedBeaches());
-                                },
-                                child: const Icon(
-                                  Icons.rate_review_outlined,
-                                  size: 40,
-                                  color: Colors.red,
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  await Get.to(EditProfilePage());
-                                },
-                                child: Icon(
-                                  Icons.settings,
-                                  size: 40,
-                                  color: Colors.orange[50],
-                                ),
-                              ),
-                              GestureDetector(
-                                onTap: () async {
-                                  await auth.signOut();
-                                  await Get.to(LandingPage());
-                                  // Navigator.popAndPushNamed(context, '/');
-                                },
-                                child: const Icon(
-                                  Icons.logout,
-                                  size: 40,
-                                  color: Colors.red,
-                                ),
-                              ),
-                              isAdmin
-                                  ? GestureDetector(
-                                      onTap: () async {
-                                        await Get.to(AdminPanel());
-                                        // Navigator.popAndPushNamed(context, '/');
-                                      },
-                                      child: Icon(
-                                        Icons.add_moderator,
-                                        size: 40,
-                                        color: Colors.green[200],
-                                      ),
+                  : FadeIn(
+                      duration: const Duration(milliseconds: 700),
+                      child: CircularMenu(
+                        alignment: Alignment.topRight,
+                        toggleButtonPadding: 15,
+                        toggleButtonSize: 25,
+                        toggleButtonBoxShadow: [
+                          BoxShadow(
+                            blurRadius: 2,
+                            spreadRadius: 2,
+                            color: Colors.black.withOpacity(0.3),
+                            offset: const Offset(0, 3),
+                          )
+                        ],
+                        curve: Curves.easeIn,
+                        reverseCurve: Curves.easeOut,
+                        items: [
+                          CircularMenuItem(
+                              iconSize: 35,
+                              padding: 2,
+                              margin: 2,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 2,
+                                  spreadRadius: 2,
+                                  color: Colors.black.withOpacity(0.3),
+                                  offset: const Offset(0, 3),
+                                )
+                              ],
+                              icon: Icons.settings,
+                              onTap: () async {
+                                await Get.to(EditProfilePage());
+                              }),
+                          CircularMenuItem(
+                              iconSize: 35,
+                              padding: 2,
+                              margin: 2,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 2,
+                                  spreadRadius: 2,
+                                  color: Colors.black.withOpacity(0.3),
+                                  offset: const Offset(0, 3),
+                                )
+                              ],
+                              icon: Icons.rate_review,
+                              onTap: () async {
+                                await Get.to(RatedBeaches());
+                              }),
+                          CircularMenuItem(
+                              iconSize: 35,
+                              padding: 2,
+                              margin: 2,
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 2,
+                                  spreadRadius: 2,
+                                  color: Colors.black.withOpacity(0.3),
+                                  offset: const Offset(0, 3),
+                                )
+                              ],
+                              icon: Icons.favorite,
+                              onTap: () async {
+                                await Get.to(FavoritesPage());
+                              }),
+                          isAdmin
+                              ? CircularMenuItem(
+                                  iconSize: 35,
+                                  padding: 2,
+                                  margin: 2,
+                                  icon: Icons.admin_panel_settings_sharp,
+                                  boxShadow: [
+                                    BoxShadow(
+                                      blurRadius: 2,
+                                      spreadRadius: 2,
+                                      color: Colors.black.withOpacity(0.3),
+                                      offset: const Offset(0, 3),
                                     )
-                                  : const SizedBox(),
-                            ],
-                          ),
-                        ),
+                                  ],
+                                  onTap: () async {
+                                    await Get.to(AdminPanel());
+                                  })
+                              : null,
+                        ],
                       ),
                     ),
               isLoading
@@ -288,7 +230,7 @@ class _HomePageState extends State<HomePage> {
                             topLeft: Radius.circular(60),
                           ),
                           child: Container(
-                            height: MediaQuery.of(context).size.height / 1.8,
+                            height: MediaQuery.of(context).size.height / 1.3,
                             width: MediaQuery.of(context).size.width,
                             child: GoogleMap(
                               mapType: MapType.normal,
