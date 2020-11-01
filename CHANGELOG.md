@@ -7,6 +7,10 @@
 * Karma points are now at settings page.
 * Logout is now at settings page.
 
+**Functionalities**
+
+* Integrates AdMob (just a simple Banner at bottom).
+
 ## 0.0.8
 
 * Configures project for Play Store deployment.
