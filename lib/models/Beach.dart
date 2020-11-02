@@ -33,5 +33,5 @@ class Beach {
   final String description;
   final double latitude;
   final double longitude;
-  final List<String> images;
+  final List<dynamic> images;
 }
