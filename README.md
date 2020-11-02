@@ -2,8 +2,7 @@
 
 ![Made with love in Greece](https://madewithlove.now.sh/gr?heart=true&colorB=%23537aee)
 
-![Flutter/Dart](https://badgen.net/pub/flutter-platform/xml)
-![Flutter/Dart](https://img.shields.io/badge/version-0.0.9-orange)
+![Flutter/Dart](https://img.shields.io/badge/version-0.0.9-orange?style=for-the-badge&logo=flutter)
 
 ![Last commit](https://img.shields.io/github/last-commit/esentis/Blue-Waves-Flutter?style=for-the-badge)
 
