@@ -1,24 +1,19 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:Blue_Waves/controllers/beach_api_controller.dart';
 import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:Blue_Waves/pages/admin_panel.dart';
 import 'package:Blue_Waves/pages/favorites_page.dart';
 import 'package:Blue_Waves/pages/rated_beaches.dart';
 import 'package:circular_menu/circular_menu.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:animate_do/animate_do.dart';
 
-import 'package:Blue_Waves/connection.dart';
-
-import '../connection.dart';
 import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
 import 'components/loader.dart';
@@ -54,49 +49,28 @@ class _HomePageState extends State<HomePage> {
         .asUint8List();
   }
 
-  BannerAd myBanner = BannerAd(
-    adUnitId: DotEnv().env['VAR_ADUNIT_ID'],
-    // adUnitId: BannerAd.testAdUnitId,
-    size: AdSize.smartBanner,
-    targetingInfo: const MobileAdTargetingInfo(childDirected: true),
-    listener: (MobileAdEvent event) {
-      print('BannerAd event is $event');
-    },
-  );
-
   /// Method to create a list of Markers and set them to the map.
   Future<void> getAllMarkers() async {
     var assetBytes = await getBytesFromAsset('assets/images/marker.png', 64);
     myMarker = BitmapDescriptor.fromBytes(assetBytes);
     _mapStyle = await rootBundle.loadString('map_styles.txt');
+    var beaches = await getAllBeachesApi();
 
-    await FirebaseDatabase.instance
-        .reference()
-        .child('beaches')
-        .once()
-        .then((snapshot) {
-      Map<dynamic, dynamic> beaches = snapshot.value;
-
-      beaches.forEach(
-        (key, value) {
-          markers.add(
-            Marker(
-              markerId: MarkerId(value['name']),
-              position: LatLng(value['latitude'], value['longitude']),
-              icon: myMarker,
-              infoWindow: InfoWindow(
-                title: value['name'],
-                onTap: () async {
-                  await Get.to(BeachPage(beach: value));
-                },
-              ),
-            ),
-          );
-        },
+    beaches['beaches'].forEach((value) {
+      markers.add(
+        Marker(
+          markerId: MarkerId(value['name']),
+          position: LatLng(value['latitude'], value['longitude']),
+          icon: myMarker,
+          infoWindow: InfoWindow(
+            title: value['name'],
+            onTap: () async {
+              await Get.to(BeachPage(beach: value));
+            },
+          ),
+        ),
       );
-    }).catchError(
-      (onError) => logger.e(onError),
-    );
+    });
     await isAdminCheck();
     setState(() {
       isLoading = false;
@@ -121,17 +95,6 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getAllMarkers();
     });
-    myBanner
-      // typically this happens well before the ad is shown
-      ..load()
-      ..show(
-        // Positions the banner ad 60 pixels from the bottom of the screen
-        anchorOffset: 60.0,
-        // Positions the banner ad 10 pixels from the center of the screen to the right
-        horizontalCenterOffset: 10.0,
-        // Banner Position
-        anchorType: AnchorType.bottom,
-      );
   }
 
   @override
