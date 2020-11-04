@@ -137,6 +137,7 @@ class _HomePageState extends State<HomePage> {
   @override
   void dispose() {
     mapController.dispose();
+    myBanner..dispose();
     super.dispose();
   }
 
