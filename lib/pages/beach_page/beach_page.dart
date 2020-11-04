@@ -4,11 +4,9 @@ import 'package:Blue_Waves/models/Favorite.dart';
 import 'package:Blue_Waves/models/Rating.dart';
 import 'package:Blue_Waves/pages/components/snack_bar.dart';
 import 'package:animate_do/animate_do.dart';
-import 'package:firebase_admob/firebase_admob.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -105,16 +103,6 @@ class _BeachPageState extends State<BeachPage> {
     setState(() {});
   }
 
-  BannerAd myBanner = BannerAd(
-    adUnitId: DotEnv().env['VAR_ADUNIT_ID'],
-    // adUnitId: BannerAd.testAdUnitId,
-    size: AdSize.smartBanner,
-    targetingInfo: const MobileAdTargetingInfo(childDirected: true),
-    listener: (MobileAdEvent event) {
-      print('BannerAd event is $event');
-    },
-  );
-
   @override
   void initState() {
     beachPlace = CameraPosition(
@@ -125,16 +113,7 @@ class _BeachPageState extends State<BeachPage> {
       markerId: MarkerId('beachMarker'),
       position: LatLng(widget.beach['latitude'], widget.beach['longitude']),
     );
-    myBanner
-      ..load()
-      ..show(
-        // Positions the banner ad 60 pixels from the bottom of the screen
-        anchorOffset: 60.0,
-        // Positions the banner ad 10 pixels from the center of the screen to the right
-        horizontalCenterOffset: 10.0,
-        // Banner Position
-        anchorType: AnchorType.bottom,
-      );
+
     super.initState();
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getRatings();
@@ -143,7 +122,6 @@ class _BeachPageState extends State<BeachPage> {
 
   @override
   void dispose() {
-    myBanner.dispose();
     super.dispose();
   }
 
