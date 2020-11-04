@@ -10,7 +10,7 @@
 **Functionalities**
 
 * Integrates AdMob (just a simple Banner at bottom).
-* The only Ad currently is on beach page and it's a banner at bottom.
+* The only Ad currently is on home page and it's a banner at bottom.
 * Beaches are now fetched from our API instead of Firestore/Realtime Database.
 
 ## 0.0.8
