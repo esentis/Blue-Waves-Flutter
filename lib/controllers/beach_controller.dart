@@ -1,12 +1,10 @@
+import 'package:Blue_Waves/controllers/beach_api_controller.dart';
 import 'package:Blue_Waves/models/Beach.dart';
 import 'package:Blue_Waves/models/Favorite.dart';
 import 'package:Blue_Waves/models/Member.dart';
-import 'package:Blue_Waves/models/Rating.dart';
-import 'package:Blue_Waves/pages/components/snack_bar.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 import '../connection.dart';
@@ -44,76 +42,67 @@ Future<void> registerUser(Member user) async {
       displayName: user.displayName,
       photoURL: user.photoUrl ?? '',
     );
-    users.add({
-      'username': user.displayName,
-      'karma': 0,
-      'role': 'user',
-      'id': userCredential.user.uid,
-      'joinDate': DateFormat('dd-MM-yyy').format(DateTime.now()),
-    }).then((docRef) async {
-      // We add the document id as a field.
-      await users.doc(docRef.id).update({'docId': docRef.id});
-    });
+    addUserToApi(user);
   });
 }
 
-/// Adds a review with the following parameters.
-/// ### Review model
-/// * beachId : String
-/// * cons : String
-/// * pros : String
-/// * rating : int
-/// * userID : String
-/// * username : String
-Future<void> addRating(Rating rating) async {
-  QuerySnapshot querySnapshot;
-  var userDocId = '';
-  // Checking if user has already reviewed the beach
-  await ratings
-      .where(
-        'username',
-        isEqualTo: rating.username,
-      )
-      .where('beachId', isEqualTo: rating.beachId)
-      .get()
-      .then((snapshot) => querySnapshot = snapshot);
-  if (querySnapshot.docs.isNotEmpty) {
-    return logger.e('You have already rated this beach');
-  }
+// /// Adds a review with the following parameters.
+// /// ### Review model
+// /// * beachId : String
+// /// * cons : String
+// /// * pros : String
+// /// * rating : int
+// /// * userID : String
+// /// * username : String
+// Future<void> addRating(Rating rating) async {
+//   QuerySnapshot querySnapshot;
+//   var userDocId = '';
+//   // Checking if user has already reviewed the beach
+//   await ratings
+//       .where(
+//         'username',
+//         isEqualTo: rating.username,
+//       )
+//       .where('beachId', isEqualTo: rating.beachId)
+//       .get()
+//       .then((snapshot) => querySnapshot = snapshot);
+//   if (querySnapshot.docs.isNotEmpty) {
+//     return logger.e('You have already rated this beach');
+//   }
 
-  // If we are ok to procceed we add the review.
-  await ratings
-      .add({
-        'beachId': rating.beachId,
-        'userId': rating.userUid,
-        'username': rating.username,
-        'rating': rating.rating,
-        'beachName': rating.beachName,
-        'date': DateFormat('dd-MM-yyy').format(DateTime.now()),
-      })
-      .then((value) => logger.i('Beach rating added'))
-      .catchError((onError) => logger.e(onError));
+//   // If we are ok to procceed we add the review.
+//   await ratings
+//       .add({
+//         'beachId': rating.beachId,
+//         'userId': rating.userUid,
+//         'username': rating.username,
+//         'rating': rating.rating,
+//         'beachName': rating.beachName,
+//         'date': DateFormat('dd-MM-yyy').format(DateTime.now()),
+//       })
+//       .then((value) => logger.i('Beach rating added'))
+//       .catchError((onError) => logger.e(onError));
 
-  await users
-      .where('id', isEqualTo: rating.userUid)
-      .limit(1)
-      .get()
-      .then((value) => userDocId = value.docs.first.data()['docId']);
-  // We award the user with karma points for rating a beach
-  await users.doc(userDocId).update({'karma': FieldValue.increment(15)}).then(
-    (value) {
-      showSnack(
-        title: 'Συγχαρητήρια',
-        message: 'Κέρδισες 15 πόντους!',
-        firstColor: Colors.orange,
-        secondColor: Colors.blue,
-      );
-      logger.i(
-        '${rating.username} got 15 karma points!',
-      );
-    },
-  ).catchError((error) => logger.e(error));
-}
+//   await users
+//       .where('id', isEqualTo: rating.userUid)
+//       .limit(1)
+//       .get()
+//       .then((value) => userDocId = value.docs.first.data()['docId']);
+//   // We award the user with karma points for rating a beach
+//   await users.doc(userDocId).update({'karma': FieldValue.increment(15)}).then(
+//     (value) {
+//       showSnack(
+//         title: 'Συγχαρητήρια',
+//         message: 'Κέρδισες 15 πόντους!',
+//         firstColor: Colors.orange,
+//         secondColor: Colors.blue,
+//       );
+//       logger.i(
+//         '${rating.username} got 15 karma points!',
+//       );
+//     },
+//   ).catchError((error) => logger.e(error));
+// }
 
 Future<void> addFavorite(Favorite favorite) async {
   QuerySnapshot querySnapshot;
