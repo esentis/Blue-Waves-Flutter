@@ -1,5 +1,9 @@
 import 'package:Blue_Waves/models/Beach.dart';
+import 'package:Blue_Waves/models/Member.dart';
+import 'package:Blue_Waves/models/Rating.dart';
 import 'package:dio/dio.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 
 import '../connection.dart';
 
@@ -62,6 +66,70 @@ Future getAllBeachesApi() async {
   try {
     response = await dio.get('/beaches/all');
     // logger.wtf(response.data);
+    return response.data;
+  } on DioError catch (e) {
+    logger.e(e.message);
+    return e.type;
+  }
+}
+
+Future addUserToApi(Member member) async {
+  Response response;
+  try {
+    response = await dio.post(
+      '/users/add',
+      data: {
+        'username': member.displayName,
+        'karma': 0,
+        'role': 'user',
+        'id': FirebaseAuth.instance.currentUser.uid,
+        'joinDate': DateFormat('dd-MM-yyy').format(DateTime.now()),
+      },
+    );
+    return response.data;
+  } on DioError catch (e) {
+    logger.e(e.message);
+    return e.type;
+  }
+}
+
+Future removeUserFromApi(String userId) async {
+  Response response;
+  try {
+    response = await dio.post('/users/delete', data: {
+      'id': userId,
+    });
+    return response.data;
+  } on DioError catch (e) {
+    logger.e(e.message);
+    return e.type;
+  }
+}
+
+Future addRatingToApi(Rating rating) async {
+  Response response;
+  try {
+    response = await dio.post(
+      '/ratings/add',
+      data: {
+        'beachId': rating.beachId,
+        'userId': rating.userUid,
+        'rating': rating.rating,
+      },
+    );
+    return response.data;
+  } on DioError catch (e) {
+    logger.e(e.message);
+    return e.type;
+  }
+}
+
+Future getBeachRatings(String beachId) async {
+  Response response;
+  try {
+    response = await dio.post('/ratings/search', data: {
+      'beachId': beachId,
+    });
     return response.data;
   } on DioError catch (e) {
     logger.e(e.message);
