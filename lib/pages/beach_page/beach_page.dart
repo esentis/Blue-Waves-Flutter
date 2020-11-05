@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:Blue_Waves/controllers/beach_api_controller.dart';
 import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:Blue_Waves/models/Favorite.dart';
 import 'package:Blue_Waves/models/Rating.dart';
@@ -14,7 +15,6 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-import '../../connection.dart';
 import 'beach_image_wrapper.dart';
 import '../components/animated_background/animated_background.dart';
 import '../components/loader.dart';
@@ -57,48 +57,26 @@ class _BeachPageState extends State<BeachPage> {
   }
 
   Future getRatings() async {
-    await ratings
-        .where('beachId', isEqualTo: widget.beach['id'])
-        .get()
-        .then((value) => foundRatings = value.docs);
+    var ratings = await getBeachRatings(widget.beach['_id']);
 
-    await favorites
-        .where(
-          'userId',
-          isEqualTo: FirebaseAuth.instance.currentUser.uid,
-        )
-        .where(
-          'beachId',
-          isEqualTo: widget.beach['id'],
-        )
-        .get()
-        .then((value) {
-      if (value.docs.isNotEmpty) {
-        logger.wtf('BEACH WAS FAVORITED AND IT SHOULD SHOW TO REMOVE');
-        isBeachFavorited = true;
-      }
-    });
-
-    if (foundRatings.isNotEmpty) {
-      logger.wtf('Ratings found iterating on them');
-      foundRatings.forEach((element) {
-        ratingSum += element['rating'];
-        if (element['username'] ==
-            FirebaseAuth.instance.currentUser.displayName) {
-          chosenRating = element['rating'];
-        }
+    if (ratings['results'].isNotEmpty) {
+      hasUserRated = ratings['results'].any((element) =>
+          element['userId'] == FirebaseAuth.instance.currentUser.uid);
+      var totalRating = 0;
+      ratings['results'].forEach((e) {
+        totalRating += e['rating'];
       });
-      actualRating = ratingSum / foundRatings.length;
-      totalRatings = foundRatings.length;
+      totalRatings = ratings['results'].length;
+      actualRating = totalRating / totalRatings;
+
+      if (hasUserRated) {
+        chosenRating = ratings['results']
+            .where((element) =>
+                element['userId'] == FirebaseAuth.instance.currentUser.uid)
+            .toList()[0]['rating']
+            .toDouble();
+      }
     }
-
-    logger.i('Found ${foundRatings.length} reviews');
-    logger.i('Actual rating is $actualRating');
-
-    hasUserRated = foundRatings.any((element) =>
-        element['username'] == FirebaseAuth.instance.currentUser.displayName);
-
-    logger.i('Has user reviewed the beach ? $hasUserRated');
     isLoading = false;
     setState(() {});
   }
@@ -321,26 +299,21 @@ class _BeachPageState extends State<BeachPage> {
                                                 Icons.waves,
                                                 color: Colors.blue,
                                               ),
-                                              onRatingUpdate: (rating) {
+                                              onRatingUpdate: (rating) async {
+                                                await addRatingToApi(
+                                                  Rating(
+                                                    beachId:
+                                                        widget.beach['_id'],
+                                                    rating: rating,
+                                                    userUid: FirebaseAuth
+                                                        .instance
+                                                        .currentUser
+                                                        .uid,
+                                                  ),
+                                                );
                                                 setState(() {
                                                   chosenRating = rating;
-                                                  addRating(
-                                                    Rating(
-                                                      beachId:
-                                                          widget.beach['id'],
-                                                      rating: rating,
-                                                      beachName:
-                                                          widget.beach['name'],
-                                                      userUid: FirebaseAuth
-                                                          .instance
-                                                          .currentUser
-                                                          .uid,
-                                                      username: FirebaseAuth
-                                                          .instance
-                                                          .currentUser
-                                                          .displayName,
-                                                    ),
-                                                  );
+
                                                   hasUserRated = true;
                                                   actualRating =
                                                       (ratingSum + rating) /
