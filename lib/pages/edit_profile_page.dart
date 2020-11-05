@@ -1,4 +1,5 @@
 import 'package:Blue_Waves/connection.dart';
+import 'package:Blue_Waves/controllers/beach_api_controller.dart';
 import 'package:Blue_Waves/pages/components/animated_background/animated_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -192,16 +193,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               confirm: GestureDetector(
                                 onTap: () async {
                                   try {
-                                    await users
-                                        .where('id',
-                                            isEqualTo: FirebaseAuth
-                                                .instance.currentUser.uid)
-                                        .get()
-                                        .then((value) async {
-                                      await users
-                                          .doc(value.docs.first.data()['docId'])
-                                          .delete();
-                                    });
+                                    await removeUserFromApi(
+                                        FirebaseAuth.instance.currentUser.uid);
                                     await FirebaseAuth.instance.currentUser
                                         .delete();
                                     await Get.offAllNamed('/');
