@@ -5,6 +5,7 @@ import 'package:Blue_Waves/pages/register_login_page/register_page.dart';
 import 'package:Blue_Waves/states/loading_state.dart';
 import 'package:Blue_Waves/pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_admob/firebase_admob.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -14,30 +15,21 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/services.dart';
-// import 'package:flutter/foundation.dart' show kDebugMode;
 
 void main() async {
   await DotEnv().load('.env');
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+  await FirebaseAdMob.instance.initialize(appId: DotEnv().env['VAR_ADMOB_ID']);
   FlutterError.onError = FirebaseCrashlytics.instance.recordFlutterError;
-  // if (kDebugMode) {
-  //   // Force disable Crashlytics collection while doing every day development.
-  //   // Temporarily toggle this to true if you want to test crash reporting in your app.
-  //   await FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
-  // } else {
-  //   // Handle Crashlytics enabled status when not in Debug,
-  //   // e.g. allow your users to opt-in to crash reporting.
-  // }
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  // LOCK THE ORIENTATION
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+    // LOCK THE ORIENTATION
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
