@@ -5,29 +5,29 @@ class BWTextField extends StatelessWidget {
   const BWTextField({
     @required this.labelText,
     this.emailController,
-    this.obscureText = false,
     this.type,
     Key key,
   }) : super(key: key);
 
   final TextEditingController emailController;
   final String labelText;
-  final bool obscureText;
   final TextInputType type;
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      padding: EdgeInsets.symmetric(
+        vertical: 8.0,
+        horizontal: MediaQuery.of(context).size.width / 5,
+      ),
       child: TextField(
         autocorrect: false,
-        obscureText: obscureText,
         controller: emailController,
         keyboardType: type,
         showCursor: true,
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: GoogleFonts.adventPro(
-            fontSize: 30,
+            fontSize: 26,
             fontWeight: FontWeight.bold,
             color: Colors.orange[50].withOpacity(0.4),
           ),
