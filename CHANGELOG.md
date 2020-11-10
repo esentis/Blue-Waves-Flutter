@@ -1,4 +1,14 @@
-# 0.0.9
+# 0.1.0
+
+**UI changes**
+
+* Login / Register page.
+  * Fields now have a horizontal padding.
+  * Field values are not reset after a failed login/register attempt.
+  * Password field has a password visibility toggler.
+* Ad banner is now at bottom and map is slightly raised.
+
+## 0.0.9
 
 **UI changes**
 
