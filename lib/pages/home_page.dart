@@ -56,7 +56,6 @@ class _HomePageState extends State<HomePage> {
 
   BannerAd myBanner = BannerAd(
     adUnitId: DotEnv().env['VAR_ADUNIT_ID'],
-    // adUnitId: BannerAd.testAdUnitId,
     size: AdSize.smartBanner,
     targetingInfo: const MobileAdTargetingInfo(childDirected: true),
     listener: (MobileAdEvent event) {
@@ -126,9 +125,9 @@ class _HomePageState extends State<HomePage> {
       ..load()
       ..show(
         // Positions the banner ad 60 pixels from the bottom of the screen
-        anchorOffset: 60.0,
+        anchorOffset: 0,
         // Positions the banner ad 10 pixels from the center of the screen to the right
-        horizontalCenterOffset: 10.0,
+        horizontalCenterOffset: 0,
         // Banner Position
         anchorType: AnchorType.bottom,
       );
@@ -154,6 +153,39 @@ class _HomePageState extends State<HomePage> {
               const AnimatedBackground(
                 showTitle: true,
               ),
+              isLoading
+                  ? const Center(child: Loader())
+                  : Positioned(
+                      bottom: MediaQuery.of(context).size.height / 16,
+                      child: FadeInUp(
+                        delay: const Duration(milliseconds: 600),
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(60),
+                            topLeft: Radius.circular(60),
+                          ),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height / 1.3,
+                            width: MediaQuery.of(context).size.width,
+                            child: GoogleMap(
+                              mapType: MapType.normal,
+                              markers: {...markers},
+                              zoomGesturesEnabled: true,
+                              myLocationButtonEnabled: false,
+                              initialCameraPosition: const CameraPosition(
+                                target: LatLng(38.2, 24.1),
+                                zoom: 6,
+                              ),
+                              onMapCreated: (GoogleMapController controller) {
+                                mapController = controller;
+                                mapController.setMapStyle(_mapStyle);
+                                _controller.complete(controller);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
               isLoading
                   ? const SizedBox()
                   : FadeIn(
@@ -242,42 +274,6 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-              isLoading
-                  ? const Center(child: Loader())
-                  : Positioned(
-                      bottom: 0,
-                      child: FadeInUp(
-                        delay: const Duration(milliseconds: 600),
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(60),
-                            topLeft: Radius.circular(60),
-                          ),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height / 1.3,
-                            width: MediaQuery.of(context).size.width,
-                            child: GoogleMap(
-                              mapType: MapType.normal,
-                              markers: {...markers},
-                              zoomControlsEnabled: true,
-                              zoomGesturesEnabled: true,
-                              mapToolbarEnabled: true,
-                              myLocationButtonEnabled: false,
-                              myLocationEnabled: false,
-                              initialCameraPosition: const CameraPosition(
-                                target: LatLng(38.2, 24.1),
-                                zoom: 6,
-                              ),
-                              onMapCreated: (GoogleMapController controller) {
-                                mapController = controller;
-                                mapController.setMapStyle(_mapStyle);
-                                _controller.complete(controller);
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
             ],
           ),
         ),
