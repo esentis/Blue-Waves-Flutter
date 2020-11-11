@@ -36,6 +36,7 @@ dependencies:
   firebase_database: ^4.2.0
   flutter_dotenv: ^2.1.0
   flutter_launcher_icons: ^0.8.1
+  flutter_neumorphic: ^3.0.3
   flutter_rating_bar: ^3.0.1+1
   get: ^3.13.2
   google_fonts: ^1.1.0
