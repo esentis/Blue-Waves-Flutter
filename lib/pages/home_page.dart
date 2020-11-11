@@ -126,9 +126,9 @@ class _HomePageState extends State<HomePage> {
       ..load()
       ..show(
         // Positions the banner ad 60 pixels from the bottom of the screen
-        anchorOffset: 60.0,
+        anchorOffset: 0,
         // Positions the banner ad 10 pixels from the center of the screen to the right
-        horizontalCenterOffset: 10.0,
+        horizontalCenterOffset: 0,
         // Banner Position
         anchorType: AnchorType.bottom,
       );
@@ -155,6 +155,39 @@ class _HomePageState extends State<HomePage> {
                 showTitle: true,
               ),
               isLoading
+                  ? const Center(child: Loader())
+                  : Positioned(
+                      bottom: MediaQuery.of(context).size.height / 16,
+                      child: FadeInUp(
+                        delay: const Duration(milliseconds: 600),
+                        child: ClipRRect(
+                          borderRadius: const BorderRadius.only(
+                            topRight: Radius.circular(60),
+                            topLeft: Radius.circular(60),
+                          ),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height / 1.3,
+                            width: MediaQuery.of(context).size.width,
+                            child: GoogleMap(
+                              mapType: MapType.normal,
+                              markers: {...markers},
+                              zoomGesturesEnabled: true,
+                              myLocationButtonEnabled: false,
+                              initialCameraPosition: const CameraPosition(
+                                target: LatLng(38.2, 24.1),
+                                zoom: 6,
+                              ),
+                              onMapCreated: (GoogleMapController controller) {
+                                mapController = controller;
+                                mapController.setMapStyle(_mapStyle);
+                                _controller.complete(controller);
+                              },
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+              isLoading
                   ? const SizedBox()
                   : FadeIn(
                       duration: const Duration(milliseconds: 700),
@@ -162,11 +195,13 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.topRight,
                         toggleButtonPadding: 15,
                         toggleButtonSize: 25,
+                        toggleButtonColor: Colors.orange[50],
+                        toggleButtonIconColor: Colors.blue,
                         toggleButtonBoxShadow: [
                           BoxShadow(
                             blurRadius: 2,
                             spreadRadius: 2,
-                            color: Colors.black.withOpacity(0.3),
+                            color: Colors.blue.withOpacity(0.3),
                             offset: const Offset(0, 3),
                           )
                         ],
@@ -181,11 +216,13 @@ class _HomePageState extends State<HomePage> {
                                 BoxShadow(
                                   blurRadius: 2,
                                   spreadRadius: 2,
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.blue.withOpacity(0.3),
                                   offset: const Offset(0, 3),
                                 )
                               ],
                               icon: Icons.settings,
+                              iconColor: Colors.blue,
+                              color: Colors.orange[50],
                               onTap: () async {
                                 await Get.to(EditProfilePage());
                               }),
@@ -197,11 +234,13 @@ class _HomePageState extends State<HomePage> {
                                 BoxShadow(
                                   blurRadius: 2,
                                   spreadRadius: 2,
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.blue.withOpacity(0.3),
                                   offset: const Offset(0, 3),
                                 )
                               ],
                               icon: Icons.rate_review,
+                              iconColor: Colors.blue,
+                              color: Colors.orange[50],
                               onTap: () async {
                                 await Get.to(RatedBeaches());
                               }),
@@ -209,15 +248,17 @@ class _HomePageState extends State<HomePage> {
                               iconSize: 35,
                               padding: 2,
                               margin: 2,
+                              color: Colors.orange[50],
                               boxShadow: [
                                 BoxShadow(
                                   blurRadius: 2,
                                   spreadRadius: 2,
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.blue.withOpacity(0.3),
                                   offset: const Offset(0, 3),
                                 )
                               ],
                               icon: Icons.favorite,
+                              iconColor: Colors.blue,
                               onTap: () async {
                                 await Get.to(FavoritesPage());
                               }),
@@ -231,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                                     BoxShadow(
                                       blurRadius: 2,
                                       spreadRadius: 2,
-                                      color: Colors.black.withOpacity(0.3),
+                                      color: Colors.blue.withOpacity(0.3),
                                       offset: const Offset(0, 3),
                                     )
                                   ],
@@ -242,42 +283,6 @@ class _HomePageState extends State<HomePage> {
                         ],
                       ),
                     ),
-              isLoading
-                  ? const Center(child: Loader())
-                  : Positioned(
-                      bottom: 0,
-                      child: FadeInUp(
-                        delay: const Duration(milliseconds: 600),
-                        child: ClipRRect(
-                          borderRadius: const BorderRadius.only(
-                            topRight: Radius.circular(60),
-                            topLeft: Radius.circular(60),
-                          ),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height / 1.3,
-                            width: MediaQuery.of(context).size.width,
-                            child: GoogleMap(
-                              mapType: MapType.normal,
-                              markers: {...markers},
-                              zoomControlsEnabled: true,
-                              zoomGesturesEnabled: true,
-                              mapToolbarEnabled: true,
-                              myLocationButtonEnabled: false,
-                              myLocationEnabled: false,
-                              initialCameraPosition: const CameraPosition(
-                                target: LatLng(38.2, 24.1),
-                                zoom: 6,
-                              ),
-                              onMapCreated: (GoogleMapController controller) {
-                                mapController = controller;
-                                mapController.setMapStyle(_mapStyle);
-                                _controller.complete(controller);
-                              },
-                            ),
-                          ),
-                        ),
-                      ),
-                    )
             ],
           ),
         ),

@@ -11,7 +11,8 @@ import 'package:provider/provider.dart';
 
 import '../../connection.dart';
 import '../components/animated_background/animated_background.dart';
-import 'components/blue_waves_textfield.dart';
+import 'components/password_field.dart';
+import 'components/text_field.dart';
 
 class LoginPage extends StatefulWidget {
   @override
@@ -19,13 +20,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var auth = FirebaseAuth.instance;
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
     var loadingState = context.watch<LoadingState>();
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: SafeArea(
@@ -44,10 +44,9 @@ class _LoginPageState extends State<LoginPage> {
                     labelText: 'Email',
                     type: TextInputType.emailAddress,
                   ),
-                  BWTextField(
+                  BWPasswordField(
                     emailController: passwordController,
                     labelText: 'Κωδικός',
-                    obscureText: true,
                   ),
                   TextButton(
                     onPressed: () async {

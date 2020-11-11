@@ -7,6 +7,7 @@ import 'package:animate_do/animate_do.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -18,6 +19,7 @@ import '../../connection.dart';
 import 'beach_image_wrapper.dart';
 import '../components/animated_background/animated_background.dart';
 import '../components/loader.dart';
+import 'favorite_icon.dart';
 
 class BeachPage extends StatefulWidget {
   const BeachPage({this.beach});
@@ -165,8 +167,9 @@ class _BeachPageState extends State<BeachPage> {
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                                TextButton(
-                                  onPressed: () async {
+                                FavoriteIcon(
+                                  isBeachFavorited: isBeachFavorited,
+                                  onTap: () async {
                                     await addFavorite(
                                       Favorite(
                                         beachId: widget.beach['id'],
@@ -200,17 +203,6 @@ class _BeachPageState extends State<BeachPage> {
                                       }
                                     });
                                   },
-                                  child: isBeachFavorited
-                                      ? const Icon(
-                                          Icons.favorite,
-                                          color: Colors.red,
-                                          size: 50,
-                                        )
-                                      : Icon(
-                                          Icons.favorite,
-                                          color: Colors.orange[50],
-                                          size: 50,
-                                        ),
                                 ),
                               ],
                             ),
@@ -274,13 +266,25 @@ class _BeachPageState extends State<BeachPage> {
                                 ),
                               ),
                             ),
-                            Text(
-                              'Rating : $actualRating out of $totalRatings ',
-                              style: GoogleFonts.adventPro(
-                                fontSize: 25,
-                                color: Colors.orange[50],
-                                fontWeight: FontWeight.bold,
-                              ),
+                            Column(
+                              children: [
+                                Text(
+                                  'Βαθμολογία: ${actualRating.toStringAsFixed(1)} / 5',
+                                  style: GoogleFonts.adventPro(
+                                    fontSize: 25,
+                                    color: Colors.orange[50],
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                Text(
+                                  ' ($totalRatings βαθμολογίες)',
+                                  style: GoogleFonts.adventPro(
+                                    fontSize: 17,
+                                    color: Colors.orange[50],
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
                             ),
                             Padding(
                               padding:

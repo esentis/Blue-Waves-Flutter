@@ -14,16 +14,21 @@ import 'package:string_extensions/string_extensions.dart';
 
 import 'package:provider/provider.dart';
 
-import 'components/blue_waves_textfield.dart';
+import 'components/password_field.dart';
+import 'components/text_field.dart';
 
-class RegisterPage extends StatelessWidget {
+class RegisterPage extends StatefulWidget {
+  @override
+  _RegisterPageState createState() => _RegisterPageState();
+}
+
+class _RegisterPageState extends State<RegisterPage> {
+  var emailController = TextEditingController();
+  var passwordController = TextEditingController();
+  var usernameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     var loadingState = context.watch<LoadingState>();
-    var emailController = TextEditingController();
-    var passwordController = TextEditingController();
-    var usernameController = TextEditingController();
-
     return Scaffold(
       resizeToAvoidBottomPadding: false,
       body: SafeArea(
@@ -46,16 +51,17 @@ class RegisterPage extends StatelessWidget {
                     type: TextInputType.emailAddress,
                     labelText: 'Email',
                   ),
-                  BWTextField(
+                  BWPasswordField(
                     emailController: passwordController,
                     labelText: 'Κωδικός',
-                    obscureText: true,
                   ),
                   FlatButton(
                     onPressed: () async {
                       loadingState.toggleLoading();
                       if (!emailController.text.isMail()) {
                         loadingState.toggleLoading();
+                        logger.wtf('im here ${emailController.text}');
+
                         return showSnack(
                           title: 'Κάτι πήγε στραβά',
                           message: 'Το email που δώσατε δεν είναι σωστό',
