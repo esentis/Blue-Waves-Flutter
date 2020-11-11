@@ -56,6 +56,7 @@ class _HomePageState extends State<HomePage> {
 
   BannerAd myBanner = BannerAd(
     adUnitId: DotEnv().env['VAR_ADUNIT_ID'],
+    // adUnitId: BannerAd.testAdUnitId,
     size: AdSize.smartBanner,
     targetingInfo: const MobileAdTargetingInfo(childDirected: true),
     listener: (MobileAdEvent event) {
@@ -194,11 +195,13 @@ class _HomePageState extends State<HomePage> {
                         alignment: Alignment.topRight,
                         toggleButtonPadding: 15,
                         toggleButtonSize: 25,
+                        toggleButtonColor: Colors.orange[50],
+                        toggleButtonIconColor: Colors.blue,
                         toggleButtonBoxShadow: [
                           BoxShadow(
                             blurRadius: 2,
                             spreadRadius: 2,
-                            color: Colors.black.withOpacity(0.3),
+                            color: Colors.blue.withOpacity(0.3),
                             offset: const Offset(0, 3),
                           )
                         ],
@@ -213,11 +216,13 @@ class _HomePageState extends State<HomePage> {
                                 BoxShadow(
                                   blurRadius: 2,
                                   spreadRadius: 2,
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.blue.withOpacity(0.3),
                                   offset: const Offset(0, 3),
                                 )
                               ],
                               icon: Icons.settings,
+                              iconColor: Colors.blue,
+                              color: Colors.orange[50],
                               onTap: () async {
                                 await Get.to(EditProfilePage());
                               }),
@@ -229,11 +234,13 @@ class _HomePageState extends State<HomePage> {
                                 BoxShadow(
                                   blurRadius: 2,
                                   spreadRadius: 2,
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.blue.withOpacity(0.3),
                                   offset: const Offset(0, 3),
                                 )
                               ],
                               icon: Icons.rate_review,
+                              iconColor: Colors.blue,
+                              color: Colors.orange[50],
                               onTap: () async {
                                 await Get.to(RatedBeaches());
                               }),
@@ -241,15 +248,17 @@ class _HomePageState extends State<HomePage> {
                               iconSize: 35,
                               padding: 2,
                               margin: 2,
+                              color: Colors.orange[50],
                               boxShadow: [
                                 BoxShadow(
                                   blurRadius: 2,
                                   spreadRadius: 2,
-                                  color: Colors.black.withOpacity(0.3),
+                                  color: Colors.blue.withOpacity(0.3),
                                   offset: const Offset(0, 3),
                                 )
                               ],
                               icon: Icons.favorite,
+                              iconColor: Colors.blue,
                               onTap: () async {
                                 await Get.to(FavoritesPage());
                               }),
@@ -263,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                                     BoxShadow(
                                       blurRadius: 2,
                                       spreadRadius: 2,
-                                      color: Colors.black.withOpacity(0.3),
+                                      color: Colors.blue.withOpacity(0.3),
                                       offset: const Offset(0, 3),
                                     )
                                   ],
