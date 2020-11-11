@@ -7,6 +7,8 @@
   * Field values are not reset after a failed login/register attempt.
   * Password field has a password visibility toggler.
 * Ad banner is now at bottom and map is slightly raised.
+* Redesigned favorite icon to be more distinguished and sleek.
+* Changed menu colors to fit more to the app's theme.
 
 ## 0.0.9
 
