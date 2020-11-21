@@ -121,17 +121,17 @@ class _HomePageState extends State<HomePage> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       getAllMarkers();
     });
-    myBanner
-      // typically this happens well before the ad is shown
-      ..load()
-      ..show(
-        // Positions the banner ad 60 pixels from the bottom of the screen
-        anchorOffset: 0,
-        // Positions the banner ad 10 pixels from the center of the screen to the right
-        horizontalCenterOffset: 0,
-        // Banner Position
-        anchorType: AnchorType.bottom,
-      );
+    // myBanner
+    //   // typically this happens well before the ad is shown
+    //   ..load()
+    //   ..show(
+    //     // Positions the banner ad 60 pixels from the bottom of the screen
+    //     anchorOffset: 0,
+    //     // Positions the banner ad 10 pixels from the center of the screen to the right
+    //     horizontalCenterOffset: 0,
+    //     // Banner Position
+    //     anchorType: AnchorType.bottom,
+    //   );
   }
 
   @override
