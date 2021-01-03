@@ -81,7 +81,7 @@ class _LocateBeachState extends State<LocateBeach> {
                       onPressed: () {
                         Get.back(result: beachMarker);
                       },
-                      child: Text('Submit location'),
+                      child: const Text('Submit location'),
                     ),
                   ],
                 ),

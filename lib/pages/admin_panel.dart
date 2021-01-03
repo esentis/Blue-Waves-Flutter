@@ -7,7 +7,6 @@ import 'package:Blue_Waves/pages/locate_beach.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:get/get.dart';
-import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'components/loader.dart';
@@ -29,13 +28,13 @@ class _AdminPanelState extends State<AdminPanel> {
 
   final _longitudeController = TextEditingController();
 
-  final _imageOneController = TextEditingController();
+  // final _imageOneController = TextEditingController();
 
-  final _imageTwoController = TextEditingController();
+  // final _imageTwoController = TextEditingController();
 
-  final _imageThreeController = TextEditingController();
+  // final _imageThreeController = TextEditingController();
 
-  final _imageFourController = TextEditingController();
+  // final _imageFourController = TextEditingController();
 
   var imageOneLink = 'no image selected';
   var imageTwoLink = 'no image selected';
@@ -53,14 +52,14 @@ class _AdminPanelState extends State<AdminPanel> {
   bool isLoading = false;
 
   Future<List<String>> uploadPhotos() async {
-    List<String> images = [];
+    var imageUrls = [];
 
     // Start uploading
     if (imageOne != null) {
       await storage.ref().child(imageOne.toString()).putFile(imageOne).then(
         (snapshot) async {
           var downloadLink = await snapshot.ref.getDownloadURL();
-          images.add(downloadLink);
+          imageUrls.add(downloadLink);
         },
       );
     }
@@ -68,7 +67,7 @@ class _AdminPanelState extends State<AdminPanel> {
       await storage.ref().child(imageTwo.toString()).putFile(imageTwo).then(
         (snapshot) async {
           var downloadLink = await snapshot.ref.getDownloadURL();
-          images.add(downloadLink);
+          imageUrls.add(downloadLink);
         },
       );
     }
@@ -76,7 +75,7 @@ class _AdminPanelState extends State<AdminPanel> {
       await storage.ref().child(imageThree.toString()).putFile(imageThree).then(
         (snapshot) async {
           var downloadLink = await snapshot.ref.getDownloadURL();
-          images.add(downloadLink);
+          imageUrls.add(downloadLink);
         },
       );
     }
@@ -84,12 +83,12 @@ class _AdminPanelState extends State<AdminPanel> {
       await storage.ref().child(imageFour.toString()).putFile(imageFour).then(
         (snapshot) async {
           var downloadLink = await snapshot.ref.getDownloadURL();
-          images.add(downloadLink);
+          imageUrls.add(downloadLink);
         },
       );
     }
 
-    return images;
+    return imageUrls;
   }
 
   @override
@@ -135,7 +134,7 @@ class _AdminPanelState extends State<AdminPanel> {
                           longitude = location.position.longitude;
                         });
                       },
-                      child: Text('Locate beach'),
+                      child: const Text('Locate beach'),
                     ),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
