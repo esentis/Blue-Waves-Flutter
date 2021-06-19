@@ -126,8 +126,8 @@ class _HomePageState extends State<HomePage> {
                       child: Container(
                         height: MediaQuery.of(context).size.height * .8,
                         width: MediaQuery.of(context).size.width,
-                        child: StreamBuilder<List<Beach>>(
-                            stream: getAllBeaches(),
+                        child: FutureBuilder<List<Beach>>(
+                            future: getAllBeaches(),
                             builder: (context, snapshot) {
                               if (!snapshot.hasData) {
                                 return const Center(
@@ -146,8 +146,13 @@ class _HomePageState extends State<HomePage> {
                                     infoWindow: InfoWindow(
                                       title: beach.name,
                                       onTap: () async {
+                                        var beachDetails =
+                                            await getBeach(beach.id!);
                                         await Get.to(
-                                            () => BeachPage(beach: beach));
+                                          () => BeachPage(
+                                            beach: beachDetails,
+                                          ),
+                                        );
                                       },
                                     ),
                                   ),
