@@ -1,3 +1,4 @@
+import 'package:Blue_Waves/constants.dart';
 import 'package:Blue_Waves/pages/components/loader.dart';
 import 'package:Blue_Waves/pages/components/snack_bar.dart';
 import 'package:Blue_Waves/states/loading_state.dart';
@@ -8,8 +9,6 @@ import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 import 'package:provider/provider.dart';
-
-import '../../connection.dart';
 import '../components/animated_background/animated_background.dart';
 import 'components/password_field.dart';
 import 'components/text_field.dart';
@@ -27,7 +26,7 @@ class _LoginPageState extends State<LoginPage> {
     var auth = FirebaseAuth.instance;
     var loadingState = context.watch<LoadingState>();
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: FadeIn(
           duration: const Duration(milliseconds: 700),
@@ -59,7 +58,7 @@ class _LoginPageState extends State<LoginPage> {
 
                         loadingState.toggleLoading();
                         await Get.offAllNamed('/home');
-                      } catch (e) {
+                      } on FirebaseAuthException catch (e) {
                         loadingState.toggleLoading();
                         showSnack(
                           title: 'Κάτι πήγε στραβά',
@@ -68,7 +67,7 @@ class _LoginPageState extends State<LoginPage> {
                           secondColor: Colors.red[800],
                           duration: 2800,
                         );
-                        logger.e(e);
+                        log.e(e);
                       }
                     },
                     child: Text(
@@ -78,15 +77,13 @@ class _LoginPageState extends State<LoginPage> {
                       ),
                     ),
                   ),
-                  FlatButton(
-                    onPressed: () {
-                      Get.back();
-                    },
+                  TextButton(
+                    onPressed: Get.back,
                     child: Text(
                       'Επιστροφή στην αρχική',
                       style: GoogleFonts.adventPro(
                         fontSize: 20,
-                        color: Colors.red[400].withOpacity(0.8),
+                        color: Colors.red[400]!.withOpacity(0.8),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -94,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
-            loadingState.isLoading ? const Loader() : const SizedBox(),
+            loadingState.isLoading! ? const Loader() : const SizedBox(),
           ]),
         ),
       ),

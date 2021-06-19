@@ -1,14 +1,15 @@
-import 'package:Blue_Waves/controllers/beach_controller.dart';
+import 'package:Blue_Waves/constants.dart';
+import 'package:Blue_Waves/controllers/user_controller.dart';
 import 'package:Blue_Waves/models/Member.dart';
 import 'package:Blue_Waves/pages/components/loader.dart';
 import 'package:Blue_Waves/pages/components/snack_bar.dart';
 import 'package:Blue_Waves/states/loading_state.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import '../../connection.dart';
 import '../components/animated_background/animated_background.dart';
 import 'package:string_extensions/string_extensions.dart';
 
@@ -30,7 +31,7 @@ class _RegisterPageState extends State<RegisterPage> {
   Widget build(BuildContext context) {
     var loadingState = context.watch<LoadingState>();
     return Scaffold(
-      resizeToAvoidBottomPadding: false,
+      resizeToAvoidBottomInset: false,
       body: SafeArea(
         child: FadeIn(
           duration: const Duration(milliseconds: 700),
@@ -55,12 +56,12 @@ class _RegisterPageState extends State<RegisterPage> {
                     emailController: passwordController,
                     labelText: 'Κωδικός',
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () async {
                       loadingState.toggleLoading();
                       if (!emailController.text.isMail()) {
                         loadingState.toggleLoading();
-                        logger.wtf('im here ${emailController.text}');
+                        log.wtf('im here ${emailController.text}');
 
                         return showSnack(
                           title: 'Κάτι πήγε στραβά',
@@ -80,7 +81,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         );
                         loadingState.toggleLoading();
                         await Get.offAllNamed('/home');
-                      } catch (e) {
+                      } on FirebaseAuthException catch (e) {
                         loadingState.toggleLoading();
                         showSnack(
                           title: 'Κάτι πήγε στραβά',
@@ -89,19 +90,19 @@ class _RegisterPageState extends State<RegisterPage> {
                           secondColor: Colors.red[800],
                           duration: 2800,
                         );
-                        logger.e(e);
+                        log.e(e);
                       }
                     },
                     child: Text(
                       'Εγγραφή',
                       style: GoogleFonts.adventPro(
                         fontSize: 25,
-                        color: Colors.orange[50].withOpacity(0.8),
+                        color: Colors.orange[50]!.withOpacity(0.8),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
-                  FlatButton(
+                  TextButton(
                     onPressed: () {
                       Navigator.pop(context);
                     },
@@ -109,7 +110,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       'Επιστροφή στην αρχική',
                       style: GoogleFonts.adventPro(
                         fontSize: 20,
-                        color: Colors.red[400].withOpacity(0.8),
+                        color: Colors.red[400]!.withOpacity(0.8),
                         fontWeight: FontWeight.bold,
                       ),
                     ),
@@ -117,7 +118,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
             ),
-            loadingState.isLoading ? const Loader() : const SizedBox(),
+            loadingState.isLoading! ? const Loader() : const SizedBox(),
           ]),
         ),
       ),

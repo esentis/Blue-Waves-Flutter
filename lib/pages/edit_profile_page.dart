@@ -1,11 +1,11 @@
-import 'package:Blue_Waves/connection.dart';
+import 'package:Blue_Waves/constants.dart';
+import 'package:Blue_Waves/controllers/user_controller.dart';
 import 'package:Blue_Waves/pages/components/animated_background/animated_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
 
@@ -19,7 +19,7 @@ class EditProfilePage extends StatefulWidget {
 }
 
 class _EditProfilePageState extends State<EditProfilePage> {
-  PackageInfo packageInfo;
+  late PackageInfo packageInfo;
   bool isLoading = true;
   Future getVersion() async {
     packageInfo = await PackageInfo.fromPlatform();
@@ -29,7 +29,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       getVersion();
     });
     super.initState();
@@ -49,7 +49,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             size: 40,
           ),
         ),
-        backgroundColor: Colors.orange[50].withOpacity(0.8),
+        backgroundColor: Colors.orange[50]!.withOpacity(0.8),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(20),
@@ -86,13 +86,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                             height: MediaQuery.of(context).size.height / 6.1,
                             width: MediaQuery.of(context).size.width / 2.5,
                             child: StreamBuilder(
-                              stream: users
-                                  .where('id',
-                                      isEqualTo:
-                                          FirebaseAuth.instance.currentUser.uid)
-                                  .snapshots(),
-                              builder: (BuildContext context,
-                                  AsyncSnapshot<QuerySnapshot> snapshot) {
+                              stream: usersRef.get().asStream(),
+                              builder: (BuildContext context, snapshot) {
                                 if (snapshot.hasData) {
                                   return GestureDetector(
                                     onTap: () {
@@ -125,9 +120,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                           ),
                                           Flexible(
                                             child: Text(
-                                              snapshot.data.docs.first
-                                                  .data()['karma']
-                                                  .toString(),
+                                              snapshot.data!.toString(),
                                               style: GoogleFonts.adventPro(
                                                 fontSize: 25,
                                                 color: Colors.orange[50],
@@ -157,7 +150,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           'Αποσύνδεση',
                           style: GoogleFonts.adventPro(
                             fontSize: 25,
-                            color: Colors.orange[50].withOpacity(0.8),
+                            color: Colors.orange[50]!.withOpacity(0.8),
                             fontWeight: FontWeight.bold,
                           ),
                         ),
@@ -192,21 +185,14 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               confirm: GestureDetector(
                                 onTap: () async {
                                   try {
-                                    await users
-                                        .where('id',
-                                            isEqualTo: FirebaseAuth
-                                                .instance.currentUser.uid)
-                                        .get()
-                                        .then((value) async {
-                                      await users
-                                          .doc(value.docs.first.data()['docId'])
-                                          .delete();
+                                    await usersRef.once().then((value) {
+                                      log.wtf(value);
                                     });
-                                    await FirebaseAuth.instance.currentUser
+                                    await FirebaseAuth.instance.currentUser!
                                         .delete();
                                     await Get.offAllNamed('/');
                                   } catch (e) {
-                                    logger.e(e);
+                                    log.e(e);
                                   }
                                 },
                                 child: Text(
@@ -252,7 +238,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         ),
                       ),
                       Text(
-                        'Έκδοση ${packageInfo.version ?? ''}',
+                        'Έκδοση ${packageInfo.version}',
                         style: GoogleFonts.adventPro(
                           fontSize: 20,
                           color: Colors.orange[50],

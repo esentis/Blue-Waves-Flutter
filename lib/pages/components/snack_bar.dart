@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-void showSnack({title, message, duration = 1300, firstColor, secondColor}) {
+void showSnack({required title, required message, duration = 1300, firstColor, secondColor}) {
   return Get.snackbar(
     '',
     '',

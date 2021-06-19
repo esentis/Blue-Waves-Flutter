@@ -5,7 +5,7 @@ extension MappingBeach on QuerySnapshot {
     // ignore: omit_local_variable_types
     List<Map<String, dynamic>> beaches = [];
     docs.forEach((element) {
-      beaches.add(element.data());
+      beaches.add(element.data() as Map<String, dynamic>);
     });
     return beaches;
   }

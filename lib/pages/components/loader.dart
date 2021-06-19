@@ -4,7 +4,7 @@ import 'package:lottie/lottie.dart';
 
 class Loader extends StatelessWidget {
   const Loader({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

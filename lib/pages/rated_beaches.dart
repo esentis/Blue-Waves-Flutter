@@ -23,7 +23,7 @@ class RatedBeaches extends StatelessWidget {
             size: 40,
           ),
         ),
-        backgroundColor: Colors.orange[50].withOpacity(0.8),
+        backgroundColor: Colors.orange[50]!.withOpacity(0.8),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(20),
@@ -55,7 +55,7 @@ class RatedBeaches extends StatelessWidget {
                 stream: FirebaseFirestore.instance
                     .collection('ratings')
                     .where('userId',
-                        isEqualTo: FirebaseAuth.instance.currentUser.uid)
+                        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -71,20 +71,20 @@ class RatedBeaches extends StatelessWidget {
 
                   return ListView(
                     children:
-                        snapshot.data.docs.map((DocumentSnapshot document) {
+                        snapshot.data!.docs.map((DocumentSnapshot document) {
                       return ListTile(
                         onTap: () async {
-                          var beach =
-                              await getBeach(document.data()['beachId']);
+                          // var beach =
+                          //     await getBeach(document.data()['beachId']);
 
-                          await Get.to(
-                            BeachPage(
-                              beach: beach,
-                            ),
-                          );
+                          // await Get.to(
+                          //   BeachPage(
+                          //     beach: beach,
+                          //   ),
+                          // );
                         },
                         title: Text(
-                          document.data()['beachName'],
+                          document['beachName'],
                           style: GoogleFonts.adventPro(
                             fontSize: 30,
                             fontWeight: FontWeight.w600,
@@ -92,7 +92,7 @@ class RatedBeaches extends StatelessWidget {
                           ),
                         ),
                         subtitle: Text(
-                          document.data()['date'],
+                          document['date'],
                           style: GoogleFonts.adventPro(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,
@@ -100,7 +100,7 @@ class RatedBeaches extends StatelessWidget {
                           ),
                         ),
                         trailing: Text(
-                          document.data()['rating'].toString(),
+                          document['rating'].toString(),
                           style: GoogleFonts.adventPro(
                             fontSize: 40,
                             fontWeight: FontWeight.w600,

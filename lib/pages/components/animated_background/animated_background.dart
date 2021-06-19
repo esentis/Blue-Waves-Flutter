@@ -9,11 +9,11 @@ import 'waves.dart';
 
 class AnimatedBackground extends StatelessWidget {
   const AnimatedBackground({
-    Key key,
+    Key? key,
     this.showTitle,
   }) : super(key: key);
 
-  final bool showTitle;
+  final bool? showTitle;
 
   @override
   Widget build(BuildContext context) {
@@ -37,7 +37,7 @@ class AnimatedBackground extends StatelessWidget {
         Positioned(
           child: Waves(),
         ),
-        showTitle
+        showTitle!
             ? Align(alignment: Alignment.topCenter, child: BlueWavesTitle())
             : const SizedBox(),
         const Abyss(),

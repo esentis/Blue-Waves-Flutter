@@ -3,15 +3,15 @@ import 'package:google_fonts/google_fonts.dart';
 
 class BWTextField extends StatelessWidget {
   const BWTextField({
-    @required this.labelText,
+    required this.labelText,
     this.emailController,
     this.type,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  final TextEditingController emailController;
+  final TextEditingController? emailController;
   final String labelText;
-  final TextInputType type;
+  final TextInputType? type;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -29,7 +29,7 @@ class BWTextField extends StatelessWidget {
           labelStyle: GoogleFonts.adventPro(
             fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: Colors.orange[50].withOpacity(0.4),
+            color: Colors.orange[50]!.withOpacity(0.4),
           ),
           contentPadding: const EdgeInsets.symmetric(
             vertical: 15,
@@ -38,14 +38,14 @@ class BWTextField extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(60),
             borderSide: BorderSide(
-              color: Colors.orange[50],
+              color: Colors.orange[50]!,
               width: 2,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(60),
             borderSide: BorderSide(
-              color: Colors.orange[200],
+              color: Colors.orange[200]!,
               width: 2,
             ),
           ),

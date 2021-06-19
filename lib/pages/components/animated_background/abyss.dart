@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 class Abyss extends StatelessWidget {
   const Abyss({
-    Key key,
+    Key? key,
   }) : super(key: key);
 
   @override

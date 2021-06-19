@@ -1,9 +1,9 @@
 class Rating {
-  final String beachId;
-  final double rating;
-  final String userUid;
-  final String username;
-  final String beachName;
+  final String? beachId;
+  final double? rating;
+  final String? userUid;
+  final String? username;
+  final String? beachName;
 
   const Rating({
     this.beachId,

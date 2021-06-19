@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:Blue_Waves/connection.dart';
+import 'package:Blue_Waves/constants.dart';
 import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:Blue_Waves/models/Beach.dart';
 import 'package:Blue_Waves/pages/locate_beach.dart';
@@ -41,13 +41,13 @@ class _AdminPanelState extends State<AdminPanel> {
   var imageThreeLink = 'no image selected';
   var imageFourLink = 'no image selected';
 
-  double longitude = 0.0;
-  double latitude = 0.0;
+  double? longitude = 0.0;
+  double? latitude = 0.0;
 
-  File imageOne;
-  File imageTwo;
-  File imageThree;
-  File imageFour;
+  File? imageOne;
+  File? imageTwo;
+  File? imageThree;
+  File? imageFour;
 
   bool isLoading = false;
 
@@ -56,7 +56,7 @@ class _AdminPanelState extends State<AdminPanel> {
 
     // Start uploading
     if (imageOne != null) {
-      await storage.ref().child(imageOne.toString()).putFile(imageOne).then(
+      await storage.ref().child(imageOne.toString()).putFile(imageOne!).then(
         (snapshot) async {
           var downloadLink = await snapshot.ref.getDownloadURL();
           imageUrls.add(downloadLink);
@@ -64,7 +64,7 @@ class _AdminPanelState extends State<AdminPanel> {
       );
     }
     if (imageTwo != null) {
-      await storage.ref().child(imageTwo.toString()).putFile(imageTwo).then(
+      await storage.ref().child(imageTwo.toString()).putFile(imageTwo!).then(
         (snapshot) async {
           var downloadLink = await snapshot.ref.getDownloadURL();
           imageUrls.add(downloadLink);
@@ -72,7 +72,11 @@ class _AdminPanelState extends State<AdminPanel> {
       );
     }
     if (imageThree != null) {
-      await storage.ref().child(imageThree.toString()).putFile(imageThree).then(
+      await storage
+          .ref()
+          .child(imageThree.toString())
+          .putFile(imageThree!)
+          .then(
         (snapshot) async {
           var downloadLink = await snapshot.ref.getDownloadURL();
           imageUrls.add(downloadLink);
@@ -80,7 +84,7 @@ class _AdminPanelState extends State<AdminPanel> {
       );
     }
     if (imageFour != null) {
-      await storage.ref().child(imageFour.toString()).putFile(imageFour).then(
+      await storage.ref().child(imageFour.toString()).putFile(imageFour!).then(
         (snapshot) async {
           var downloadLink = await snapshot.ref.getDownloadURL();
           imageUrls.add(downloadLink);
@@ -88,12 +92,12 @@ class _AdminPanelState extends State<AdminPanel> {
       );
     }
 
-    return imageUrls;
+    return imageUrls as Future<List<String>>;
   }
 
   @override
   void initState() {
-    logger.i(Get.arguments.toString());
+    log.i(Get.arguments.toString());
     super.initState();
   }
 
@@ -160,10 +164,10 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          var image = await ImagePicker().getImage(
+                          var image = await (ImagePicker().getImage(
                             source: ImageSource.gallery,
-                          );
-                          logger.wtf(image.path);
+                          ) as Future<PickedFile>);
+                          log.wtf(image.path);
 
                           var fileName = image.path;
                           var selectedPhoto = File(fileName);
@@ -180,10 +184,10 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          var image = await ImagePicker().getImage(
+                          var image = await (ImagePicker().getImage(
                             source: ImageSource.gallery,
-                          );
-                          logger.wtf(image.path);
+                          ) as Future<PickedFile>);
+                          log.wtf(image.path);
 
                           var fileName = image.path;
                           var selectedPhoto = File(fileName);
@@ -200,10 +204,10 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          var image = await ImagePicker().getImage(
+                          var image = await (ImagePicker().getImage(
                             source: ImageSource.gallery,
-                          );
-                          logger.wtf(image.path);
+                          ) as Future<PickedFile>);
+                          log.wtf(image.path);
 
                           var fileName = image.path;
                           var selectedPhoto = File(fileName);
@@ -220,10 +224,10 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          var image = await ImagePicker().getImage(
+                          var image = await (ImagePicker().getImage(
                             source: ImageSource.gallery,
-                          );
-                          logger.wtf(image.path);
+                          ) as Future<PickedFile>);
+                          log.wtf(image.path);
 
                           var fileName = image.path;
                           var selectedPhoto = File(fileName);
@@ -252,12 +256,11 @@ class _AdminPanelState extends State<AdminPanel> {
                             name: _nameController.text,
                           ),
                         );
-                        logger.wtf('NAME ${_nameController.text}');
-                        logger
-                            .wtf('DESCRIPTION ${_descriptionController.text}');
-                        logger.wtf('LATITUDE ${_latitudeController.text}');
-                        logger.wtf('LONGITUDE ${_longitudeController.text}');
-                        logger.wtf(images);
+                        log.wtf('NAME ${_nameController.text}');
+                        log.wtf('DESCRIPTION ${_descriptionController.text}');
+                        log.wtf('LATITUDE ${_latitudeController.text}');
+                        log.wtf('LONGITUDE ${_longitudeController.text}');
+                        log.wtf(images);
                         setState(() {
                           isLoading = false;
                           imageOneLink = imageTwoLink = imageThreeLink =

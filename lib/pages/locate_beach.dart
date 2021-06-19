@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Blue_Waves/connection.dart';
+import 'package:Blue_Waves/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -11,8 +11,8 @@ class LocateBeach extends StatefulWidget {
 }
 
 class _LocateBeachState extends State<LocateBeach> {
-  CameraPosition beachPlace;
-  Marker beachMarker;
+  late CameraPosition beachPlace;
+  Marker? beachMarker;
   final Completer<GoogleMapController> _controller = Completer();
   @override
   void initState() {
@@ -45,7 +45,7 @@ class _LocateBeachState extends State<LocateBeach> {
                 mapType: MapType.normal,
                 onCameraMove: (details) {
                   setState(() {
-                    logger.i(details);
+                    log.i(details);
                     beachMarker = Marker(
                       markerId: MarkerId('test'),
                       position: LatLng(
@@ -55,7 +55,7 @@ class _LocateBeachState extends State<LocateBeach> {
                     );
                   });
                 },
-                markers: {beachMarker},
+                markers: {beachMarker!},
                 zoomControlsEnabled: true,
                 zoomGesturesEnabled: true,
                 mapToolbarEnabled: true,
@@ -75,7 +75,7 @@ class _LocateBeachState extends State<LocateBeach> {
                 child: Column(
                   children: [
                     Text(
-                      'Latitude : ${beachMarker.position.latitude.toStringAsFixed(2)}\nLongitude : ${beachMarker.position.longitude.toStringAsFixed(2)}',
+                      'Latitude : ${beachMarker!.position.latitude.toStringAsFixed(2)}\nLongitude : ${beachMarker!.position.longitude.toStringAsFixed(2)}',
                     ),
                     TextButton(
                       onPressed: () {

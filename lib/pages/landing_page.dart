@@ -25,7 +25,7 @@ class _LandingPageState extends State<LandingPage> {
     super.initState();
 
     // EXECUTES AFTER BUILD
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) {
       checkUser();
     });
   }

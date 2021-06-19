@@ -3,9 +3,9 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 
 class FavoriteIcon extends StatelessWidget {
   const FavoriteIcon({
-    @required this.isBeachFavorited,
-    @required this.onTap,
-    Key key,
+    required this.isBeachFavorited,
+    required this.onTap,
+    Key? key,
   }) : super(key: key);
 
   final bool isBeachFavorited;
@@ -17,11 +17,11 @@ class FavoriteIcon extends StatelessWidget {
         depth: isBeachFavorited ? 15 : -25,
         intensity: 5,
         boxShape: const NeumorphicBoxShape.circle(),
-        shadowDarkColor: Colors.red[500].withOpacity(0.5),
+        shadowDarkColor: Colors.red[500]!.withOpacity(0.5),
         shadowLightColor: Colors.orange[50],
         color: Colors.orange[50],
       ),
-      onPressed: onTap,
+      onPressed: onTap as void Function()?,
       child: isBeachFavorited
           ? NeumorphicIcon(
               Icons.favorite,
@@ -29,23 +29,23 @@ class FavoriteIcon extends StatelessWidget {
                 depth: 15,
                 color: Colors.red[500],
                 intensity: 5,
-                shadowDarkColor: Colors.red[500].withOpacity(0.5),
+                shadowDarkColor: Colors.red[500]!.withOpacity(0.5),
                 border: NeumorphicBorder(
-                  color: Colors.orange[50].withOpacity(0.2),
+                  color: Colors.orange[50]!.withOpacity(0.2),
                   isEnabled: true,
                   width: 2,
                 ),
               ),
-              size: 50,
+              size: 22,
             )
           : NeumorphicIcon(
               Icons.favorite,
-              size: 50,
+              size: 22,
               style: NeumorphicStyle(
                 depth: 15,
                 color: Colors.orange[50],
                 border: NeumorphicBorder(
-                  color: Colors.red[400].withOpacity(0.2),
+                  color: Colors.red[400]!.withOpacity(0.2),
                   isEnabled: true,
                   width: 2,
                 ),

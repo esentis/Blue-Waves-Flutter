@@ -1,11 +1,9 @@
-import 'package:Blue_Waves/pages/beach_page/beach_page.dart';
 import 'package:Blue_Waves/pages/components/animated_background/animated_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:Blue_Waves/controllers/beach_controller.dart';
 
 class FavoritesPage extends StatelessWidget {
   @override
@@ -22,7 +20,7 @@ class FavoritesPage extends StatelessWidget {
             size: 40,
           ),
         ),
-        backgroundColor: Colors.orange[50].withOpacity(0.8),
+        backgroundColor: Colors.orange[50]!.withOpacity(0.8),
         shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
             bottomRight: Radius.circular(20),
@@ -54,7 +52,7 @@ class FavoritesPage extends StatelessWidget {
                 stream: FirebaseFirestore.instance
                     .collection('favorites')
                     .where('userId',
-                        isEqualTo: FirebaseAuth.instance.currentUser.uid)
+                        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
@@ -70,19 +68,19 @@ class FavoritesPage extends StatelessWidget {
 
                   return ListView(
                     children:
-                        snapshot.data.docs.map((DocumentSnapshot document) {
+                        snapshot.data!.docs.map((DocumentSnapshot document) {
                       return ListTile(
                         onTap: () async {
-                          var beach =
-                              await getBeach(document.data()['beachId']);
-                          await Get.to(
-                            BeachPage(
-                              beach: beach,
-                            ),
-                          );
+                          // var beach =
+                          //     await getBeach(document.data()['beachId']);
+                          // await Get.to(
+                          //   BeachPage(
+                          //     beach: beach,
+                          //   ),
+                          // );
                         },
                         title: Text(
-                          document.data()['beachName'],
+                          document['beachName'],
                           style: GoogleFonts.adventPro(
                             fontSize: 30,
                             fontWeight: FontWeight.w600,
@@ -90,7 +88,7 @@ class FavoritesPage extends StatelessWidget {
                           ),
                         ),
                         subtitle: Text(
-                          document.data()['date'],
+                          document['date'],
                           style: GoogleFonts.adventPro(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,

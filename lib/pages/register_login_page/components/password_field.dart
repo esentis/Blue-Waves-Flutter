@@ -1,20 +1,20 @@
-import 'package:Blue_Waves/connection.dart';
+import 'package:Blue_Waves/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class BWPasswordField extends StatefulWidget {
   const BWPasswordField({
-    @required this.labelText,
+    required this.labelText,
     this.emailController,
     this.obscureText = false,
     this.type,
-    Key key,
+    Key? key,
   }) : super(key: key);
 
-  final TextEditingController emailController;
+  final TextEditingController? emailController;
   final String labelText;
   final bool obscureText;
-  final TextInputType type;
+  final TextInputType? type;
 
   @override
   _BWPasswordFieldState createState() => _BWPasswordFieldState();
@@ -39,7 +39,7 @@ class _BWPasswordFieldState extends State<BWPasswordField> {
           labelText: widget.labelText,
           suffixIcon: GestureDetector(
               onTap: () {
-                logger.i('holding');
+                log.i('holding');
                 setState(() {
                   if (!showingPassword) {
                     showingPassword = true;
@@ -54,7 +54,7 @@ class _BWPasswordFieldState extends State<BWPasswordField> {
           labelStyle: GoogleFonts.adventPro(
             fontSize: 26,
             fontWeight: FontWeight.bold,
-            color: Colors.orange[50].withOpacity(0.4),
+            color: Colors.orange[50]!.withOpacity(0.4),
           ),
           contentPadding: const EdgeInsets.symmetric(
             vertical: 15,
@@ -63,14 +63,14 @@ class _BWPasswordFieldState extends State<BWPasswordField> {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(60),
             borderSide: BorderSide(
-              color: Colors.orange[50],
+              color: Colors.orange[50]!,
               width: 2,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(60),
             borderSide: BorderSide(
-              color: Colors.orange[200],
+              color: Colors.orange[200]!,
               width: 2,
             ),
           ),

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
 class LoadingState extends ChangeNotifier {
-  bool isLoading;
+  bool? isLoading;
   LoadingState({
     this.isLoading,
   });
@@ -9,7 +9,7 @@ class LoadingState extends ChangeNotifier {
   void getIsLoading() => isLoading;
 
   void toggleLoading() {
-    if (isLoading) {
+    if (isLoading!) {
       isLoading = false;
       notifyListeners();
     } else {
