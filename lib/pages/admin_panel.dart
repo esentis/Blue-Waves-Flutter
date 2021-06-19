@@ -239,23 +239,23 @@ class _AdminPanelState extends State<AdminPanel> {
                           });
                         },
                         child: Text(imageFourLink)),
-                    FlatButton(
+                    TextButton(
                       onPressed: () async {
                         setState(() {
                           isLoading = true;
                         });
                         var images = await uploadPhotos();
 
-                        await addBeach(
-                          // ignore: missing_required_param
-                          Beach(
-                            description: _descriptionController.text,
-                            images: images,
-                            latitude: latitude,
-                            longitude: longitude,
-                            name: _nameController.text,
-                          ),
-                        );
+                        // await addBeach(
+                        //   // ignore: missing_required_param
+                        //   Beach(
+                        //     description: _descriptionController.text,
+                        //     images: images,
+                        //     latitude: latitude,
+                        //     longitude: longitude,
+                        //     name: _nameController.text,
+                        //   ),
+                        // );
                         log.wtf('NAME ${_nameController.text}');
                         log.wtf('DESCRIPTION ${_descriptionController.text}');
                         log.wtf('LATITUDE ${_latitudeController.text}');

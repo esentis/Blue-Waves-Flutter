@@ -171,9 +171,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                 color: Colors.red.withOpacity(0.8),
                               ),
                               cancel: GestureDetector(
-                                onTap: () {
-                                  Get.back();
-                                },
+                                onTap: Get.back,
                                 child: Text(
                                   'Ακύρωση',
                                   style: GoogleFonts.adventPro(
