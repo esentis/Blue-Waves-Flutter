@@ -13,6 +13,7 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -38,10 +39,10 @@ class _BeachPageState extends State<BeachPage> {
   double actualRating = 0;
   List foundRatings = [];
   int totalRatings = 0;
-  double? chosenRating = 0.5;
+  double? chosenRating;
   int currentIndex = 0;
   bool verticalGallery = false;
-  bool isLoading = false;
+  bool isLoading = true;
 
   final PageController _pageController = PageController();
 
@@ -58,48 +59,65 @@ class _BeachPageState extends State<BeachPage> {
     );
   }
 
+  Future<void> addFavorite(Favorite favorite) async {
+    // Checking if user has already favorited the beach
+    var fav = await favorites
+        .child(favorite.beachId! + favorite.userId!)
+        .once()
+        .then((snapshot) => snapshot.value);
+
+    if (fav != null) {
+      await favorites.child(favorite.beachId! + favorite.userId!).remove();
+      return log.e('Beach removed from favorites.');
+    }
+
+    // If we are ok to procceed we add the review.
+    await favorites.child(favorite.beachId! + favorite.userId!).set({
+      'beachId': favorite.beachId,
+      'userId': favorite.userId,
+      'beachName': favorite.beachName,
+      'date': DateFormat('dd-MM-yyy').format(DateTime.now()),
+    }).then((value) {
+      log.i('Beach added to favorites!');
+    }).catchError((onError) => log.e(onError));
+  }
+
   Future getRatings() async {
-    // await ratings
-    //     .where('beachId', isEqualTo: widget.beach!.id)
-    //     .get()
-    //     .then((value) => foundRatings = value.docs);
+    // ignore: omit_local_variable_types
+    Rating? rate = await ratings
+        .child(widget.beach!.id! + FirebaseAuth.instance.currentUser!.uid)
+        .once()
+        .then(
+      (value) {
+        if (value.value != null) {
+          return Rating.fromJson(value.value.cast<String, dynamic>());
+        }
+        return value.value;
+      },
+    );
 
-    // await favorites
-    //     .where(
-    //       'userId',
-    //       isEqualTo: FirebaseAuth.instance.currentUser!.uid,
-    //     )
-    //     .where('beachId', isEqualTo: widget.beach!.id)
-    //     .get()
-    //     .then((value) {
-    //   if (value.docs.isNotEmpty) {
-    //     log.wtf('BEACH WAS FAVORITED AND IT SHOULD SHOW TO REMOVE');
-    //     isBeachFavorited = true;
-    //   }
-    // });
+    await favorites
+        .child(widget.beach!.id! + FirebaseAuth.instance.currentUser!.uid)
+        .once()
+        .then((value) {
+      if (value.value != null) {
+        log.wtf('BEACH WAS FAVORITED AND IT SHOULD SHOW TO REMOVE');
 
-    // if (foundRatings.isNotEmpty) {
-    //   log.wtf('Ratings found iterating on them');
-    //   foundRatings.forEach((element) {
-    //     ratingSum += element['rating'];
-    //     if (element['username'] ==
-    //         FirebaseAuth.instance.currentUser!.displayName) {
-    //       chosenRating = element['rating'];
-    //     }
-    //   });
-    //   actualRating = ratingSum / foundRatings.length;
-    //   totalRatings = foundRatings.length;
-    // }
+        isBeachFavorited = true;
+        return;
+      }
+      return;
+    });
 
-    // log.i('Found ${foundRatings.length} reviews');
-    // log.i('Actual rating is $actualRating');
+    actualRating = widget.beach!.averageRating!;
+    totalRatings = widget.beach!.ratingCount!;
 
-    // hasUserRated = foundRatings.any((element) =>
-    //     element['username'] == FirebaseAuth.instance.currentUser!.displayName);
+    hasUserRated = rate != null;
 
-    // log.i('Has user reviewed the beach ? $hasUserRated');
-    // isLoading = false;
-    // setState(() {});
+    log.i('Has user reviewed the beach ? $hasUserRated');
+    isLoading = false;
+    chosenRating = rate == null ? 0 : rate.rating;
+    setState(() {});
   }
 
   @override
@@ -173,6 +191,7 @@ class _BeachPageState extends State<BeachPage> {
                                             .instance.currentUser!.uid,
                                       ),
                                     );
+
                                     setState(
                                       () {
                                         isBeachFavorited = !isBeachFavorited;
@@ -269,7 +288,7 @@ class _BeachPageState extends State<BeachPage> {
                                   ),
                                 ),
                                 Text(
-                                  ' ($totalRatings βαθμολογίες)',
+                                  ' (${widget.beach!.ratingCount} βαθμολογίες)',
                                   style: GoogleFonts.adventPro(
                                     fontSize: 17,
                                     color: Colors.orange[50],
