@@ -24,7 +24,6 @@ dependencies:
   flutter:
     sdk: flutter
   animate_do: ^2.0.0
-  circular_menu: ^1.1.1
   cloud_firestore: ^2.2.2
   cupertino_icons: ^1.0.0
   dio: ^4.0.0
