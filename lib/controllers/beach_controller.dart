@@ -82,9 +82,11 @@ Future<void> addRating(Rating rating) async {
       .once()
       .then((value) => Beach.fromMap(value.value.cast<String, dynamic>()));
   if (beach.ratingCount != null) {
+    var currentSum = beach.averageRating! * beach.ratingCount!;
+    currentSum += rating.rating!;
     beach.ratingCount = beach.ratingCount! + 1;
-    beach.averageRating = beach.averageRating! * (beach.ratingCount! - 1) +
-        rating.rating! / beach.ratingCount!;
+
+    beach.averageRating = currentSum / beach.ratingCount!;
   } else {
     beach.ratingCount = 1;
     beach.averageRating = rating.rating;
