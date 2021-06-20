@@ -40,7 +40,7 @@ class _BeachPageState extends State<BeachPage> {
   List foundRatings = [];
   int totalRatings = 0;
   double? chosenRating;
-  int currentIndex = 0;
+  int currentIndex = 1;
   bool verticalGallery = false;
   bool isLoading = true;
 
@@ -263,15 +263,24 @@ class _BeachPageState extends State<BeachPage> {
                                           ),
                                         ),
                                         pageController: _pageController,
-                                        onPageChanged: (index) {},
+                                        onPageChanged: (index) {
+                                          setState(
+                                            () {
+                                              currentIndex = index + 1;
+                                            },
+                                          );
+                                        },
                                       ),
                                     ),
                                   ),
-                                  const Align(
+                                  Align(
                                     alignment: Alignment.bottomRight,
                                     child: Padding(
-                                      padding: EdgeInsets.all(8.0),
-                                      child: Text('1/1'),
+                                      padding: const EdgeInsets.all(8.0),
+                                      child: Text(
+                                        '$currentIndex/${widget.beach!.images!.length}',
+                                        style: kStyleDefaultBold,
+                                      ),
                                     ),
                                   ),
                                 ],
@@ -288,7 +297,7 @@ class _BeachPageState extends State<BeachPage> {
                                   ),
                                 ),
                                 Text(
-                                  ' (${widget.beach!.ratingCount} βαθμολογίες)',
+                                  ' ($totalRatings βαθμολογίες)',
                                   style: GoogleFonts.adventPro(
                                     fontSize: 17,
                                     color: Colors.orange[50],
@@ -301,15 +310,14 @@ class _BeachPageState extends State<BeachPage> {
                               padding:
                                   const EdgeInsets.symmetric(horizontal: 25.0),
                               child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
                                   Flexible(
                                     child: GestureDetector(
                                       onTap: () {},
                                       child: hasUserRated
                                           ? Text(
-                                              'Έχεις ήδη βαθμολογήσει με :',
+                                              'Έχεις ήδη βαθμολογήσει με : ',
                                               style: GoogleFonts.adventPro(
                                                 fontSize: 20,
                                                 fontWeight: FontWeight.bold,
@@ -318,6 +326,7 @@ class _BeachPageState extends State<BeachPage> {
                                             )
                                           : RatingBar.builder(
                                               initialRating: 0.5,
+                                              updateOnDrag: true,
                                               minRating: 0.5,
                                               direction: Axis.horizontal,
                                               allowHalfRating: true,
@@ -332,30 +341,37 @@ class _BeachPageState extends State<BeachPage> {
                                                 color: Colors.blue,
                                               ),
                                               onRatingUpdate: (rating) {
-                                                setState(() {
-                                                  chosenRating = rating;
-                                                  addRating(
-                                                    Rating(
-                                                      beachId: widget.beach!.id,
-                                                      rating: rating,
-                                                      beachName:
-                                                          widget.beach!.name,
-                                                      userUid: FirebaseAuth
-                                                          .instance
-                                                          .currentUser!
-                                                          .uid,
-                                                      username: FirebaseAuth
-                                                          .instance
-                                                          .currentUser!
-                                                          .displayName,
-                                                    ),
-                                                  );
-                                                  hasUserRated = true;
-                                                  actualRating =
-                                                      (ratingSum + rating) /
-                                                          (totalRatings + 1);
-                                                  totalRatings += 1;
-                                                });
+                                                setState(
+                                                  () {
+                                                    chosenRating = rating;
+                                                    addRating(
+                                                      Rating(
+                                                        beachId:
+                                                            widget.beach!.id,
+                                                        rating: rating,
+                                                        beachName:
+                                                            widget.beach!.name,
+                                                        userUid: FirebaseAuth
+                                                            .instance
+                                                            .currentUser!
+                                                            .uid,
+                                                        username: FirebaseAuth
+                                                            .instance
+                                                            .currentUser!
+                                                            .displayName,
+                                                      ),
+                                                    );
+                                                    hasUserRated = true;
+                                                    ratingSum = widget.beach!
+                                                            .averageRating! *
+                                                        widget.beach!
+                                                            .ratingCount!;
+                                                    actualRating =
+                                                        (ratingSum + rating) /
+                                                            (totalRatings + 1);
+                                                    totalRatings += 1;
+                                                  },
+                                                );
                                               },
                                               glow: true,
                                               glowColor: Colors.blue,
@@ -387,10 +403,7 @@ class _BeachPageState extends State<BeachPage> {
                                 ),
                                 child: Text(
                                   widget.beach!.description!,
-                                  style: GoogleFonts.adventPro(
-                                    fontSize: 22,
-                                    color: Colors.orange[50],
-                                  ),
+                                  style: kStyleDefault,
                                 ),
                               ),
                             ),
@@ -399,8 +412,8 @@ class _BeachPageState extends State<BeachPage> {
                               height: MediaQuery.of(context).size.height / 2,
                               child: ClipRRect(
                                 borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(20),
-                                  topLeft: Radius.circular(20),
+                                  topRight: Radius.circular(12),
+                                  topLeft: Radius.circular(12),
                                 ),
                                 child: GoogleMap(
                                   mapType: MapType.normal,
