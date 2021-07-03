@@ -160,9 +160,7 @@ class _HomePageState extends State<HomePage> {
                               });
 
                               return GoogleMap(
-                                mapType: MapType.normal,
-                                markers: {...markers},
-                                zoomGesturesEnabled: true,
+                                markers: {...markers as List<Marker>},
                                 myLocationButtonEnabled: false,
                                 initialCameraPosition: const CameraPosition(
                                   target: LatLng(38.2, 24.1),
@@ -179,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                     ),
                   ),
             //TODO: Add new menu
-            isLoading ? const SizedBox() : SizedBox()
+            if (isLoading) const SizedBox() else const SizedBox()
           ],
         ),
       ),

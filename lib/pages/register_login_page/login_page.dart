@@ -64,7 +64,7 @@ class _LoginPageState extends State<LoginPage> {
                           title: 'Κάτι πήγε στραβά',
                           message: e.message,
                           firstColor: Colors.red,
-                          secondColor: Colors.red[800],
+                          secondColor: Colors.red[800]!,
                           duration: 2800,
                         );
                         log.e(e);

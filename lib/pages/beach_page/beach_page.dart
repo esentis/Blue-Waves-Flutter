@@ -82,7 +82,7 @@ class _BeachPageState extends State<BeachPage> {
     }).catchError((onError) => log.e(onError));
   }
 
-  Future getRatings() async {
+  Future<Rating?> getRatings() async {
     // ignore: omit_local_variable_types
     Rating? rate = await ratings
         .child(widget.beach!.id! + FirebaseAuth.instance.currentUser!.uid)
@@ -90,9 +90,9 @@ class _BeachPageState extends State<BeachPage> {
         .then(
       (value) {
         if (value.value != null) {
-          return Rating.fromJson(value.value.cast<String, dynamic>());
+          return Rating.fromJson(value.value as Map<String, dynamic>);
         }
-        return value.value;
+        return null;
       },
     );
 

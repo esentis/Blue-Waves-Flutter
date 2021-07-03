@@ -5,8 +5,6 @@
 import 'dart:convert';
 import 'package:Blue_Waves/constants.dart';
 
-Beach beachFromMap(String str) => Beach.fromMap(json.decode(str));
-
 String beachToMap(Beach data) => json.encode(data.toMap());
 
 class Beach {
@@ -31,16 +29,14 @@ class Beach {
   double? averageRating;
 
   factory Beach.fromMap(Json json) => Beach(
-        latitude: json['latitude'].toDouble(),
-        description: json['description'],
-        longitude: json['longitude'].toDouble(),
-        images: List<String>.from(json['images'].map((x) => x)),
-        id: json['id'],
-        name: json['name'],
-        averageRating: json['averageRating'] != null
-            ? json['averageRating'].toDouble()
-            : 0.0,
-        ratingCount: json['ratingCount'] ?? 0,
+        latitude: json['latitude'] as double,
+        description: json['description'] as String,
+        longitude: json['longitude'] as double,
+        images: List<String>.from((json['images'] as List).map((x) => x)),
+        id: json['id'] as String,
+        name: json['name'] as String,
+        averageRating: (json['averageRating'] as double?) ?? 0.0,
+        ratingCount: (json['ratingCount'] as int?) ?? 0,
       );
 
   Map<String, dynamic> toMap() => {

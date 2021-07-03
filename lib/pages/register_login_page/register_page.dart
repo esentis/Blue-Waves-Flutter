@@ -67,7 +67,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           title: 'Κάτι πήγε στραβά',
                           message: 'Το email που δώσατε δεν είναι σωστό',
                           firstColor: Colors.red,
-                          secondColor: Colors.red[800],
+                          secondColor: Colors.red[800]!,
                           duration: 2800,
                         );
                       }
@@ -87,7 +87,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           title: 'Κάτι πήγε στραβά',
                           message: e.message,
                           firstColor: Colors.red,
-                          secondColor: Colors.red[800],
+                          secondColor: Colors.red[800]!,
                           duration: 2800,
                         );
                         log.e(e);

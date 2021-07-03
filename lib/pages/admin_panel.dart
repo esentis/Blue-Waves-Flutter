@@ -134,8 +134,8 @@ class _AdminPanelState extends State<AdminPanel> {
                       onPressed: () async {
                         var location = await Get.to(LocateBeach());
                         setState(() {
-                          latitude = location.position.latitude;
-                          longitude = location.position.longitude;
+                          latitude = location.position.latitude as double;
+                          longitude = location.position.longitude as double;
                         });
                       },
                       child: const Text('Locate beach'),

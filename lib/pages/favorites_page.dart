@@ -80,7 +80,7 @@ class FavoritesPage extends StatelessWidget {
                           // );
                         },
                         title: Text(
-                          document['beachName'],
+                          document['beachName'] as String,
                           style: GoogleFonts.adventPro(
                             fontSize: 30,
                             fontWeight: FontWeight.w600,
@@ -88,7 +88,7 @@ class FavoritesPage extends StatelessWidget {
                           ),
                         ),
                         subtitle: Text(
-                          document['date'],
+                          document['date'] as String,
                           style: GoogleFonts.adventPro(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,

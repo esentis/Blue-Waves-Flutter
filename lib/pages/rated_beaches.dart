@@ -1,11 +1,9 @@
-import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
 
 class RatedBeaches extends StatelessWidget {
@@ -84,7 +82,7 @@ class RatedBeaches extends StatelessWidget {
                           // );
                         },
                         title: Text(
-                          document['beachName'],
+                          document['beachName'] as String,
                           style: GoogleFonts.adventPro(
                             fontSize: 30,
                             fontWeight: FontWeight.w600,
@@ -92,7 +90,7 @@ class RatedBeaches extends StatelessWidget {
                           ),
                         ),
                         subtitle: Text(
-                          document['date'],
+                          document['date'] as String,
                           style: GoogleFonts.adventPro(
                             fontSize: 15,
                             fontWeight: FontWeight.w600,

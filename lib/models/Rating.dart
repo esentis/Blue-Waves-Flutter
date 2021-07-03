@@ -17,11 +17,11 @@ class Rating {
   });
 
   factory Rating.fromJson(Json json) => Rating(
-        beachId: json['beachId'],
-        beachName: json['beachName'],
-        date: json['date'],
-        rating: json['rating'].toDouble(),
-        username: json['username'],
-        userUid: json['userId'],
+        beachId: json['beachId'].toString(),
+        beachName: json['beachName'].toString(),
+        date: json['date'].toString(),
+        rating: double.tryParse(json['rating'].toString()),
+        username: json['username'].toString(),
+        userUid: json['userId'].toString(),
       );
 }

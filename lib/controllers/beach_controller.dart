@@ -26,9 +26,10 @@ Future<List<Beach>> getAllBeaches() async {
   // ignore: omit_local_variable_types
   await beaches.once().then(
     (value) {
-      var mappedBeaches = Map<String, dynamic>.from(value.value);
+      var mappedBeaches =
+          Map<String, dynamic>.from(value as Map<String, dynamic>);
       mappedBeaches.forEach((key, value) {
-        listBeaches.add(Beach.fromMap(value.cast<String, dynamic>()));
+        listBeaches.add(Beach.fromMap(value as Map<String, dynamic>));
       });
     },
   );
@@ -39,7 +40,7 @@ Future<Beach> getBeach(String id) async {
   var beach = await beaches
       .child(id)
       .once()
-      .then((value) => Beach.fromMap(value.value.cast<String, dynamic>()));
+      .then((value) => Beach.fromMap(value.value as Map<String, dynamic>));
   return beach;
 }
 
@@ -80,7 +81,7 @@ Future<void> addRating(Rating rating) async {
   var beach = await beaches
       .child(rating.beachId!)
       .once()
-      .then((value) => Beach.fromMap(value.value.cast<String, dynamic>()));
+      .then((value) => Beach.fromMap(value.value as Map<String, dynamic>));
   if (beach.ratingCount != null) {
     var currentSum = beach.averageRating! * beach.ratingCount!;
     currentSum += rating.rating!;

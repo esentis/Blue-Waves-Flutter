@@ -7,11 +7,11 @@ import 'package:photo_view/photo_view_gallery.dart';
 class GalleryPhotoViewWrapper extends StatefulWidget {
   GalleryPhotoViewWrapper({
     required this.images,
+    required this.initialIndex,
     this.loadingBuilder,
     this.backgroundDecoration,
     this.minScale,
     this.maxScale,
-    required this.initialIndex,
     this.scrollDirection = Axis.horizontal,
   }) : pageController = PageController(initialPage: initialIndex);
 
@@ -62,7 +62,8 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
               builder: _buildItem,
               itemCount: widget.images!.length,
               loadingBuilder: widget.loadingBuilder,
-              backgroundDecoration: widget.backgroundDecoration as BoxDecoration?,
+              backgroundDecoration:
+                  widget.backgroundDecoration as BoxDecoration?,
               pageController: widget.pageController,
               onPageChanged: onPageChanged,
               scrollDirection: widget.scrollDirection,
@@ -73,9 +74,7 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   GestureDetector(
-                    onTap: () {
-                      Get.back();
-                    },
+                    onTap: Get.back,
                     child: Icon(
                       Icons.arrow_back_ios,
                       size: 40,
@@ -90,7 +89,6 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
                         style: GoogleFonts.adventPro(
                           color: Colors.orange[50],
                           fontSize: 25.0,
-                          decoration: null,
                         ),
                       ),
                     ),
@@ -106,11 +104,13 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     return PhotoViewGalleryPageOptions(
-      imageProvider: Image.network(widget.images![index]).image,
+      imageProvider:
+          Image.network((widget.images as List<String>?)![index]).image,
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       maxScale: PhotoViewComputedScale.covered * 4.1,
-      heroAttributes: PhotoViewHeroAttributes(tag: widget.images![index]),
+      heroAttributes:
+          PhotoViewHeroAttributes(tag: widget.images![index].toString()),
     );
   }
 }
