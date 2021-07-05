@@ -1,11 +1,11 @@
 import 'dart:async';
+
 import 'package:Blue_Waves/constants.dart';
 import 'package:Blue_Waves/controllers/beach_controller.dart';
 import 'package:Blue_Waves/models/Beach.dart';
 import 'package:Blue_Waves/models/Favorite.dart';
 import 'package:Blue_Waves/models/Rating.dart';
 import 'package:animate_do/animate_do.dart';
-
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_neumorphic/flutter_neumorphic.dart';
@@ -17,9 +17,9 @@ import 'package:intl/intl.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
-import 'beach_image_wrapper.dart';
 import '../components/animated_background/animated_background.dart';
 import '../components/loader.dart';
+import 'beach_image_wrapper.dart';
 import 'favorite_icon.dart';
 
 class BeachPage extends StatefulWidget {
@@ -46,7 +46,7 @@ class _BeachPageState extends State<BeachPage> {
 
   final PageController _pageController = PageController();
 
-  void open(BuildContext context, int index) async {
+  Future<void> open(BuildContext context, int index) async {
     await Get.to(
       GalleryPhotoViewWrapper(
         images: widget.beach!.images,
@@ -61,7 +61,7 @@ class _BeachPageState extends State<BeachPage> {
 
   Future<void> addFavorite(Favorite favorite) async {
     // Checking if user has already favorited the beach
-    var fav = await favorites
+    final fav = await favorites
         .child(favorite.beachId! + favorite.userId!)
         .once()
         .then((snapshot) => snapshot.value);
@@ -84,7 +84,7 @@ class _BeachPageState extends State<BeachPage> {
 
   Future<Rating?> getRatings() async {
     // ignore: omit_local_variable_types
-    Rating? rate = await ratings
+    final Rating? rate = await ratings
         .child(widget.beach!.id! + FirebaseAuth.instance.currentUser!.uid)
         .once()
         .then(
@@ -127,7 +127,7 @@ class _BeachPageState extends State<BeachPage> {
       zoom: 14.4746,
     );
     beachMarker = Marker(
-      markerId: MarkerId('beachMarker'),
+      markerId: const MarkerId('beachMarker'),
       position: LatLng(widget.beach!.latitude!, widget.beach!.longitude!),
     );
 
@@ -146,292 +146,276 @@ class _BeachPageState extends State<BeachPage> {
             const AnimatedBackground(
               showTitle: false,
             ),
-            isLoading
-                ? const Loader()
-                : FadeIn(
-                    duration: const Duration(milliseconds: 700),
-                    child: Scaffold(
-                      backgroundColor: Colors.transparent,
-                      appBar: AppBar(
-                        elevation: 25,
-                        leading: GestureDetector(
-                          onTap: Get.back,
-                          child: const Icon(
-                            Icons.arrow_back,
-                            color: Colors.blue,
-                            size: 40,
-                          ),
-                        ),
-                        shadowColor: Colors.black,
-                        toolbarHeight: MediaQuery.of(context).size.height / 10,
-                        backgroundColor: Colors.orange[50]!.withOpacity(0.8),
-                        title: Column(
-                          mainAxisAlignment: MainAxisAlignment.start,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              children: [
-                                Text(
-                                  widget.beach!.name!,
-                                  style: GoogleFonts.adventPro(
-                                    fontSize: 25,
-                                    color: Colors.blue,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                                FavoriteIcon(
-                                  isBeachFavorited: isBeachFavorited,
-                                  onTap: () async {
-                                    await addFavorite(
-                                      Favorite(
-                                        beachId: widget.beach!.id,
-                                        beachName: widget.beach!.name,
-                                        userId: FirebaseAuth
-                                            .instance.currentUser!.uid,
-                                      ),
-                                    );
-
-                                    setState(
-                                      () {
-                                        isBeachFavorited = !isBeachFavorited;
-                                      },
-                                    );
-                                  },
-                                ),
-                              ],
-                            ),
-                          ],
-                        ),
-                        shape: const RoundedRectangleBorder(
-                          borderRadius: BorderRadius.only(
-                            bottomRight: Radius.circular(20),
-                            bottomLeft: Radius.circular(20),
-                          ),
-                        ),
+            if (isLoading)
+              const Loader()
+            else
+              FadeIn(
+                duration: const Duration(milliseconds: 700),
+                child: Scaffold(
+                  backgroundColor: Colors.transparent,
+                  appBar: AppBar(
+                    elevation: 25,
+                    leading: GestureDetector(
+                      onTap: Get.back,
+                      child: const Icon(
+                        Icons.arrow_back,
+                        color: Colors.blue,
+                        size: 40,
                       ),
-                      body: SingleChildScrollView(
-                        child: Column(
+                    ),
+                    shadowColor: Colors.black,
+                    toolbarHeight: MediaQuery.of(context).size.height / 10,
+                    backgroundColor: Colors.orange[50]!.withOpacity(0.8),
+                    title: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Padding(
-                              padding: const EdgeInsets.all(8.0),
-                              child: Stack(
-                                children: [
-                                  Container(
-                                    color: Colors.transparent,
-                                    width: double.infinity,
-                                    height:
-                                        MediaQuery.of(context).size.height / 4,
-                                    child: ClipRRect(
-                                      borderRadius: BorderRadius.circular(12),
-                                      child: PhotoViewGallery.builder(
-                                        scrollPhysics:
-                                            const BouncingScrollPhysics(),
-                                        builder:
-                                            (BuildContext context, int index) {
-                                          return PhotoViewGalleryPageOptions(
-                                            imageProvider: NetworkImage(
-                                              widget.beach!.images![index],
-                                            ),
-                                            minScale: PhotoViewComputedScale
-                                                .contained,
-                                            initialScale:
-                                                PhotoViewComputedScale.covered,
-                                            tightMode: true,
-                                            onTapDown: (context, details,
-                                                controllerValue) {
-                                              open(context, index);
-                                            },
-                                            heroAttributes:
-                                                PhotoViewHeroAttributes(
-                                                    tag: widget
-                                                        .beach!.images![index]),
-                                          );
-                                        },
-                                        itemCount: widget.beach!.images!.length,
-                                        loadingBuilder: (context, event) =>
-                                            Center(
-                                          child: Container(
-                                            width: 20.0,
-                                            height: 20.0,
-                                            child: CircularProgressIndicator(
-                                              value: event == null
-                                                  ? 0
-                                                  : event.cumulativeBytesLoaded /
-                                                      event.expectedTotalBytes!,
-                                            ),
-                                          ),
-                                        ),
-                                        pageController: _pageController,
-                                        onPageChanged: (index) {
-                                          setState(
-                                            () {
-                                              currentIndex = index + 1;
-                                            },
-                                          );
-                                        },
-                                      ),
-                                    ),
-                                  ),
-                                  Align(
-                                    alignment: Alignment.bottomRight,
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(8.0),
-                                      child: Text(
-                                        '$currentIndex/${widget.beach!.images!.length}',
-                                        style: kStyleDefaultBold,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                            Text(
+                              widget.beach!.name!,
+                              style: GoogleFonts.adventPro(
+                                fontSize: 25,
+                                color: Colors.blue,
+                                fontWeight: FontWeight.bold,
                               ),
                             ),
-                            Column(
-                              children: [
-                                Text(
-                                  'Βαθμολογία: ${actualRating.toStringAsFixed(1)} / 5',
-                                  style: GoogleFonts.adventPro(
-                                    fontSize: 25,
-                                    color: Colors.orange[50],
-                                    fontWeight: FontWeight.bold,
+                            FavoriteIcon(
+                              isBeachFavorited: isBeachFavorited,
+                              onTap: () async {
+                                await addFavorite(
+                                  Favorite(
+                                    beachId: widget.beach!.id,
+                                    beachName: widget.beach!.name,
+                                    userId:
+                                        FirebaseAuth.instance.currentUser!.uid,
                                   ),
-                                ),
-                                Text(
-                                  ' ($totalRatings βαθμολογίες)',
-                                  style: GoogleFonts.adventPro(
-                                    fontSize: 17,
-                                    color: Colors.orange[50],
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Flexible(
-                                    child: GestureDetector(
-                                      onTap: () {},
-                                      child: hasUserRated
-                                          ? Text(
-                                              'Έχεις ήδη βαθμολογήσει με : ',
-                                              style: GoogleFonts.adventPro(
-                                                fontSize: 20,
-                                                fontWeight: FontWeight.bold,
-                                                color: Colors.red,
-                                              ),
-                                            )
-                                          : RatingBar.builder(
-                                              initialRating: 0.5,
-                                              updateOnDrag: true,
-                                              minRating: 0.5,
-                                              direction: Axis.horizontal,
-                                              allowHalfRating: true,
-                                              itemSize: 40,
-                                              itemCount: 5,
-                                              itemPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4.0),
-                                              itemBuilder: (context, _) =>
-                                                  const Icon(
-                                                Icons.waves,
-                                                color: Colors.blue,
-                                              ),
-                                              onRatingUpdate: (rating) {
-                                                setState(
-                                                  () {
-                                                    chosenRating = rating;
-                                                    addRating(
-                                                      Rating(
-                                                        beachId:
-                                                            widget.beach!.id,
-                                                        rating: rating,
-                                                        beachName:
-                                                            widget.beach!.name,
-                                                        userUid: FirebaseAuth
-                                                            .instance
-                                                            .currentUser!
-                                                            .uid,
-                                                        username: FirebaseAuth
-                                                            .instance
-                                                            .currentUser!
-                                                            .displayName,
-                                                      ),
-                                                    );
-                                                    hasUserRated = true;
-                                                    ratingSum = widget.beach!
-                                                            .averageRating! *
-                                                        widget.beach!
-                                                            .ratingCount!;
-                                                    actualRating =
-                                                        (ratingSum + rating) /
-                                                            (totalRatings + 1);
-                                                    totalRatings += 1;
-                                                  },
-                                                );
-                                              },
-                                              glow: true,
-                                              glowColor: Colors.blue,
-                                            ),
-                                    ),
-                                  ),
-                                  Text(
-                                    chosenRating.toString(),
-                                    style: GoogleFonts.adventPro(
-                                      fontSize: 25,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.orange[50],
-                                    ),
-                                  )
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 2,
-                                      spreadRadius: 2,
-                                      color: Colors.black.withOpacity(0.2),
-                                    ),
-                                  ],
-                                ),
-                                child: Text(
-                                  widget.beach!.description!,
-                                  style: kStyleDefault,
-                                ),
-                              ),
-                            ),
-                            Container(
-                              width: MediaQuery.of(context).size.width,
-                              height: MediaQuery.of(context).size.height / 2,
-                              child: ClipRRect(
-                                borderRadius: const BorderRadius.only(
-                                  topRight: Radius.circular(12),
-                                  topLeft: Radius.circular(12),
-                                ),
-                                child: GoogleMap(
-                                  mapType: MapType.normal,
-                                  markers: {beachMarker!},
-                                  zoomControlsEnabled: true,
-                                  zoomGesturesEnabled: true,
-                                  mapToolbarEnabled: true,
-                                  myLocationButtonEnabled: false,
-                                  initialCameraPosition: beachPlace,
-                                  onMapCreated: _controller.complete,
-                                ),
-                              ),
+                                );
+
+                                setState(
+                                  () {
+                                    isBeachFavorited = !isBeachFavorited;
+                                  },
+                                );
+                              },
                             ),
                           ],
                         ),
+                      ],
+                    ),
+                    shape: const RoundedRectangleBorder(
+                      borderRadius: BorderRadius.only(
+                        bottomRight: Radius.circular(20),
+                        bottomLeft: Radius.circular(20),
                       ),
                     ),
                   ),
+                  body: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(8.0),
+                          child: Stack(
+                            children: [
+                              Container(
+                                color: Colors.transparent,
+                                width: double.infinity,
+                                height: MediaQuery.of(context).size.height / 4,
+                                child: ClipRRect(
+                                  borderRadius: BorderRadius.circular(12),
+                                  child: PhotoViewGallery.builder(
+                                    scrollPhysics:
+                                        const BouncingScrollPhysics(),
+                                    builder: (BuildContext context, int index) {
+                                      return PhotoViewGalleryPageOptions(
+                                        imageProvider: NetworkImage(
+                                          widget.beach!.images![index],
+                                        ),
+                                        minScale:
+                                            PhotoViewComputedScale.contained,
+                                        initialScale:
+                                            PhotoViewComputedScale.covered,
+                                        tightMode: true,
+                                        onTapDown: (context, details,
+                                            controllerValue) {
+                                          open(context, index);
+                                        },
+                                        heroAttributes: PhotoViewHeroAttributes(
+                                            tag: widget.beach!.images![index]),
+                                      );
+                                    },
+                                    itemCount: widget.beach!.images!.length,
+                                    loadingBuilder: (context, event) => Center(
+                                      child: SizedBox(
+                                        width: 20.0,
+                                        height: 20.0,
+                                        child: CircularProgressIndicator(
+                                          value: event == null
+                                              ? 0
+                                              : event.cumulativeBytesLoaded /
+                                                  event.expectedTotalBytes!,
+                                        ),
+                                      ),
+                                    ),
+                                    pageController: _pageController,
+                                    onPageChanged: (index) {
+                                      setState(
+                                        () {
+                                          currentIndex = index + 1;
+                                        },
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                              Align(
+                                alignment: Alignment.bottomRight,
+                                child: Padding(
+                                  padding: const EdgeInsets.all(8.0),
+                                  child: Text(
+                                    '$currentIndex/${widget.beach!.images!.length}',
+                                    style: kStyleDefaultBold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Column(
+                          children: [
+                            Text(
+                              'Βαθμολογία: ${actualRating.toStringAsFixed(1)} / 5',
+                              style: GoogleFonts.adventPro(
+                                fontSize: 25,
+                                color: Colors.orange[50],
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              ' ($totalRatings βαθμολογίες)',
+                              style: GoogleFonts.adventPro(
+                                fontSize: 17,
+                                color: Colors.orange[50],
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Flexible(
+                                child: GestureDetector(
+                                  onTap: () {},
+                                  child: hasUserRated
+                                      ? Text(
+                                          'Έχεις ήδη βαθμολογήσει με : ',
+                                          style: GoogleFonts.adventPro(
+                                            fontSize: 20,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.red,
+                                          ),
+                                        )
+                                      : RatingBar.builder(
+                                          initialRating: 0.5,
+                                          updateOnDrag: true,
+                                          minRating: 0.5,
+                                          allowHalfRating: true,
+                                          itemPadding:
+                                              const EdgeInsets.symmetric(
+                                                  horizontal: 4.0),
+                                          itemBuilder: (context, _) =>
+                                              const Icon(
+                                            Icons.waves,
+                                            color: Colors.blue,
+                                          ),
+                                          onRatingUpdate: (rating) {
+                                            setState(
+                                              () {
+                                                chosenRating = rating;
+                                                addRating(
+                                                  Rating(
+                                                    beachId: widget.beach!.id,
+                                                    rating: rating,
+                                                    beachName:
+                                                        widget.beach!.name,
+                                                    userUid: FirebaseAuth
+                                                        .instance
+                                                        .currentUser!
+                                                        .uid,
+                                                    username: FirebaseAuth
+                                                        .instance
+                                                        .currentUser!
+                                                        .displayName,
+                                                  ),
+                                                );
+                                                hasUserRated = true;
+                                                ratingSum = widget
+                                                        .beach!.averageRating! *
+                                                    widget.beach!.ratingCount!;
+                                                actualRating =
+                                                    (ratingSum + rating) /
+                                                        (totalRatings + 1);
+                                                totalRatings += 1;
+                                              },
+                                            );
+                                          },
+                                          glowColor: Colors.blue,
+                                        ),
+                                ),
+                              ),
+                              Text(
+                                chosenRating.toString(),
+                                style: GoogleFonts.adventPro(
+                                  fontSize: 25,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.orange[50],
+                                ),
+                              )
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.all(12.0),
+                          child: Container(
+                            decoration: BoxDecoration(
+                              boxShadow: [
+                                BoxShadow(
+                                  blurRadius: 2,
+                                  spreadRadius: 2,
+                                  color: Colors.black.withOpacity(0.2),
+                                ),
+                              ],
+                            ),
+                            child: Text(
+                              widget.beach!.description!,
+                              style: kStyleDefault,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
+                          width: MediaQuery.of(context).size.width,
+                          height: MediaQuery.of(context).size.height / 2,
+                          child: ClipRRect(
+                            borderRadius: const BorderRadius.only(
+                              topRight: Radius.circular(12),
+                              topLeft: Radius.circular(12),
+                            ),
+                            child: GoogleMap(
+                              markers: {beachMarker!},
+                              myLocationButtonEnabled: false,
+                              initialCameraPosition: beachPlace,
+                              onMapCreated: _controller.complete,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
           ],
         ),
       ),

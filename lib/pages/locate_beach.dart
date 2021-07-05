@@ -33,7 +33,7 @@ class _LocateBeachState extends State<LocateBeach> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Container(
+          SizedBox(
             width: MediaQuery.of(context).size.width,
             height: MediaQuery.of(context).size.height / 2,
             child: ClipRRect(
@@ -42,7 +42,6 @@ class _LocateBeachState extends State<LocateBeach> {
                 topLeft: Radius.circular(20),
               ),
               child: GoogleMap(
-                mapType: MapType.normal,
                 onCameraMove: (details) {
                   setState(() {
                     log.i(details);
@@ -56,9 +55,6 @@ class _LocateBeachState extends State<LocateBeach> {
                   });
                 },
                 markers: {beachMarker!},
-                zoomControlsEnabled: true,
-                zoomGesturesEnabled: true,
-                mapToolbarEnabled: true,
                 myLocationButtonEnabled: false,
                 initialCameraPosition: beachPlace,
                 onMapCreated: (GoogleMapController controller) {

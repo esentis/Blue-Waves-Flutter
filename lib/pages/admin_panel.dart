@@ -1,8 +1,6 @@
 import 'dart:io';
 
 import 'package:Blue_Waves/constants.dart';
-import 'package:Blue_Waves/controllers/beach_controller.dart';
-import 'package:Blue_Waves/models/Beach.dart';
 import 'package:Blue_Waves/pages/locate_beach.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
@@ -36,10 +34,10 @@ class _AdminPanelState extends State<AdminPanel> {
 
   // final _imageFourController = TextEditingController();
 
-  var imageOneLink = 'no image selected';
-  var imageTwoLink = 'no image selected';
-  var imageThreeLink = 'no image selected';
-  var imageFourLink = 'no image selected';
+  String imageOneLink = 'no image selected';
+  String imageTwoLink = 'no image selected';
+  String imageThreeLink = 'no image selected';
+  String imageFourLink = 'no image selected';
 
   double? longitude = 0.0;
   double? latitude = 0.0;
@@ -52,13 +50,13 @@ class _AdminPanelState extends State<AdminPanel> {
   bool isLoading = false;
 
   Future<List<String>> uploadPhotos() async {
-    var imageUrls = [];
+    final imageUrls = [];
 
     // Start uploading
     if (imageOne != null) {
       await storage.ref().child(imageOne.toString()).putFile(imageOne!).then(
         (snapshot) async {
-          var downloadLink = await snapshot.ref.getDownloadURL();
+          final downloadLink = await snapshot.ref.getDownloadURL();
           imageUrls.add(downloadLink);
         },
       );
@@ -66,7 +64,7 @@ class _AdminPanelState extends State<AdminPanel> {
     if (imageTwo != null) {
       await storage.ref().child(imageTwo.toString()).putFile(imageTwo!).then(
         (snapshot) async {
-          var downloadLink = await snapshot.ref.getDownloadURL();
+          final downloadLink = await snapshot.ref.getDownloadURL();
           imageUrls.add(downloadLink);
         },
       );
@@ -78,7 +76,7 @@ class _AdminPanelState extends State<AdminPanel> {
           .putFile(imageThree!)
           .then(
         (snapshot) async {
-          var downloadLink = await snapshot.ref.getDownloadURL();
+          final downloadLink = await snapshot.ref.getDownloadURL();
           imageUrls.add(downloadLink);
         },
       );
@@ -86,7 +84,7 @@ class _AdminPanelState extends State<AdminPanel> {
     if (imageFour != null) {
       await storage.ref().child(imageFour.toString()).putFile(imageFour!).then(
         (snapshot) async {
-          var downloadLink = await snapshot.ref.getDownloadURL();
+          final downloadLink = await snapshot.ref.getDownloadURL();
           imageUrls.add(downloadLink);
         },
       );
@@ -132,7 +130,7 @@ class _AdminPanelState extends State<AdminPanel> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        var location = await Get.to(LocateBeach());
+                        final location = await Get.to(LocateBeach());
                         setState(() {
                           latitude = location.position.latitude as double;
                           longitude = location.position.longitude as double;
@@ -144,14 +142,12 @@ class _AdminPanelState extends State<AdminPanel> {
                       mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Flexible(
-                          flex: 1,
                           child: Padding(
                             padding: const EdgeInsets.all(14.0),
                             child: Text(latitude.toString()),
                           ),
                         ),
                         Flexible(
-                          flex: 1,
                           child: Padding(
                             padding: const EdgeInsets.all(14.0),
                             child: Text(longitude.toString()),
@@ -164,13 +160,13 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          var image = await (ImagePicker().getImage(
+                          final image = await (ImagePicker().getImage(
                             source: ImageSource.gallery,
                           ) as Future<PickedFile>);
                           log.wtf(image.path);
 
-                          var fileName = image.path;
-                          var selectedPhoto = File(fileName);
+                          final fileName = image.path;
+                          final selectedPhoto = File(fileName);
                           imageOne = selectedPhoto;
 
                           setState(() {
@@ -184,13 +180,13 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          var image = await (ImagePicker().getImage(
+                          final image = await (ImagePicker().getImage(
                             source: ImageSource.gallery,
                           ) as Future<PickedFile>);
                           log.wtf(image.path);
 
-                          var fileName = image.path;
-                          var selectedPhoto = File(fileName);
+                          final fileName = image.path;
+                          final selectedPhoto = File(fileName);
                           imageTwo = selectedPhoto;
 
                           setState(() {
@@ -204,13 +200,13 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          var image = await (ImagePicker().getImage(
+                          final image = await (ImagePicker().getImage(
                             source: ImageSource.gallery,
                           ) as Future<PickedFile>);
                           log.wtf(image.path);
 
-                          var fileName = image.path;
-                          var selectedPhoto = File(fileName);
+                          final fileName = image.path;
+                          final selectedPhoto = File(fileName);
                           imageThree = selectedPhoto;
 
                           setState(() {
@@ -224,13 +220,13 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          var image = await (ImagePicker().getImage(
+                          final image = await (ImagePicker().getImage(
                             source: ImageSource.gallery,
                           ) as Future<PickedFile>);
                           log.wtf(image.path);
 
-                          var fileName = image.path;
-                          var selectedPhoto = File(fileName);
+                          final fileName = image.path;
+                          final selectedPhoto = File(fileName);
                           imageFour = selectedPhoto;
 
                           setState(() {
@@ -244,7 +240,7 @@ class _AdminPanelState extends State<AdminPanel> {
                         setState(() {
                           isLoading = true;
                         });
-                        var images = await uploadPhotos();
+                        final images = await uploadPhotos();
 
                         // await addBeach(
                         //   // ignore: missing_required_param

@@ -1,7 +1,3 @@
-// To parse this JSON data, do
-//
-//     final beach = beachFromMap(jsonString);
-
 import 'dart:convert';
 import 'package:Blue_Waves/constants.dart';
 

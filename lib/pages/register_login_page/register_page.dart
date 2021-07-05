@@ -85,7 +85,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         loadingState.toggleLoading();
                         showSnack(
                           title: 'Κάτι πήγε στραβά',
-                          message: e.message,
+                          message: e.message!,
                           firstColor: Colors.red,
                           secondColor: Colors.red[800]!,
                           duration: 2800,

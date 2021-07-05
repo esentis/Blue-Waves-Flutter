@@ -32,7 +32,6 @@ class FavoriteIcon extends StatelessWidget {
                 shadowDarkColor: Colors.red[500]!.withOpacity(0.5),
                 border: NeumorphicBorder(
                   color: Colors.orange[50]!.withOpacity(0.2),
-                  isEnabled: true,
                   width: 2,
                 ),
               ),
@@ -46,7 +45,6 @@ class FavoriteIcon extends StatelessWidget {
                 color: Colors.orange[50],
                 border: NeumorphicBorder(
                   color: Colors.red[400]!.withOpacity(0.2),
-                  isEnabled: true,
                   width: 2,
                 ),
               ),

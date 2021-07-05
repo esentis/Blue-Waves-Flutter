@@ -7,26 +7,28 @@ import 'package:uuid/uuid.dart';
 
 import 'package:intl/intl.dart';
 
-var uuid = const Uuid();
+Uuid uuid = const Uuid();
 // Beaches DB reference
-var beaches = FirebaseDatabase.instance.reference().child('beaches');
+DatabaseReference beaches =
+    FirebaseDatabase.instance.reference().child('beaches');
 
 // Reviews DB reference
-var ratings = FirebaseDatabase.instance.reference().child('ratings');
+DatabaseReference ratings =
+    FirebaseDatabase.instance.reference().child('ratings');
 
 // Favorites DB references
-var favorites = FirebaseDatabase.instance.reference().child('favorites');
+DatabaseReference favorites =
+    FirebaseDatabase.instance.reference().child('favorites');
 
 // Neaches reference in Realtime Database
 // var _beachesRef = FirebaseDatabase.instance.reference().child('beaches');
 
 Future<List<Beach>> getAllBeaches() async {
-  // ignore: omit_local_variable_types
-  List<Beach> listBeaches = [];
+  final List<Beach> listBeaches = [];
   // ignore: omit_local_variable_types
   await beaches.once().then(
     (value) {
-      var mappedBeaches =
+      final mappedBeaches =
           Map<String, dynamic>.from(value as Map<String, dynamic>);
       mappedBeaches.forEach((key, value) {
         listBeaches.add(Beach.fromMap(value as Map<String, dynamic>));
@@ -37,7 +39,7 @@ Future<List<Beach>> getAllBeaches() async {
 }
 
 Future<Beach> getBeach(String id) async {
-  var beach = await beaches
+  final beach = await beaches
       .child(id)
       .once()
       .then((value) => Beach.fromMap(value.value as Map<String, dynamic>));
@@ -53,7 +55,7 @@ Future<Beach> getBeach(String id) async {
 /// * userID : String
 /// * username : String
 Future<void> addRating(Rating rating) async {
-  var rate = await ratings
+  final rate = await ratings
       .child(rating.beachId! + rating.userUid!)
       .once()
       .then((snapshot) => snapshot.value);
@@ -78,7 +80,7 @@ Future<void> addRating(Rating rating) async {
       .catchError((onError) => log.e(onError));
 
 // Update beach average rating and total rating count
-  var beach = await beaches
+  final beach = await beaches
       .child(rating.beachId!)
       .once()
       .then((value) => Beach.fromMap(value.value as Map<String, dynamic>));

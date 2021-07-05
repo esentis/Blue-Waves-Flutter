@@ -19,12 +19,12 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
-  var emailController = TextEditingController();
-  var passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    var auth = FirebaseAuth.instance;
-    var loadingState = context.watch<LoadingState>();
+    final auth = FirebaseAuth.instance;
+    final loadingState = context.watch<LoadingState>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -62,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                         loadingState.toggleLoading();
                         showSnack(
                           title: 'Κάτι πήγε στραβά',
-                          message: e.message,
+                          message: e.message!,
                           firstColor: Colors.red,
                           secondColor: Colors.red[800]!,
                           duration: 2800,
