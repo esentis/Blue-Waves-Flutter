@@ -46,7 +46,7 @@ class RatedBeaches extends StatelessWidget {
           Padding(
             padding:
                 EdgeInsets.only(top: MediaQuery.of(context).size.height / 8),
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               height: MediaQuery.of(context).size.height,
               child: StreamBuilder(

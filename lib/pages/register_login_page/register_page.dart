@@ -1,20 +1,18 @@
-import 'package:Blue_Waves/constants.dart';
-import 'package:Blue_Waves/controllers/user_controller.dart';
-import 'package:Blue_Waves/models/Member.dart';
-import 'package:Blue_Waves/pages/components/loader.dart';
-import 'package:Blue_Waves/pages/components/snack_bar.dart';
-import 'package:Blue_Waves/states/loading_state.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/controllers/user_controller.dart';
+import 'package:blue_waves/models/member.dart';
+import 'package:blue_waves/pages/components/loader.dart';
+import 'package:blue_waves/pages/components/snack_bar.dart';
+import 'package:blue_waves/states/loading_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import '../components/animated_background/animated_background.dart';
+import 'package:provider/provider.dart';
 import 'package:string_extensions/string_extensions.dart';
 
-import 'package:provider/provider.dart';
-
+import '../components/animated_background/animated_background.dart';
 import 'components/password_field.dart';
 import 'components/text_field.dart';
 
@@ -24,12 +22,12 @@ class RegisterPage extends StatefulWidget {
 }
 
 class _RegisterPageState extends State<RegisterPage> {
-  var emailController = TextEditingController();
-  var passwordController = TextEditingController();
-  var usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    var loadingState = context.watch<LoadingState>();
+    final loadingState = context.watch<LoadingState>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
       body: SafeArea(
@@ -118,6 +116,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 ],
               ),
             ),
+            // ignore: prefer_if_elements_to_conditional_expressions
             loadingState.isLoading! ? const Loader() : const SizedBox(),
           ]),
         ),

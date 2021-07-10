@@ -1,7 +1,7 @@
 import 'dart:io';
 
-import 'package:Blue_Waves/constants.dart';
-import 'package:Blue_Waves/pages/locate_beach.dart';
+import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/pages/locate_beach.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:get/get.dart';

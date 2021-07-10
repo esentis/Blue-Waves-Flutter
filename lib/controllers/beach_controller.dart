@@ -1,6 +1,6 @@
-import 'package:Blue_Waves/constants.dart';
-import 'package:Blue_Waves/models/Beach.dart';
-import 'package:Blue_Waves/models/Rating.dart';
+import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/models/beach.dart';
+import 'package:blue_waves/models/rating.dart';
 import 'package:firebase_database/firebase_database.dart';
 // import 'package:firebase_database/firebase_database.dart';
 import 'package:uuid/uuid.dart';
@@ -104,16 +104,16 @@ Future<void> addRating(Rating rating) async {
   /// * longitude : double
   /// * images : List<String>
   /// * id : String
-  Future<void> addBeach(Beach beach) async {
-    // If we are ok to procceed we add the beach.
-    await beaches.child(uuid.v1()).set({
-      'name': beach.name,
-      'description': beach.description,
-      'longitude': beach.longitude,
-      'latitude': beach.latitude,
-      'images': beach.images,
-    }).then((docRef) async {
-      log.i('Beach Added');
-    }).catchError((error) => log.e('Failed to add beach: $error'));
-  }
+  // Future<void> addBeach(Beach beach) async {
+  //   // If we are ok to procceed we add the beach.
+  //   await beaches.child(uuid.v1()).set({
+  //     'name': beach.name,
+  //     'description': beach.description,
+  //     'longitude': beach.longitude,
+  //     'latitude': beach.latitude,
+  //     'images': beach.images,
+  //   }).then((docRef) async {
+  //     log.i('Beach Added');
+  //   }).catchError((error) => log.e('Failed to add beach: $error'));
+  // }
 }

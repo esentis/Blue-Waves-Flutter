@@ -1,9 +1,10 @@
-import 'package:Blue_Waves/models/Member.dart';
+import 'package:blue_waves/models/member.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:intl/intl.dart';
 import 'package:firebase_database/firebase_database.dart';
 
-var usersRef = FirebaseDatabase.instance.reference().child('users');
+DatabaseReference usersRef =
+    FirebaseDatabase.instance.reference().child('users');
 
 /// Registers a user with the following parameters.
 /// ### Member model
@@ -12,7 +13,7 @@ var usersRef = FirebaseDatabase.instance.reference().child('users');
 /// * password : String
 /// * photoUrl : String
 Future<void> registerUser(Member user) async {
-  var userCredential =
+  final userCredential =
       await FirebaseAuth.instance.createUserWithEmailAndPassword(
     email: user.email!,
     password: user.password!,

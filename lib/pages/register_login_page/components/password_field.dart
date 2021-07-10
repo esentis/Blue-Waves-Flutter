@@ -1,4 +1,4 @@
-import 'package:Blue_Waves/constants.dart';
+import 'package:blue_waves/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 

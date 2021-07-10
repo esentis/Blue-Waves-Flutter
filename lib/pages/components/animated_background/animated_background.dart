@@ -37,9 +37,10 @@ class AnimatedBackground extends StatelessWidget {
         Positioned(
           child: Waves(),
         ),
-        showTitle!
-            ? Align(alignment: Alignment.topCenter, child: BlueWavesTitle())
-            : const SizedBox(),
+        if (showTitle!)
+          Align(alignment: Alignment.topCenter, child: BlueWavesTitle())
+        else
+          const SizedBox(),
         const Abyss(),
       ],
     );

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class RPSCustomPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
-    var paint = Paint()
+    final paint = Paint()
       ..color = Colors.blue
       ..style = PaintingStyle.fill
       ..maskFilter = const MaskFilter.blur(BlurStyle.outer, 40)
@@ -16,7 +16,7 @@ class RPSCustomPainter extends CustomPainter {
         Rect.fromCenter(width: 450, height: 450, center: const Offset(0, 200)),
       );
 
-    var path = Path();
+    final path = Path();
     path.moveTo(0, size.height * 1.00);
     path.quadraticBezierTo(size.width * 0.02, size.height * 0.71,
         size.width * 0.06, size.height * 0.49);

@@ -1,9 +1,9 @@
-import 'package:Blue_Waves/pages/beach_page/beach_page.dart';
-import 'package:Blue_Waves/pages/landing_page.dart';
-import 'package:Blue_Waves/pages/register_login_page/login_page.dart';
-import 'package:Blue_Waves/pages/register_login_page/register_page.dart';
-import 'package:Blue_Waves/states/loading_state.dart';
-import 'package:Blue_Waves/pages/home_page.dart';
+import 'package:blue_waves/pages/beach_page/beach_page.dart';
+import 'package:blue_waves/pages/landing_page.dart';
+import 'package:blue_waves/pages/register_login_page/login_page.dart';
+import 'package:blue_waves/pages/register_login_page/register_page.dart';
+import 'package:blue_waves/states/loading_state.dart';
+import 'package:blue_waves/pages/home_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -16,8 +16,8 @@ import 'package:provider/provider.dart';
 // import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/services.dart';
 
-void main() async {
-  await dotenv.load(fileName: '.env');
+Future<void> main() async {
+  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   //await FirebaseAdMob.instance.initialize(appId: DotEnv.env['VAR_ADMOB_ID']);
@@ -34,7 +34,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    var analytics = FirebaseAnalytics();
+    final analytics = FirebaseAnalytics();
     // 100 mb max cache memory.
     FirebaseFirestore.instance.settings = const Settings(
       persistenceEnabled: true,

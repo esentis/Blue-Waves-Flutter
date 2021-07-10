@@ -1,4 +1,4 @@
-import 'package:Blue_Waves/pages/landing_page.dart';
+import 'package:blue_waves/pages/landing_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';

@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:Blue_Waves/constants.dart';
-import 'package:Blue_Waves/controllers/beach_controller.dart';
-import 'package:Blue_Waves/models/Beach.dart';
-import 'package:Blue_Waves/models/Favorite.dart';
-import 'package:Blue_Waves/models/Rating.dart';
+import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/controllers/beach_controller.dart';
+import 'package:blue_waves/models/beach.dart';
+import 'package:blue_waves/models/favorite.dart';
+import 'package:blue_waves/models/rating.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -79,6 +79,7 @@ class _BeachPageState extends State<BeachPage> {
       'date': DateFormat('dd-MM-yyy').format(DateTime.now()),
     }).then((value) {
       log.i('Beach added to favorites!');
+      // ignore: invalid_return_type_for_catch_error
     }).catchError((onError) => log.e(onError));
   }
 

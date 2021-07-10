@@ -1,4 +1,4 @@
-import 'package:Blue_Waves/pages/components/animated_background/animated_background.dart';
+import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -45,7 +45,7 @@ class FavoritesPage extends StatelessWidget {
           Padding(
             padding:
                 EdgeInsets.only(top: MediaQuery.of(context).size.height / 8),
-            child: Container(
+            child: SizedBox(
               width: double.infinity,
               height: MediaQuery.of(context).size.height,
               child: StreamBuilder(

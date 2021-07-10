@@ -1,5 +1,6 @@
+// ignore: file_names
 import 'dart:convert';
-import 'package:Blue_Waves/constants.dart';
+import 'package:blue_waves/constants.dart';
 
 String beachToMap(Beach data) => json.encode(data.toMap());
 

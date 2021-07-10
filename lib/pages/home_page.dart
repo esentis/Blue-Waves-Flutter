@@ -1,21 +1,20 @@
 import 'dart:async';
 import 'dart:typed_data';
+import 'dart:ui' as ui;
 
-import 'package:Blue_Waves/controllers/beach_controller.dart';
-import 'package:Blue_Waves/models/Beach.dart';
+import 'package:blue_waves/controllers/beach_controller.dart';
+import 'package:blue_waves/models/beach.dart';
+import 'package:animate_do/animate_do.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 // import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:animate_do/animate_do.dart';
 
 import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
 import 'components/loader.dart';
-
-import 'dart:ui' as ui;
 
 class HomePage extends StatefulWidget {
   @override
@@ -135,6 +134,7 @@ class _HomePageState extends State<HomePage> {
                           }
                           // ignore: omit_local_variable_types
                           final List<Beach> beaches = snapshot.data!;
+                          // ignore: avoid_function_literals_in_foreach_calls
                           beaches.forEach((beach) {
                             markers.add(
                               Marker(

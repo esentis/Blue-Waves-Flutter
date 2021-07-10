@@ -1,7 +1,7 @@
-import 'package:Blue_Waves/constants.dart';
-import 'package:Blue_Waves/pages/components/loader.dart';
-import 'package:Blue_Waves/pages/components/snack_bar.dart';
-import 'package:Blue_Waves/states/loading_state.dart';
+import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/pages/components/loader.dart';
+import 'package:blue_waves/pages/components/snack_bar.dart';
+import 'package:blue_waves/states/loading_state.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -91,6 +91,7 @@ class _LoginPageState extends State<LoginPage> {
                 ],
               ),
             ),
+            // ignore: prefer_if_elements_to_conditional_expressions
             loadingState.isLoading! ? const Loader() : const SizedBox(),
           ]),
         ),

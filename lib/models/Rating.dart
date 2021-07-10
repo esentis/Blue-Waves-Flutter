@@ -1,4 +1,4 @@
-import 'package:Blue_Waves/constants.dart';
+import 'package:blue_waves/constants.dart';
 
 class Rating {
   final String? beachId;

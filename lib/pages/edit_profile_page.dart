@@ -1,7 +1,6 @@
-import 'package:Blue_Waves/constants.dart';
-import 'package:Blue_Waves/controllers/user_controller.dart';
-import 'package:Blue_Waves/pages/components/animated_background/animated_background.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/controllers/user_controller.dart';
+import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -71,180 +70,179 @@ class _EditProfilePageState extends State<EditProfilePage> {
           const AnimatedBackground(
             showTitle: false,
           ),
-          isLoading
-              ? const Loader()
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Align(
-                        alignment: Alignment.topCenter,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              top: MediaQuery.of(context).size.height / 5),
-                          child: Container(
-                            height: MediaQuery.of(context).size.height / 6.1,
-                            width: MediaQuery.of(context).size.width / 2.5,
-                            child: StreamBuilder(
-                              stream: usersRef.get().asStream(),
-                              builder: (BuildContext context, snapshot) {
-                                if (snapshot.hasData) {
-                                  return GestureDetector(
-                                    onTap: () {
-                                      showSnack(
-                                        title: 'Τι είναι οι πόντοι;',
-                                        duration: 2300,
-                                        message:
-                                            'Κάθε φορά που βαθμολογείς μια παραλία κερδίζεις πόντους !',
-                                        firstColor:
-                                            Colors.blueAccent.withOpacity(0.8),
-                                        secondColor:
-                                            Colors.blue.withOpacity(0.7),
-                                      );
-                                    },
-                                    child: Padding(
-                                      padding: const EdgeInsets.all(18.0),
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Flexible(
-                                            child: Text(
-                                              'Πόντοι',
-                                              style: GoogleFonts.adventPro(
-                                                fontSize: 20,
-                                                color: Colors.orange[50],
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                          Flexible(
-                                            child: Text(
-                                              snapshot.data!.toString(),
-                                              style: GoogleFonts.adventPro(
-                                                fontSize: 25,
-                                                color: Colors.orange[50],
-                                                fontWeight: FontWeight.bold,
-                                              ),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
+          if (isLoading)
+            const Loader()
+          else
+            Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Align(
+                    alignment: Alignment.topCenter,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          top: MediaQuery.of(context).size.height / 5),
+                      child: SizedBox(
+                        height: MediaQuery.of(context).size.height / 6.1,
+                        width: MediaQuery.of(context).size.width / 2.5,
+                        child: StreamBuilder(
+                          stream: usersRef.get().asStream(),
+                          builder: (BuildContext context, snapshot) {
+                            if (snapshot.hasData) {
+                              return GestureDetector(
+                                onTap: () {
+                                  showSnack(
+                                    title: 'Τι είναι οι πόντοι;',
+                                    duration: 2300,
+                                    message:
+                                        'Κάθε φορά που βαθμολογείς μια παραλία κερδίζεις πόντους !',
+                                    firstColor:
+                                        Colors.blueAccent.withOpacity(0.8),
+                                    secondColor: Colors.blue.withOpacity(0.7),
                                   );
-                                }
-                                return const Center(
-                                    child: CircularProgressIndicator());
-                              },
-                            ),
-                          ),
+                                },
+                                child: Padding(
+                                  padding: const EdgeInsets.all(18.0),
+                                  child: Column(
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Flexible(
+                                        child: Text(
+                                          'Πόντοι',
+                                          style: GoogleFonts.adventPro(
+                                            fontSize: 20,
+                                            color: Colors.orange[50],
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                      Flexible(
+                                        child: Text(
+                                          snapshot.data!.toString(),
+                                          style: GoogleFonts.adventPro(
+                                            fontSize: 25,
+                                            color: Colors.orange[50],
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              );
+                            }
+                            return const Center(
+                                child: CircularProgressIndicator());
+                          },
                         ),
                       ),
-                      TextButton(
-                        onPressed: () async {
-                          await FirebaseAuth.instance.signOut();
-                          await Get.to(LandingPage());
-                        },
-                        child: Text(
-                          'Αποσύνδεση',
-                          style: GoogleFonts.adventPro(
-                            fontSize: 25,
-                            color: Colors.orange[50]!.withOpacity(0.8),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await FirebaseAuth.instance.signOut();
+                      await Get.to(LandingPage());
+                    },
+                    child: Text(
+                      'Αποσύνδεση',
+                      style: GoogleFonts.adventPro(
+                        fontSize: 25,
+                        color: Colors.orange[50]!.withOpacity(0.8),
+                        fontWeight: FontWeight.bold,
                       ),
-                      TextButton(
-                        onPressed: () async {
-                          await Get.defaultDialog(
-                              title: 'Επιβεβαίωση',
-                              backgroundColor: Colors.orange[50],
-                              middleText:
-                                  'Διαγράψτε το λογαριασμό σας οριστικά. Δε θα έχετε δυνατότητα επαναφοράς',
-                              middleTextStyle: GoogleFonts.adventPro(
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      await Get.defaultDialog(
+                          title: 'Επιβεβαίωση',
+                          backgroundColor: Colors.orange[50],
+                          middleText:
+                              'Διαγράψτε το λογαριασμό σας οριστικά. Δε θα έχετε δυνατότητα επαναφοράς',
+                          middleTextStyle: GoogleFonts.adventPro(
+                            fontSize: 20,
+                            color: Colors.black.withOpacity(0.8),
+                          ),
+                          titleStyle: GoogleFonts.adventPro(
+                            fontSize: 30,
+                            color: Colors.red.withOpacity(0.8),
+                          ),
+                          cancel: GestureDetector(
+                            onTap: Get.back,
+                            child: Text(
+                              'Ακύρωση',
+                              style: GoogleFonts.adventPro(
                                 fontSize: 20,
-                                color: Colors.black.withOpacity(0.8),
-                              ),
-                              titleStyle: GoogleFonts.adventPro(
-                                fontSize: 30,
                                 color: Colors.red.withOpacity(0.8),
                               ),
-                              cancel: GestureDetector(
-                                onTap: Get.back,
-                                child: Text(
-                                  'Ακύρωση',
-                                  style: GoogleFonts.adventPro(
-                                    fontSize: 20,
-                                    color: Colors.red.withOpacity(0.8),
-                                  ),
-                                ),
-                              ),
-                              confirm: GestureDetector(
-                                onTap: () async {
-                                  try {
-                                    await usersRef.once().then((value) {
-                                      log.wtf(value);
-                                    });
-                                    await FirebaseAuth.instance.currentUser!
-                                        .delete();
-                                    await Get.offAllNamed('/');
-                                  } catch (e) {
-                                    log.e(e);
-                                  }
-                                },
-                                child: Text(
-                                  'Διαγραφή',
-                                  style: GoogleFonts.adventPro(
-                                    fontSize: 20,
-                                    color: Colors.red.withOpacity(0.8),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ));
-                        },
-                        child: Text(
-                          'Διαγραφή λογαριασμού',
-                          style: GoogleFonts.adventPro(
-                            fontSize: 25,
-                            color: Colors.red.withOpacity(0.8),
-                            fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
-                      ),
-                      TextButton(
-                        onPressed: () async {
-                          var _emailLaunchUri = Uri(
-                            scheme: 'mailto',
-                            path: 'esentakos@yahoo.gr',
-                            queryParameters: {
-                              'subject': 'Αναφορά προβλήματος/ζητήματος'
+                          confirm: GestureDetector(
+                            onTap: () async {
+                              try {
+                                await usersRef.once().then((value) {
+                                  log.wtf(value);
+                                });
+                                await FirebaseAuth.instance.currentUser!
+                                    .delete();
+                                await Get.offAllNamed('/');
+                              } catch (e) {
+                                log.e(e);
+                              }
                             },
-                          );
-                          if (await canLaunch(_emailLaunchUri.toString())) {
-                            await launch(_emailLaunchUri.toString());
-                          } else {
-                            throw 'Could not launch $_emailLaunchUri';
-                          }
-                        },
-                        child: Text(
-                          'Αναφορά',
-                          style: GoogleFonts.adventPro(
-                            fontSize: 18,
-                            color: Colors.orange[50],
-                          ),
-                        ),
+                            child: Text(
+                              'Διαγραφή',
+                              style: GoogleFonts.adventPro(
+                                fontSize: 20,
+                                color: Colors.red.withOpacity(0.8),
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ));
+                    },
+                    child: Text(
+                      'Διαγραφή λογαριασμού',
+                      style: GoogleFonts.adventPro(
+                        fontSize: 25,
+                        color: Colors.red.withOpacity(0.8),
+                        fontWeight: FontWeight.bold,
                       ),
-                      Text(
-                        'Έκδοση ${packageInfo.version}',
-                        style: GoogleFonts.adventPro(
-                          fontSize: 20,
-                          color: Colors.orange[50],
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
-                ),
+                  TextButton(
+                    onPressed: () async {
+                      final _emailLaunchUri = Uri(
+                        scheme: 'mailto',
+                        path: 'esentakos@yahoo.gr',
+                        queryParameters: {
+                          'subject': 'Αναφορά προβλήματος/ζητήματος'
+                        },
+                      );
+                      if (await canLaunch(_emailLaunchUri.toString())) {
+                        await launch(_emailLaunchUri.toString());
+                      } else {
+                        throw 'Could not launch $_emailLaunchUri';
+                      }
+                    },
+                    child: Text(
+                      'Αναφορά',
+                      style: GoogleFonts.adventPro(
+                        fontSize: 18,
+                        color: Colors.orange[50],
+                      ),
+                    ),
+                  ),
+                  Text(
+                    'Έκδοση ${packageInfo.version}',
+                    style: GoogleFonts.adventPro(
+                      fontSize: 20,
+                      color: Colors.orange[50],
+                    ),
+                  ),
+                ],
+              ),
+            ),
         ],
       ),
     );

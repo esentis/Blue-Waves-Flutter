@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:Blue_Waves/constants.dart';
+import 'package:blue_waves/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -20,9 +20,9 @@ class _LocateBeachState extends State<LocateBeach> {
       target: LatLng(20, 20),
       zoom: 1,
     );
-    beachMarker = Marker(
+    beachMarker = const Marker(
       markerId: MarkerId('beachMarker'),
-      position: const LatLng(20, 20),
+      position: LatLng(20, 20),
     );
     super.initState();
   }
@@ -46,7 +46,7 @@ class _LocateBeachState extends State<LocateBeach> {
                   setState(() {
                     log.i(details);
                     beachMarker = Marker(
-                      markerId: MarkerId('test'),
+                      markerId: const MarkerId('test'),
                       position: LatLng(
                         details.target.latitude,
                         details.target.longitude,
