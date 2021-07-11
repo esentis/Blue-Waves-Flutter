@@ -37,7 +37,7 @@ class _BeachPageState extends State<BeachPage> {
   bool isBeachFavorited = false;
   double ratingSum = 0;
   double actualRating = 0;
-  List foundRatings = [];
+  // List foundRatings = [];
   int totalRatings = 0;
   double? chosenRating;
   int currentIndex = 1;

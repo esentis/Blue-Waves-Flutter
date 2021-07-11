@@ -20,7 +20,7 @@ class EditProfilePage extends StatefulWidget {
 class _EditProfilePageState extends State<EditProfilePage> {
   late PackageInfo packageInfo;
   bool isLoading = true;
-  Future getVersion() async {
+  Future<void> getVersion() async {
     packageInfo = await PackageInfo.fromPlatform();
     isLoading = false;
     setState(() {});

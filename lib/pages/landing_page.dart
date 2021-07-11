@@ -14,7 +14,7 @@ class LandingPage extends StatefulWidget {
 class _LandingPageState extends State<LandingPage> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
-  Future checkUser() async {
+  Future<void> checkUser() async {
     if (FirebaseAuth.instance.currentUser != null) {
       await Get.offAllNamed('/home');
     }

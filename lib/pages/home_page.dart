@@ -28,7 +28,7 @@ class _HomePageState extends State<HomePage> {
   late GoogleMapController mapController;
   CameraPosition? greeceCamera;
   Marker? beachMarker;
-  List markers = [];
+  List<Marker> markers = [];
   late BitmapDescriptor myMarker;
   String? _mapStyle;
 
@@ -159,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                           });
 
                           return GoogleMap(
-                            markers: {...markers as List<Marker>},
+                            markers: {...markers},
                             myLocationButtonEnabled: false,
                             initialCameraPosition: const CameraPosition(
                               target: LatLng(38.2, 24.1),
