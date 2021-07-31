@@ -1,4 +1,5 @@
 import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
 import 'package:blue_waves/states/loading_state.dart';
@@ -45,7 +46,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   BWPasswordField(
                     emailController: passwordController,
-                    labelText: 'Κωδικός',
+                    labelText: S.current.pass,
                   ),
                   TextButton(
                     onPressed: () async {
@@ -61,7 +62,7 @@ class _LoginPageState extends State<LoginPage> {
                       } on FirebaseAuthException catch (e) {
                         loadingState.toggleLoading();
                         showSnack(
-                          title: 'Κάτι πήγε στραβά',
+                          title: S.current.error,
                           message: e.message!,
                           firstColor: Colors.red,
                           secondColor: Colors.red[800]!,
@@ -71,7 +72,7 @@ class _LoginPageState extends State<LoginPage> {
                       }
                     },
                     child: Text(
-                      'Είσοδος',
+                      S.current.login,
                       style: GoogleFonts.adventPro(
                         fontSize: 35,
                       ),
@@ -80,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   TextButton(
                     onPressed: Get.back,
                     child: Text(
-                      'Επιστροφή στην αρχική',
+                      S.current.back,
                       style: GoogleFonts.adventPro(
                         fontSize: 20,
                         color: Colors.red[400]!.withOpacity(0.8),

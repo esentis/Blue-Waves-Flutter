@@ -1,5 +1,6 @@
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/controllers/user_controller.dart';
+import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -57,7 +58,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
         ),
         centerTitle: true,
         title: Text(
-          'Επεξεργασία προφίλ',
+          S.current.editProfile,
           style: GoogleFonts.adventPro(
             fontSize: 25,
             fontWeight: FontWeight.bold,
@@ -92,10 +93,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               return GestureDetector(
                                 onTap: () {
                                   showSnack(
-                                    title: 'Τι είναι οι πόντοι;',
+                                    title: S.current.pointsQuestion,
                                     duration: 2300,
-                                    message:
-                                        'Κάθε φορά που βαθμολογείς μια παραλία κερδίζεις πόντους !',
+                                    message: S.current.pointsExplain,
                                     firstColor:
                                         Colors.blueAccent.withOpacity(0.8),
                                     secondColor: Colors.blue.withOpacity(0.7),
@@ -108,7 +108,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                                     children: [
                                       Flexible(
                                         child: Text(
-                                          'Πόντοι',
+                                          S.current.points,
                                           style: GoogleFonts.adventPro(
                                             fontSize: 20,
                                             color: Colors.orange[50],
@@ -145,7 +145,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       await Get.to(LandingPage());
                     },
                     child: Text(
-                      'Αποσύνδεση',
+                      S.current.logout,
                       style: GoogleFonts.adventPro(
                         fontSize: 25,
                         color: Colors.orange[50]!.withOpacity(0.8),
@@ -156,10 +156,9 @@ class _EditProfilePageState extends State<EditProfilePage> {
                   TextButton(
                     onPressed: () async {
                       await Get.defaultDialog(
-                          title: 'Επιβεβαίωση',
+                          title: S.current.confirm,
                           backgroundColor: Colors.orange[50],
-                          middleText:
-                              'Διαγράψτε το λογαριασμό σας οριστικά. Δε θα έχετε δυνατότητα επαναφοράς',
+                          middleText: S.current.deleteExplain,
                           middleTextStyle: GoogleFonts.adventPro(
                             fontSize: 20,
                             color: Colors.black.withOpacity(0.8),
@@ -171,7 +170,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           cancel: GestureDetector(
                             onTap: Get.back,
                             child: Text(
-                              'Ακύρωση',
+                              S.current.cancel,
                               style: GoogleFonts.adventPro(
                                 fontSize: 20,
                                 color: Colors.red.withOpacity(0.8),
@@ -192,7 +191,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               }
                             },
                             child: Text(
-                              'Διαγραφή',
+                              S.current.delete,
                               style: GoogleFonts.adventPro(
                                 fontSize: 20,
                                 color: Colors.red.withOpacity(0.8),
@@ -202,7 +201,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           ));
                     },
                     child: Text(
-                      'Διαγραφή λογαριασμού',
+                      S.current.deleteAccount,
                       style: GoogleFonts.adventPro(
                         fontSize: 25,
                         color: Colors.red.withOpacity(0.8),
@@ -215,9 +214,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       final _emailLaunchUri = Uri(
                         scheme: 'mailto',
                         path: 'esentakos@yahoo.gr',
-                        queryParameters: {
-                          'subject': 'Αναφορά προβλήματος/ζητήματος'
-                        },
+                        queryParameters: {'subject': S.current.reportText},
                       );
                       if (await canLaunch(_emailLaunchUri.toString())) {
                         await launch(_emailLaunchUri.toString());
@@ -226,7 +223,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       }
                     },
                     child: Text(
-                      'Αναφορά',
+                      S.current.report,
                       style: GoogleFonts.adventPro(
                         fontSize: 18,
                         color: Colors.orange[50],
@@ -234,7 +231,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                   ),
                   Text(
-                    'Έκδοση ${packageInfo.version}',
+                    '${S.current.version} ${packageInfo.version}',
                     style: GoogleFonts.adventPro(
                       fontSize: 20,
                       color: Colors.orange[50],

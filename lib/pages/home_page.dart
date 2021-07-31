@@ -2,7 +2,10 @@ import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 
+import 'package:blue_waves/api/api_service.dart';
+import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/controllers/beach_controller.dart';
+import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -11,6 +14,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 
 import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
@@ -107,6 +111,7 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     final _controller = Completer();
 
+    log.wtf(S.of(context).pageBeachRatings);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -125,7 +130,7 @@ class _HomePageState extends State<HomePage> {
                     height: MediaQuery.of(context).size.height * .8,
                     width: MediaQuery.of(context).size.width,
                     child: FutureBuilder<List<Beach>>(
-                        future: getAllBeaches(),
+                        future: Api.instance.getAllBeaches(),
                         builder: (context, snapshot) {
                           if (!snapshot.hasData) {
                             return const Center(
@@ -145,8 +150,8 @@ class _HomePageState extends State<HomePage> {
                                 infoWindow: InfoWindow(
                                   title: beach.name,
                                   onTap: () async {
-                                    final beachDetails =
-                                        await getBeach(beach.id!);
+                                    final beachDetails = await Api.instance
+                                        .getBeach(id: beach.id!);
                                     await Get.to(
                                       () => BeachPage(
                                         beach: beachDetails,

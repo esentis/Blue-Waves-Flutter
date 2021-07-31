@@ -1,3 +1,4 @@
+import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -29,7 +30,7 @@ class FavoritesPage extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Αγαπημένες παραλίες',
+          S.current.favoritedBeaches,
           style: GoogleFonts.adventPro(
             fontSize: 25,
             fontWeight: FontWeight.bold,
@@ -57,7 +58,7 @@ class FavoritesPage extends StatelessWidget {
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
-                    return const Text('Something went wrong');
+                    return Text(S.current.error);
                   }
 
                   if (snapshot.connectionState == ConnectionState.waiting) {

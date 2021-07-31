@@ -1,3 +1,4 @@
+import 'package:blue_waves/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -50,7 +51,7 @@ class _LandingPageState extends State<LandingPage> {
                           await Navigator.pushNamed(context, '/register');
                         },
                         child: Text(
-                          'Εγγραφή',
+                          S.current.register,
                           style: GoogleFonts.adventPro(
                             fontSize: 35,
                           ),
@@ -61,7 +62,7 @@ class _LandingPageState extends State<LandingPage> {
                           await Navigator.pushNamed(context, '/login');
                         },
                         child: Text(
-                          'Είσοδος',
+                          S.current.login,
                           style: GoogleFonts.adventPro(
                             fontSize: 35,
                           ),

@@ -1,3 +1,4 @@
+import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/beach_page/beach_page.dart';
 import 'package:blue_waves/pages/landing_page.dart';
 import 'package:blue_waves/pages/register_login_page/login_page.dart';
@@ -9,8 +10,9 @@ import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-// ignore: library_prefixes
+
 import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 // import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -50,6 +52,13 @@ class MyApp extends StatelessWidget {
       ],
       child: GetMaterialApp(
         title: 'Blue Waves',
+        localizationsDelegates: const [
+          S.delegate,
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales: S.delegate.supportedLocales,
         debugShowCheckedModeBanner: false,
         navigatorObservers: [
           FirebaseAnalyticsObserver(analytics: analytics),

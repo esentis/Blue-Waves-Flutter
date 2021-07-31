@@ -23,10 +23,10 @@ class Member {
   });
 
   factory Member.fromJson(Json json) => Member(
-        displayName: json['username'] as String,
-        id: json['id'] as String?,
-        joinDate: json['joinDate'] as String?,
-        role: json['role'] as String?,
-        karma: json['karma'] as int?,
+        displayName: json['username'],
+        id: json['id'],
+        joinDate: json['joinDate'],
+        role: json['role'],
+        karma: json['karma'],
       );
 }

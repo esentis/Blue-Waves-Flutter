@@ -4,24 +4,21 @@ class Rating {
   final String? beachId;
   final double? rating;
   final String? userUid;
-  final String? username;
-  final String? beachName;
   final String? date;
+  final String? review;
   const Rating({
     this.beachId,
     this.rating,
     this.userUid,
-    this.username,
-    this.beachName,
     this.date,
+    this.review,
   });
 
   factory Rating.fromJson(Json json) => Rating(
-        beachId: json['beachId'].toString(),
-        beachName: json['beachName'].toString(),
-        date: json['date'].toString(),
-        rating: double.tryParse(json['rating'].toString()),
-        username: json['username'].toString(),
-        userUid: json['userId'].toString(),
+        beachId: json['beachId'],
+        date: json['date'],
+        rating: json['rating'],
+        userUid: json['userId'],
+        review: json['review'],
       );
 }

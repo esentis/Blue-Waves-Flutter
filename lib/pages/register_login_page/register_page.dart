@@ -1,4 +1,5 @@
 import 'package:animate_do/animate_do.dart';
+import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/controllers/user_controller.dart';
 import 'package:blue_waves/models/member.dart';
@@ -70,7 +71,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         );
                       }
                       try {
-                        await registerUser(
+                        await Api.instance.registerUser(
                           Member(
                             displayName: usernameController.text,
                             email: emailController.text,

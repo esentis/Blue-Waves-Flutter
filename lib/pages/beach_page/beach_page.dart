@@ -1,7 +1,9 @@
 import 'dart:async';
 
+import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/controllers/beach_controller.dart';
+import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:blue_waves/models/favorite.dart';
 import 'package:blue_waves/models/rating.dart';
@@ -42,84 +44,84 @@ class _BeachPageState extends State<BeachPage> {
   double? chosenRating;
   int currentIndex = 1;
   bool verticalGallery = false;
-  bool isLoading = true;
+  bool isLoading = false;
 
   final PageController _pageController = PageController();
 
   Future<void> open(BuildContext context, int index) async {
-    await Get.to(
-      GalleryPhotoViewWrapper(
-        images: widget.beach!.images,
-        backgroundDecoration: const BoxDecoration(
-          color: Color(0xff005295),
-        ),
-        initialIndex: index,
-        scrollDirection: verticalGallery ? Axis.vertical : Axis.horizontal,
-      ),
-    );
+    // await Get.to(
+    //   GalleryPhotoViewWrapper(
+    //     images: widget.beach!.images,
+    //     backgroundDecoration: const BoxDecoration(
+    //       color: Color(0xff005295),
+    //     ),
+    //     initialIndex: index,
+    //     scrollDirection: verticalGallery ? Axis.vertical : Axis.horizontal,
+    //   ),
+    // );
   }
 
-  Future<void> addFavorite(Favorite favorite) async {
-    // Checking if user has already favorited the beach
-    final fav = await favorites
-        .child(favorite.beachId! + favorite.userId!)
-        .once()
-        .then((snapshot) => snapshot.value);
+  // Future<void> addFavorite(Favorite favorite) async {
+  //   // Checking if user has already favorited the beach
+  //   final fav = await favorites
+  //       .child(favorite.beachId! + favorite.userId!)
+  //       .once()
+  //       .then((snapshot) => snapshot.value);
 
-    if (fav != null) {
-      await favorites.child(favorite.beachId! + favorite.userId!).remove();
-      return log.e('Beach removed from favorites.');
-    }
+  //   if (fav != null) {
+  //     await favorites.child(favorite.beachId! + favorite.userId!).remove();
+  //     return log.e('Beach removed from favorites.');
+  //   }
 
-    // If we are ok to procceed we add the review.
-    await favorites.child(favorite.beachId! + favorite.userId!).set({
-      'beachId': favorite.beachId,
-      'userId': favorite.userId,
-      'beachName': favorite.beachName,
-      'date': DateFormat('dd-MM-yyy').format(DateTime.now()),
-    }).then((value) {
-      log.i('Beach added to favorites!');
-      // ignore: invalid_return_type_for_catch_error
-    }).catchError((onError) => log.e(onError));
-  }
+  //   // If we are ok to procceed we add the review.
+  //   await favorites.child(favorite.beachId! + favorite.userId!).set({
+  //     'beachId': favorite.beachId,
+  //     'userId': favorite.userId,
+  //     'beachName': favorite.beachName,
+  //     'date': DateFormat('dd-MM-yyy').format(DateTime.now()),
+  //   }).then((value) {
+  //     log.i('Beach added to favorites!');
+  //     // ignore: invalid_return_type_for_catch_error
+  //   }).catchError((onError) => log.e(onError));
+  // }
 
-  Future<Rating?> getRatings() async {
-    // ignore: omit_local_variable_types
-    final Rating? rate = await ratings
-        .child(widget.beach!.id! + FirebaseAuth.instance.currentUser!.uid)
-        .once()
-        .then(
-      (value) {
-        if (value.value != null) {
-          return Rating.fromJson(value.value as Map<String, dynamic>);
-        }
-        return null;
-      },
-    );
+  // Future<Rating?> getRatings() async {
+  //   // ignore: omit_local_variable_types
+  //   final Rating? rate = await ratings
+  //       .child(widget.beach!.id! + FirebaseAuth.instance.currentUser!.uid)
+  //       .once()
+  //       .then(
+  //     (value) {
+  //       if (value.value != null) {
+  //         return Rating.fromJson(value.value as Map<String, dynamic>);
+  //       }
+  //       return null;
+  //     },
+  //   );
 
-    await favorites
-        .child(widget.beach!.id! + FirebaseAuth.instance.currentUser!.uid)
-        .once()
-        .then((value) {
-      if (value.value != null) {
-        log.wtf('BEACH WAS FAVORITED AND IT SHOULD SHOW TO REMOVE');
+  //   await favorites
+  //       .child(widget.beach!.id! + FirebaseAuth.instance.currentUser!.uid)
+  //       .once()
+  //       .then((value) {
+  //     if (value.value != null) {
+  //       log.wtf('BEACH WAS FAVORITED AND IT SHOULD SHOW TO REMOVE');
 
-        isBeachFavorited = true;
-        return;
-      }
-      return;
-    });
+  //       isBeachFavorited = true;
+  //       return;
+  //     }
+  //     return;
+  //   });
 
-    actualRating = widget.beach!.averageRating!;
-    totalRatings = widget.beach!.ratingCount!;
+  //   actualRating = widget.beach!.averageRating!;
+  //   totalRatings = widget.beach!.ratingCount!;
 
-    hasUserRated = rate != null;
+  //   hasUserRated = rate != null;
 
-    log.i('Has user reviewed the beach ? $hasUserRated');
-    isLoading = false;
-    chosenRating = rate == null ? 0 : rate.rating;
-    setState(() {});
-  }
+  //   log.i('Has user reviewed the beach ? $hasUserRated');
+  //   isLoading = false;
+  //   chosenRating = rate == null ? 0 : rate.rating;
+  //   setState(() {});
+  // }
 
   @override
   void initState() {
@@ -134,7 +136,7 @@ class _BeachPageState extends State<BeachPage> {
 
     super.initState();
     WidgetsBinding.instance!.addPostFrameCallback((_) {
-      getRatings();
+      //    getRatings();
     });
   }
 
@@ -181,24 +183,33 @@ class _BeachPageState extends State<BeachPage> {
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
-                            FavoriteIcon(
-                              isBeachFavorited: isBeachFavorited,
-                              onTap: () async {
-                                await addFavorite(
-                                  Favorite(
-                                    beachId: widget.beach!.id,
-                                    beachName: widget.beach!.name,
-                                    userId:
-                                        FirebaseAuth.instance.currentUser!.uid,
-                                  ),
-                                );
+                            Flexible(
+                              child: FutureBuilder<bool>(
+                                future: Api.instance.checkFavorite(
+                                  userId:
+                                      FirebaseAuth.instance.currentUser!.uid,
+                                  beachId: widget.beach!.id!,
+                                ),
+                                builder: (context, snapshot) {
+                                  if (!snapshot.hasData) {
+                                    log.wtf(snapshot.data);
+                                    return const Loader();
+                                  }
+                                  isBeachFavorited = snapshot.data!;
+                                  return FavoriteIcon(
+                                    isBeachFavorited: isBeachFavorited,
+                                    onTap: () async {
+                                      await Api.instance.toggleFavorite(
+                                        userId: FirebaseAuth
+                                            .instance.currentUser!.uid,
+                                        beachId: widget.beach!.id!,
+                                      );
 
-                                setState(
-                                  () {
-                                    isBeachFavorited = !isBeachFavorited;
-                                  },
-                                );
-                              },
+                                      setState(() {});
+                                    },
+                                  );
+                                },
+                              ),
                             ),
                           ],
                         ),
@@ -224,68 +235,68 @@ class _BeachPageState extends State<BeachPage> {
                                 height: MediaQuery.of(context).size.height / 4,
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(12),
-                                  child: PhotoViewGallery.builder(
-                                    scrollPhysics:
-                                        const BouncingScrollPhysics(),
-                                    builder: (BuildContext context, int index) {
-                                      return PhotoViewGalleryPageOptions(
-                                        imageProvider: NetworkImage(
-                                          widget.beach!.images![index],
-                                        ),
-                                        minScale:
-                                            PhotoViewComputedScale.contained,
-                                        initialScale:
-                                            PhotoViewComputedScale.covered,
-                                        tightMode: true,
-                                        onTapDown: (context, details,
-                                            controllerValue) {
-                                          open(context, index);
-                                        },
-                                        heroAttributes: PhotoViewHeroAttributes(
-                                            tag: widget.beach!.images![index]),
-                                      );
-                                    },
-                                    itemCount: widget.beach!.images!.length,
-                                    loadingBuilder: (context, event) => Center(
-                                      child: SizedBox(
-                                        width: 20.0,
-                                        height: 20.0,
-                                        child: CircularProgressIndicator(
-                                          value: event == null
-                                              ? 0
-                                              : event.cumulativeBytesLoaded /
-                                                  event.expectedTotalBytes!,
-                                        ),
-                                      ),
-                                    ),
-                                    pageController: _pageController,
-                                    onPageChanged: (index) {
-                                      setState(
-                                        () {
-                                          currentIndex = index + 1;
-                                        },
-                                      );
-                                    },
-                                  ),
+                                  // child: PhotoViewGallery.builder(
+                                  //   scrollPhysics:
+                                  //       const BouncingScrollPhysics(),
+                                  //   builder: (BuildContext context, int index) {
+                                  //     return PhotoViewGalleryPageOptions(
+                                  //       imageProvider: NetworkImage(
+                                  //         widget.beach!.images![index],
+                                  //       ),
+                                  //       minScale:
+                                  //           PhotoViewComputedScale.contained,
+                                  //       initialScale:
+                                  //           PhotoViewComputedScale.covered,
+                                  //       tightMode: true,
+                                  //       onTapDown: (context, details,
+                                  //           controllerValue) {
+                                  //         open(context, index);
+                                  //       },
+                                  //       heroAttributes: PhotoViewHeroAttributes(
+                                  //           tag: widget.beach!.images![index]),
+                                  //     );
+                                  //   },
+                                  //   itemCount: widget.beach!.images!.length,
+                                  //   loadingBuilder: (context, event) => Center(
+                                  //     child: SizedBox(
+                                  //       width: 20.0,
+                                  //       height: 20.0,
+                                  //       child: CircularProgressIndicator(
+                                  //         value: event == null
+                                  //             ? 0
+                                  //             : event.cumulativeBytesLoaded /
+                                  //                 event.expectedTotalBytes!,
+                                  //       ),
+                                  //     ),
+                                  //   ),
+                                  //   pageController: _pageController,
+                                  //   onPageChanged: (index) {
+                                  //     setState(
+                                  //       () {
+                                  //         currentIndex = index + 1;
+                                  //       },
+                                  //     );
+                                  //   },
+                                  // ),
                                 ),
                               ),
-                              Align(
-                                alignment: Alignment.bottomRight,
-                                child: Padding(
-                                  padding: const EdgeInsets.all(8.0),
-                                  child: Text(
-                                    '$currentIndex/${widget.beach!.images!.length}',
-                                    style: kStyleDefaultBold,
-                                  ),
-                                ),
-                              ),
+                              // Align(
+                              //   alignment: Alignment.bottomRight,
+                              //   child: Padding(
+                              //     padding: const EdgeInsets.all(8.0),
+                              //     child: Text(
+                              //       '$currentIndex/${widget.beach!.images!.length}',
+                              //       style: kStyleDefaultBold,
+                              //     ),
+                              //   ),
+                              // ),
                             ],
                           ),
                         ),
                         Column(
                           children: [
                             Text(
-                              'Βαθμολογία: ${actualRating.toStringAsFixed(1)} / 5',
+                              '${S.current.pageBeachRating} ${actualRating.toStringAsFixed(1)} / 5',
                               style: GoogleFonts.adventPro(
                                 fontSize: 25,
                                 color: Colors.orange[50],
@@ -293,7 +304,7 @@ class _BeachPageState extends State<BeachPage> {
                               ),
                             ),
                             Text(
-                              ' ($totalRatings βαθμολογίες)',
+                              ' ($totalRatings ${S.current.pageBeachRatings})',
                               style: GoogleFonts.adventPro(
                                 fontSize: 17,
                                 color: Colors.orange[50],
@@ -312,56 +323,68 @@ class _BeachPageState extends State<BeachPage> {
                                   onTap: () {},
                                   child: hasUserRated
                                       ? Text(
-                                          'Έχεις ήδη βαθμολογήσει με : ',
+                                          S.current.pageBeachRated,
                                           style: GoogleFonts.adventPro(
                                             fontSize: 20,
                                             fontWeight: FontWeight.bold,
                                             color: Colors.red,
                                           ),
                                         )
-                                      : RatingBar.builder(
+                                      : RatingBar(
                                           initialRating: 0.5,
-                                          updateOnDrag: true,
                                           minRating: 0.5,
                                           allowHalfRating: true,
                                           itemPadding:
                                               const EdgeInsets.symmetric(
                                                   horizontal: 4.0),
-                                          itemBuilder: (context, _) =>
-                                              const Icon(
-                                            Icons.waves,
-                                            color: Colors.blue,
+                                          ratingWidget: RatingWidget(
+                                            half: Icon(Icons.waves),
+                                            full: Icon(
+                                              Icons.waves,
+                                              color: Colors.red,
+                                            ),
+                                            empty: Icon(Icons.waves),
                                           ),
-                                          onRatingUpdate: (rating) {
-                                            setState(
-                                              () {
-                                                chosenRating = rating;
-                                                addRating(
-                                                  Rating(
-                                                    beachId: widget.beach!.id,
-                                                    rating: rating,
-                                                    beachName:
-                                                        widget.beach!.name,
-                                                    userUid: FirebaseAuth
-                                                        .instance
-                                                        .currentUser!
-                                                        .uid,
-                                                    username: FirebaseAuth
-                                                        .instance
-                                                        .currentUser!
-                                                        .displayName,
-                                                  ),
-                                                );
-                                                hasUserRated = true;
-                                                ratingSum = widget
-                                                        .beach!.averageRating! *
-                                                    widget.beach!.ratingCount!;
-                                                actualRating =
-                                                    (ratingSum + rating) /
-                                                        (totalRatings + 1);
-                                                totalRatings += 1;
-                                              },
+                                          onRatingUpdate: (rating) async {
+                                            log.wtf('rated $rating');
+                                            await Api.instance.addRating(
+                                              Rating(
+                                                beachId: widget.beach!.id,
+                                                rating: rating,
+                                                review: 'test review',
+                                                userUid: FirebaseAuth
+                                                    .instance.currentUser!.uid,
+                                              ),
                                             );
+                                            // setState(
+                                            //   () {
+                                            //     chosenRating = rating;
+                                            //     addRating(
+                                            //       Rating(
+                                            //         beachId: widget.beach!.id,
+                                            //         rating: rating,
+                                            //         beachName:
+                                            //             widget.beach!.name,
+                                            //         userUid: FirebaseAuth
+                                            //             .instance
+                                            //             .currentUser!
+                                            //             .uid,
+                                            //         username: FirebaseAuth
+                                            //             .instance
+                                            //             .currentUser!
+                                            //             .displayName,
+                                            //       ),
+                                            //     );
+                                            //     hasUserRated = true;
+                                            //     ratingSum = widget
+                                            //             .beach!.averageRating! *
+                                            //         widget.beach!.ratingCount!;
+                                            //     actualRating =
+                                            //         (ratingSum + rating) /
+                                            //             (totalRatings + 1);
+                                            //     totalRatings += 1;
+                                            //   },
+                                            // );
                                           },
                                           glowColor: Colors.blue,
                                         ),

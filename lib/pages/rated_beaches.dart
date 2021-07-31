@@ -1,3 +1,4 @@
+import 'package:blue_waves/generated/l10n.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -30,7 +31,7 @@ class RatedBeaches extends StatelessWidget {
         ),
         centerTitle: true,
         title: Text(
-          'Βαθμολογημένες παραλίες',
+          S.current.ratedBeaches,
           style: GoogleFonts.adventPro(
             fontSize: 25,
             fontWeight: FontWeight.bold,
@@ -58,7 +59,7 @@ class RatedBeaches extends StatelessWidget {
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot) {
                   if (snapshot.hasError) {
-                    return const Text('Something went wrong');
+                    return Text(S.current.error);
                   }
 
                   if (snapshot.connectionState == ConnectionState.waiting) {
