@@ -58,6 +58,6 @@ class MessageLookup extends MessageLookupByLibrary {
         "reportText": MessageLookupByLibrary.simpleMessage(
             "Αναφορά προβλήματος/ζητήματος."),
         "username": MessageLookupByLibrary.simpleMessage("Όνομα χρήστη"),
-        "version": MessageLookupByLibrary.simpleMessage("Έκδοσης")
+        "version": MessageLookupByLibrary.simpleMessage("Έκδοση")
       };
 }
