@@ -29,10 +29,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteExplain": MessageLookupByLibrary.simpleMessage(
             "Delete your account permanently, there is no retrieve option."),
         "editProfile": MessageLookupByLibrary.simpleMessage("Edit profile"),
-        "error": MessageLookupByLibrary.simpleMessage(
-            "Something went wrong, try again later !"),
+        "error": MessageLookupByLibrary.simpleMessage("Error"),
         "errorMail":
             MessageLookupByLibrary.simpleMessage("Your email is not correct"),
+        "errorText": MessageLookupByLibrary.simpleMessage(
+            "Something went wrong, try again later !"),
         "favoritedBeaches":
             MessageLookupByLibrary.simpleMessage("Favorite beaches"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading..."),

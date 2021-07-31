@@ -31,10 +31,11 @@ class MessageLookup extends MessageLookupByLibrary {
             "Διαγραφή λογαριασμού οριστικά, δεν υπάρχει δυνατότητα επαναφοράς."),
         "editProfile":
             MessageLookupByLibrary.simpleMessage("Επεξεργασία προφίλ"),
-        "error": MessageLookupByLibrary.simpleMessage(
-            "Κάτι πήγε στραβά, δοκιμάστε ξανά αργότερα !"),
+        "error": MessageLookupByLibrary.simpleMessage("Σφάλμα"),
         "errorMail":
             MessageLookupByLibrary.simpleMessage("Το email δεν είναι σωστό"),
+        "errorText": MessageLookupByLibrary.simpleMessage(
+            "Κάτι πήγε στραβά, δοκιμάστε ξανά αργότερα !"),
         "favoritedBeaches":
             MessageLookupByLibrary.simpleMessage("Αγαπημένες παραλίες"),
         "loading": MessageLookupByLibrary.simpleMessage("Φορτώνει..."),

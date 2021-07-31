@@ -220,11 +220,21 @@ class S {
     );
   }
 
-  /// `Something went wrong, try again later !`
+  /// `Error`
   String get error {
     return Intl.message(
-      'Something went wrong, try again later !',
+      'Error',
       name: 'error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Something went wrong, try again later !`
+  String get errorText {
+    return Intl.message(
+      'Something went wrong, try again later !',
+      name: 'errorText',
       desc: '',
       args: [],
     );

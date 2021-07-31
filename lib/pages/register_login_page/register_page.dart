@@ -2,6 +2,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/controllers/user_controller.dart';
+import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/member.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
@@ -44,7 +45,7 @@ class _RegisterPageState extends State<RegisterPage> {
                 children: [
                   BWTextField(
                     emailController: usernameController,
-                    labelText: 'Όνομα χρήστη',
+                    labelText: S.current.username,
                   ),
                   BWTextField(
                     emailController: emailController,
@@ -53,7 +54,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   ),
                   BWPasswordField(
                     emailController: passwordController,
-                    labelText: 'Κωδικός',
+                    labelText: S.current.pass,
                   ),
                   TextButton(
                     onPressed: () async {
@@ -63,8 +64,8 @@ class _RegisterPageState extends State<RegisterPage> {
                         log.wtf('im here ${emailController.text}');
 
                         return showSnack(
-                          title: 'Κάτι πήγε στραβά',
-                          message: 'Το email που δώσατε δεν είναι σωστό',
+                          title: S.current.error,
+                          message: S.current.errorMail,
                           firstColor: Colors.red,
                           secondColor: Colors.red[800]!,
                           duration: 2800,
@@ -83,7 +84,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       } on FirebaseAuthException catch (e) {
                         loadingState.toggleLoading();
                         showSnack(
-                          title: 'Κάτι πήγε στραβά',
+                          title: S.current.error,
                           message: e.message!,
                           firstColor: Colors.red,
                           secondColor: Colors.red[800]!,
@@ -93,7 +94,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       }
                     },
                     child: Text(
-                      'Εγγραφή',
+                      S.current.register,
                       style: GoogleFonts.adventPro(
                         fontSize: 25,
                         color: Colors.orange[50]!.withOpacity(0.8),
@@ -106,7 +107,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       Navigator.pop(context);
                     },
                     child: Text(
-                      'Επιστροφή στην αρχική',
+                      S.current.back,
                       style: GoogleFonts.adventPro(
                         fontSize: 20,
                         color: Colors.red[400]!.withOpacity(0.8),
