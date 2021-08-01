@@ -1,6 +1,7 @@
+import 'package:blue_waves/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 void showSnack({
   required String title,
@@ -23,19 +24,17 @@ void showSnack({
     titleText: Text(
       title,
       textAlign: TextAlign.center,
-      style: GoogleFonts.adventPro(
+      style: kStyleDefaultBold.copyWith(
         color: const Color(0xff005295),
-        fontSize: 25,
-        fontWeight: FontWeight.bold,
+        fontSize: 25.sp,
       ),
     ),
     messageText: Text(
       message,
       textAlign: TextAlign.center,
-      style: GoogleFonts.adventPro(
+      style: kStyleDefaultBold.copyWith(
         color: Colors.orange[50],
-        fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontSize: 20.sp,
       ),
     ),
     barBlur: 5,

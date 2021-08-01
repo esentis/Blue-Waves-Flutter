@@ -7,7 +7,7 @@ import 'package:animate_do/animate_do.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'package:provider/provider.dart';
 import '../components/animated_background/animated_background.dart';
@@ -73,8 +73,8 @@ class _LoginPageState extends State<LoginPage> {
                     },
                     child: Text(
                       S.current.login,
-                      style: GoogleFonts.adventPro(
-                        fontSize: 35,
+                      style: kStyleDefault.copyWith(
+                        fontSize: 25.sp,
                       ),
                     ),
                   ),
@@ -82,10 +82,8 @@ class _LoginPageState extends State<LoginPage> {
                     onPressed: Get.back,
                     child: Text(
                       S.current.back,
-                      style: GoogleFonts.adventPro(
-                        fontSize: 20,
+                      style: kStyleDefaultBold.copyWith(
                         color: Colors.red[400]!.withOpacity(0.8),
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   )

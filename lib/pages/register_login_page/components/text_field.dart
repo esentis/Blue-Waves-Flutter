@@ -1,5 +1,7 @@
+import 'package:blue_waves/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class BWTextField extends StatelessWidget {
   const BWTextField({
@@ -16,8 +18,8 @@ class BWTextField extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(
-        vertical: 8.0,
-        horizontal: MediaQuery.of(context).size.width / 5,
+        vertical: 8.0.h,
+        horizontal: 20.w,
       ),
       child: TextField(
         autocorrect: false,
@@ -26,33 +28,31 @@ class BWTextField extends StatelessWidget {
         showCursor: true,
         decoration: InputDecoration(
           labelText: labelText,
-          labelStyle: GoogleFonts.adventPro(
-            fontSize: 26,
-            fontWeight: FontWeight.bold,
+          labelStyle: kStyleDefaultBold.copyWith(
+            fontSize: 26.sp,
             color: Colors.orange[50]!.withOpacity(0.4),
           ),
-          contentPadding: const EdgeInsets.symmetric(
-            vertical: 15,
-            horizontal: 20,
+          contentPadding: EdgeInsets.symmetric(
+            vertical: 15.h,
+            horizontal: 20.w,
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(60),
+            borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
               color: Colors.orange[50]!,
-              width: 2,
+              width: 2.w,
             ),
           ),
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(60),
+            borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
               color: Colors.orange[200]!,
-              width: 2,
+              width: 2.w,
             ),
           ),
         ),
-        style: GoogleFonts.adventPro(
-          fontSize: 25,
-          fontWeight: FontWeight.bold,
+        style: kStyleDefaultBold.copyWith(
+          fontSize: 25.sp,
           color: Colors.orange[50],
         ),
       ),

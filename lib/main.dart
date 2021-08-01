@@ -15,6 +15,7 @@ import 'package:flutter/material.dart';
 
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 // import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -59,53 +60,55 @@ class MyApp extends StatelessWidget {
       persistenceEnabled: true,
       cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
     );
-    return MultiProvider(
-      providers: [
-        ListenableProvider<LoadingState>(
-          create: (_) => LoadingState(
-            isLoading: false,
+    return ScreenUtilInit(
+      builder: () => MultiProvider(
+        providers: [
+          ListenableProvider<LoadingState>(
+            create: (_) => LoadingState(
+              isLoading: false,
+            ),
+          )
+        ],
+        child: GetMaterialApp(
+          title: 'Blue Waves',
+          localizationsDelegates: const [
+            S.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: S.delegate.supportedLocales,
+          debugShowCheckedModeBanner: false,
+          navigatorObservers: [
+            FirebaseAnalyticsObserver(analytics: analytics),
+            SentryNavigatorObserver(),
+          ],
+          theme: ThemeData(
+            primarySwatch: Colors.blue,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-        )
-      ],
-      child: GetMaterialApp(
-        title: 'Blue Waves',
-        localizationsDelegates: const [
-          S.delegate,
-          GlobalMaterialLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-        ],
-        supportedLocales: S.delegate.supportedLocales,
-        debugShowCheckedModeBanner: false,
-        navigatorObservers: [
-          FirebaseAnalyticsObserver(analytics: analytics),
-          SentryNavigatorObserver(),
-        ],
-        theme: ThemeData(
-          primarySwatch: Colors.blue,
-          visualDensity: VisualDensity.adaptivePlatformDensity,
+          initialRoute: '/',
+          getPages: [
+            GetPage(name: '/', page: () => LandingPage()),
+            GetPage(
+              name: '/home',
+              page: () => HomePage(),
+            ),
+            GetPage(
+              name: '/beach',
+              page: () => const BeachPage(),
+              transition: Transition.fadeIn,
+            ),
+            GetPage(
+              name: '/register',
+              page: () => RegisterPage(),
+            ),
+            GetPage(
+              name: '/login',
+              page: () => LoginPage(),
+            ),
+          ],
         ),
-        initialRoute: '/',
-        getPages: [
-          GetPage(name: '/', page: () => LandingPage()),
-          GetPage(
-            name: '/home',
-            page: () => HomePage(),
-          ),
-          GetPage(
-            name: '/beach',
-            page: () => const BeachPage(),
-            transition: Transition.fadeIn,
-          ),
-          GetPage(
-            name: '/register',
-            page: () => RegisterPage(),
-          ),
-          GetPage(
-            name: '/login',
-            page: () => LoginPage(),
-          ),
-        ],
       ),
     );
   }

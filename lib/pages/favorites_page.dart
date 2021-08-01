@@ -1,3 +1,4 @@
+import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -5,6 +6,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class FavoritesPage extends StatelessWidget {
   @override
@@ -15,25 +17,24 @@ class FavoritesPage extends StatelessWidget {
           onTap: () {
             Get.back();
           },
-          child: const Icon(
+          child: Icon(
             Icons.arrow_back,
             color: Colors.blue,
-            size: 40,
+            size: 40.w,
           ),
         ),
         backgroundColor: Colors.orange[50]!.withOpacity(0.8),
-        shape: const RoundedRectangleBorder(
+        shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.only(
-            bottomRight: Radius.circular(20),
-            bottomLeft: Radius.circular(20),
+            bottomRight: Radius.circular(20.r),
+            bottomLeft: Radius.circular(20.r),
           ),
         ),
         centerTitle: true,
         title: Text(
           S.current.favoritedBeaches,
-          style: GoogleFonts.adventPro(
-            fontSize: 25,
-            fontWeight: FontWeight.bold,
+          style: kStyleDefaultBold.copyWith(
+            fontSize: 25.sp,
             color: Colors.blue,
           ),
         ),

@@ -1,3 +1,4 @@
+import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -33,8 +34,8 @@ class _LandingPageState extends State<LandingPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: SafeArea(
+    return Material(
+      child: SafeArea(
         child: FadeIn(
             duration: const Duration(milliseconds: 700),
             child: Stack(
@@ -52,9 +53,7 @@ class _LandingPageState extends State<LandingPage> {
                         },
                         child: Text(
                           S.current.register,
-                          style: GoogleFonts.adventPro(
-                            fontSize: 35,
-                          ),
+                          style: kStyleDefault,
                         ),
                       ),
                       TextButton(
@@ -63,9 +62,7 @@ class _LandingPageState extends State<LandingPage> {
                         },
                         child: Text(
                           S.current.login,
-                          style: GoogleFonts.adventPro(
-                            fontSize: 35,
-                          ),
+                          style: kStyleDefault,
                         ),
                       ),
                     ],

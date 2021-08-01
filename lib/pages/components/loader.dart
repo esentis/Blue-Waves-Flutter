@@ -1,7 +1,8 @@
+import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:lottie/lottie.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 class Loader extends StatelessWidget {
   const Loader({
@@ -21,10 +22,8 @@ class Loader extends StatelessWidget {
             Text(
               S.current.loading,
               textAlign: TextAlign.center,
-              style: GoogleFonts.adventPro(
-                color: Colors.white,
-                fontSize: 60,
-                fontWeight: FontWeight.bold,
+              style: kStyleDefaultBold.copyWith(
+                fontSize: 60.sp,
               ),
             )
           ],

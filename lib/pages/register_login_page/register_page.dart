@@ -1,7 +1,7 @@
 import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
-import 'package:blue_waves/controllers/user_controller.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/member.dart';
 import 'package:blue_waves/pages/components/loader.dart';
@@ -95,10 +95,9 @@ class _RegisterPageState extends State<RegisterPage> {
                     },
                     child: Text(
                       S.current.register,
-                      style: GoogleFonts.adventPro(
-                        fontSize: 25,
+                      style: kStyleDefaultBold.copyWith(
+                        fontSize: 25.sp,
                         color: Colors.orange[50]!.withOpacity(0.8),
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
@@ -108,10 +107,8 @@ class _RegisterPageState extends State<RegisterPage> {
                     },
                     child: Text(
                       S.current.back,
-                      style: GoogleFonts.adventPro(
-                        fontSize: 20,
+                      style: kStyleDefaultBold.copyWith(
                         color: Colors.red[400]!.withOpacity(0.8),
-                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   )
