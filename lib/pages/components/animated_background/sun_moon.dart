@@ -16,21 +16,15 @@ class SunMoon extends StatelessWidget {
         'https://assets8.lottiefiles.com/packages/lf20_sCwGNr.json',
         animate: true,
         repeat: true,
-        width: 40.w,
+        width: 35.w,
       ),
       secondCurve: Curves.easeInOut,
       secondChild: Lottie.network(
         'https://assets10.lottiefiles.com/private_files/lf30_Um0Z9o.json',
         animate: true,
         repeat: true,
-        width: 100.w,
+        width: 70.w,
       ),
     );
-    // return Lottie.network(
-    //   'https://assets8.lottiefiles.com/packages/lf20_sCwGNr.json',
-    //   animate: true,
-    //   repeat: true,
-    //   width: 40.w,
-    // );
   }
 }
