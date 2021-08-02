@@ -18,24 +18,48 @@ class Waves extends StatelessWidget {
             config: CustomConfig(
               gradients: [
                 [
-                  Colors.white,
-                  const Color(0xff18A6EC),
+                  if (isDark)
+                    const Color(0xff31326F)
+                  else
+                    const Color(0xff709FB0),
+                  if (isDark)
+                    const Color(0xff34626C)
+                  else
+                    const Color(0xff9DDAC6),
                 ],
                 [
-                  const Color(0xff18A6EC),
-                  const Color(0xff005295),
+                  if (isDark)
+                    const Color(0xff31326F)
+                  else
+                    const Color(0xff1AA6B7),
+                  if (isDark)
+                    const Color(0xff31326F)
+                  else
+                    const Color(0xff005295),
                 ],
                 [
-                  Colors.white,
-                  const Color(0xff18A6EC),
+                  if (isDark)
+                    const Color(0xff252525)
+                  else
+                    const Color(0xffF9F9F9),
+                  if (isDark)
+                    const Color(0xff16697A)
+                  else
+                    const Color(0xff18A6EC),
                 ],
                 [
-                  const Color(0xff18A6EC),
-                  const Color(0xff005295),
+                  if (isDark)
+                    const Color(0xff41AEA9)
+                  else
+                    const Color(0xff1AA6B7),
+                  if (isDark)
+                    const Color(0xff0F3057)
+                  else
+                    const Color(0xff005295),
                 ]
               ],
               durations: isDark
-                  ? [35000, 30000, 45000, 25000]
+                  ? [35000, 40000, 45000, 55000]
                   : [35000, 19440, 10800, 6000],
               heightPercentages:
                   isDark ? [0.02, 0.03, 0.04, 0.05] : [0.01, 0.02, 0.01, 0.02],
