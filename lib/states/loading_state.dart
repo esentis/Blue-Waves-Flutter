@@ -9,12 +9,7 @@ class LoadingState extends ChangeNotifier {
   void getIsLoading() => isLoading;
 
   void toggleLoading() {
-    if (isLoading!) {
-      isLoading = false;
-      notifyListeners();
-    } else {
-      isLoading = true;
-      notifyListeners();
-    }
+    isLoading = !isLoading!;
+    notifyListeners();
   }
 }
