@@ -5,6 +5,7 @@ import 'package:blue_waves/pages/register_login_page/login_page.dart';
 import 'package:blue_waves/pages/register_login_page/register_page.dart';
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/pages/home_page.dart';
+import 'package:blue_waves/states/theme_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
@@ -35,14 +36,17 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   }
 
-  await SentryFlutter.init(
-    (options) {
-      options.dsn = dotenv.env['SENTRY_DSN'];
-    },
-    appRunner: () => runApp(
-      MyApp(),
-    ),
+  runApp(
+    MyApp(),
   );
+  // await SentryFlutter.init(
+  //   (options) {
+  //     options.dsn = dotenv.env['SENTRY_DSN'];
+  //   },
+  //   appRunner: () => runApp(
+  //     MyApp(),
+  //   ),
+  // );
 }
 
 class MyApp extends StatelessWidget {
@@ -67,7 +71,10 @@ class MyApp extends StatelessWidget {
             create: (_) => LoadingState(
               isLoading: false,
             ),
-          )
+          ),
+          ListenableProvider<ThemeState>(
+            create: (_) => ThemeState(isDark: false),
+          ),
         ],
         child: GetMaterialApp(
           title: 'Blue Waves',
@@ -84,12 +91,10 @@ class MyApp extends StatelessWidget {
             SentryNavigatorObserver(),
           ],
           theme: ThemeData(
-            primarySwatch: Colors.blue,
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          initialRoute: '/',
+          initialRoute: '/home',
           getPages: [
-            GetPage(name: '/', page: () => LandingPage()),
             GetPage(
               name: '/home',
               page: () => HomePage(),
