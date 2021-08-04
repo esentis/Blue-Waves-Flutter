@@ -92,6 +92,34 @@ class Api {
     }
   }
 
+  Future<String> registerGoogleUser(
+      {required String id, required String displayName}) async {
+    Response<dynamic> response;
+    try {
+      response = await http.post('users/', data: {
+        'id': id,
+        'username': displayName,
+      });
+      return response.data['createdAt'];
+    } on DioError catch (e) {
+      log.e(e.message);
+      return e.message;
+    }
+  }
+
+  Future<bool> checkUser(String id) async {
+    Response<dynamic> response;
+    try {
+      response = await http.post('users/check', data: {
+        'id': id,
+      });
+      return response.data['success'];
+    } on DioError catch (e) {
+      log.e(e.message);
+      return false;
+    }
+  }
+
   Future<String> addRating(Rating rating) async {
     Response<dynamic> response;
     try {
