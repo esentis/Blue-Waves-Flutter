@@ -90,10 +90,10 @@ class S {
     );
   }
 
-  /// `Login`
+  /// `Sign in`
   String get login {
     return Intl.message(
-      'Login',
+      'Sign in',
       name: 'login',
       desc: '',
       args: [],
@@ -110,10 +110,10 @@ class S {
     );
   }
 
-  /// `Logout`
+  /// `Sign out`
   String get logout {
     return Intl.message(
-      'Logout',
+      'Sign out',
       name: 'logout',
       desc: '',
       args: [],

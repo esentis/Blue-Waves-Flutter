@@ -37,8 +37,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "favoritedBeaches":
             MessageLookupByLibrary.simpleMessage("Favorite beaches"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
-        "login": MessageLookupByLibrary.simpleMessage("Login"),
-        "logout": MessageLookupByLibrary.simpleMessage("Logout"),
+        "login": MessageLookupByLibrary.simpleMessage("Sign in"),
+        "logout": MessageLookupByLibrary.simpleMessage("Sign out"),
         "or": MessageLookupByLibrary.simpleMessage("Or"),
         "pageBeachRated":
             MessageLookupByLibrary.simpleMessage("You have already rated : "),
