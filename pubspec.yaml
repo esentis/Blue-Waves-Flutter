@@ -42,6 +42,7 @@ dependencies:
   flutter_screenutil: ^5.0.0+2
   get: ^4.1.4
   google_fonts: ^2.1.0
+  google_maps_cluster_manager: ^1.0.0
   google_maps_flutter: ^2.0.6
   google_maps_flutter_web: ^0.3.0+2
   google_sign_in: ^5.0.5
