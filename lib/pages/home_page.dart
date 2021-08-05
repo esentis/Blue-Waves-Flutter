@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
+import 'dart:ui';
 
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
@@ -9,13 +10,15 @@ import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 // import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
+import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
 import 'components/loader.dart';
@@ -30,11 +33,19 @@ class _HomePageState extends State<HomePage> {
   bool isLoading = true;
   bool isAdmin = false;
   late GoogleMapController mapController;
-  CameraPosition? greeceCamera;
+  CameraPosition greeceCamera = const CameraPosition(
+    target: LatLng(38.2, 23.9),
+    zoom: 6,
+  );
   Marker? beachMarker;
-  List<Marker> markers = [];
+  Set<Marker> markers = {};
   late BitmapDescriptor myMarker;
   String? _mapStyle;
+  List<Beach> _beaches = [];
+  late ClusterManager<Beach> _manager;
+  final List<ClusterItem<Beach>> _items = [];
+
+  final Completer<GoogleMapController> _controller = Completer();
 
   /// Method to magically create custom marker !!
   static Future<Uint8List> getBytesFromAsset(String path, int width) async {
@@ -47,15 +58,14 @@ class _HomePageState extends State<HomePage> {
         .asUint8List();
   }
 
-  // BannerAd myBanner = BannerAd(
-  //   adUnitId: env['VAR_ADUNIT_ID'],
-  //   // adUnitId: BannerAd.testAdUnitId,
-  //   size: AdSize.smartBanner,
-  //   targetingInfo: const MobileAdTargetingInfo(childDirected: true),
-  //   listener: (MobileAdEvent event) {
-  //     print('BannerAd event is $event');
-  //   },
-  // );
+  Future<void> preparePage() async {
+    _beaches = await Api.instance.getAllBeaches();
+
+    for (final Beach b in _beaches) {
+      _items.add(ClusterItem(LatLng(b.latitude!, b.longitude!), item: b));
+    }
+    _manager.setItems(_items);
+  }
 
   /// Method to create a list of Markers and set them to the map.
   Future<void> setMapStyle() async {
@@ -69,35 +79,32 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  // Future<void> isAdminCheck() async {
-  //   isAdmin = await users
-  //       .where('id', isEqualTo: FirebaseAuth.instance.currentUser.uid)
-  //       .where('role', isEqualTo: 'admin')
-  //       .get()
-  //       .then((value) {
-  //     // Returns false as the user is not admin
-  //     return value.docs.isNotEmpty;
-  //   });
-  // }
+  void _updateMarkers(Set<Marker> markers) {
+    log.i('Updated ${markers.length} markers');
+    setState(() {
+      this.markers = markers;
+    });
+  }
+
+  ClusterManager<Beach> _initClusterManager() {
+    log.i('Initializing cluster manager');
+    return ClusterManager<Beach>(
+      _items,
+      _updateMarkers,
+      markerBuilder: _markerBuilder,
+      stopClusteringZoom: 17.0,
+    );
+  }
 
   @override
   void initState() {
+    _manager = _initClusterManager();
+    preparePage();
     super.initState();
 
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       setMapStyle();
     });
-    // myBanner
-    //   // typically this happens well before the ad is shown
-    //   ..load()
-    //   ..show(
-    //     // Positions the banner ad 60 pixels from the bottom of the screen
-    //     anchorOffset: 0,
-    //     // Positions the banner ad 10 pixels from the center of the screen to the right
-    //     horizontalCenterOffset: 0,
-    //     // Banner Position
-    //     anchorType: AnchorType.bottom,
-    //   );
   }
 
   @override
@@ -109,9 +116,6 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
-    final _controller = Completer();
-
-    log.wtf(S.of(context).pageBeachRatings);
     return Scaffold(
       body: SafeArea(
         child: Stack(
@@ -129,54 +133,20 @@ class _HomePageState extends State<HomePage> {
                   child: SizedBox(
                     height: MediaQuery.of(context).size.height * .8,
                     width: MediaQuery.of(context).size.width,
-                    child: FutureBuilder<List<Beach>>(
-                        future: Api.instance.getAllBeaches(),
-                        builder: (context, snapshot) {
-                          if (!snapshot.hasData) {
-                            return const Center(
-                              child: CircularProgressIndicator(),
-                            );
-                          }
-                          // ignore: omit_local_variable_types
-                          final List<Beach> beaches = snapshot.data!;
-                          // ignore: avoid_function_literals_in_foreach_calls
-                          beaches.forEach((beach) {
-                            markers.add(
-                              Marker(
-                                markerId: MarkerId(beach.name!),
-                                position:
-                                    LatLng(beach.latitude!, beach.longitude!),
-                                icon: myMarker,
-                                infoWindow: InfoWindow(
-                                  title: beach.name,
-                                  onTap: () async {
-                                    final beachDetails = await Api.instance
-                                        .getBeach(id: beach.id!);
-                                    await Get.to(
-                                      () => BeachPage(
-                                        beach: beachDetails,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ),
-                            );
-                          });
-
-                          return GoogleMap(
-                            markers: {...markers},
-                            myLocationButtonEnabled: false,
-                            initialCameraPosition: const CameraPosition(
-                              target: LatLng(38.2, 24.1),
-                              zoom: 6,
-                            ),
-                            onMapCreated: (GoogleMapController controller) {
-                              mapController = controller;
-                              mapController.setMapStyle(_mapStyle);
-                              _controller.complete(controller);
-                            },
-                          );
-                        }),
+                    child: GoogleMap(
+                      markers: markers,
+                      myLocationButtonEnabled: false,
+                      initialCameraPosition: greeceCamera,
+                      zoomControlsEnabled: false,
+                      onCameraMove: _manager.onCameraMove,
+                      onCameraIdle: _manager.updateMap,
+                      onMapCreated: (GoogleMapController controller) {
+                        mapController = controller;
+                        _manager.setMapController(controller);
+                        mapController.setMapStyle(_mapStyle);
+                        _controller.complete(controller);
+                      },
+                    ),
                   ),
                 ),
               ),
@@ -186,5 +156,92 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
+  }
+
+  static double convertRadiusToSigma(double radius) {
+    return radius * 0.57735 + 0.5;
+  }
+
+  Future<Marker> Function(Cluster<Beach>) get _markerBuilder =>
+      (cluster) async {
+        return Marker(
+          markerId: MarkerId(cluster.getId()),
+          position: cluster.location,
+          onTap: cluster.isMultiple
+              ? () async {
+                  if (cluster.count == 2) {
+                    final LatLng latLng_1 = LatLng(
+                        cluster.markers.first.location.latitude,
+                        cluster.markers.first.location.longitude);
+                    final LatLng latLng_2 = LatLng(
+                        cluster.markers.last.location.latitude,
+                        cluster.markers.last.location.longitude);
+
+                    final LatLngBounds bound = LatLngBounds(
+                      southwest: latLng_1.latitude > latLng_2.latitude
+                          ? latLng_2
+                          : latLng_1,
+                      northeast: latLng_1.latitude > latLng_2.latitude
+                          ? latLng_1
+                          : latLng_2,
+                    );
+
+                    final CameraUpdate u2 =
+                        CameraUpdate.newLatLngBounds(bound, 50);
+                    await mapController.animateCamera(u2);
+                  } else {
+                    await mapController.animateCamera(
+                        CameraUpdate.newLatLngZoom(cluster.location, 7));
+                  }
+                }
+              : null,
+          infoWindow: cluster.isMultiple
+              ? const InfoWindow()
+              : InfoWindow(
+                  title: cluster.items.first?.name,
+                  onTap: () async {
+                    await Get.to(
+                      () => BeachPage(
+                        beach: cluster.items.first,
+                      ),
+                    );
+                  },
+                ),
+          icon: await _getMarkerBitmap(cluster.isMultiple ? 110 : 50,
+              text: cluster.isMultiple ? cluster.count.toString() : null),
+        );
+      };
+
+  Future<BitmapDescriptor> _getMarkerBitmap(int size, {String? text}) async {
+    final PictureRecorder pictureRecorder = PictureRecorder();
+    final Canvas canvas = Canvas(pictureRecorder);
+    final Paint paint1 = Paint()..color = const Color(0xff18A6EC);
+    final Paint paint2 = Paint()..color = const Color(0xff005295);
+
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.0, paint1);
+    canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
+
+    if (text != null) {
+      final TextPainter painter =
+          TextPainter(textDirection: ui.TextDirection.ltr);
+      painter.text = TextSpan(
+        text: text,
+        style: kStyleDefaultBold.copyWith(
+          fontSize: (size / 3).sp,
+          color: Colors.orange[100],
+        ),
+      );
+      painter.layout();
+      painter.paint(
+        canvas,
+        Offset(size / 2 - painter.width / 2, size / 2 - painter.height / 2),
+      );
+    }
+
+    final img = await pictureRecorder.endRecording().toImage(size, size);
+    // ignore: cast_nullable_to_non_nullable
+    final data = await img.toByteData(format: ImageByteFormat.png) as ByteData;
+
+    return BitmapDescriptor.fromBytes(data.buffer.asUint8List());
   }
 }
