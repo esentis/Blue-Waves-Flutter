@@ -5,19 +5,15 @@ import 'dart:ui';
 
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
-import 'package:blue_waves/controllers/beach_controller.dart';
-import 'package:blue_waves/generated/l10n.dart';
+
 import 'package:blue_waves/models/beach.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/foundation.dart';
-// import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
@@ -156,10 +152,6 @@ class _HomePageState extends State<HomePage> {
         ),
       ),
     );
-  }
-
-  static double convertRadiusToSigma(double radius) {
-    return radius * 0.57735 + 0.5;
   }
 
   Future<Marker> Function(Cluster<Beach>) get _markerBuilder =>

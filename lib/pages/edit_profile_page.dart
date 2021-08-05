@@ -1,5 +1,4 @@
 import 'package:blue_waves/constants.dart';
-import 'package:blue_waves/controllers/user_controller.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -59,54 +58,43 @@ class _EditProfilePageState extends State<EditProfilePage> {
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height / 6.1,
                           width: MediaQuery.of(context).size.width / 2.5,
-                          child: StreamBuilder(
-                            stream: usersRef.get().asStream(),
-                            builder: (BuildContext context, snapshot) {
-                              if (snapshot.hasData) {
-                                return GestureDetector(
-                                  onTap: () {
-                                    showSnack(
-                                      title: S.current.pointsQuestion,
-                                      duration: 2300,
-                                      message: S.current.pointsExplain,
-                                      firstColor:
-                                          Colors.blueAccent.withOpacity(0.8),
-                                      secondColor: Colors.blue.withOpacity(0.7),
-                                    );
-                                  },
-                                  child: Padding(
-                                    padding: const EdgeInsets.all(18.0),
-                                    child: Column(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: [
-                                        Flexible(
-                                          child: Text(
-                                            S.current.points,
-                                            style: kStyleDefault.copyWith(
-                                              color: Colors.orange[50],
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                        Flexible(
-                                          child: Text(
-                                            snapshot.data!.toString(),
-                                            style: kStyleDefaultBold.copyWith(
-                                              fontSize: 25.sp,
-                                              color: Colors.orange[50],
-                                            ),
-                                            textAlign: TextAlign.center,
-                                          ),
-                                        ),
-                                      ],
+                          child: GestureDetector(
+                            onTap: () {
+                              showSnack(
+                                title: S.current.pointsQuestion,
+                                duration: 2300,
+                                message: S.current.pointsExplain,
+                                firstColor: Colors.blueAccent.withOpacity(0.8),
+                                secondColor: Colors.blue.withOpacity(0.7),
+                              );
+                            },
+                            child: Padding(
+                              padding: const EdgeInsets.all(18.0),
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      S.current.points,
+                                      style: kStyleDefault.copyWith(
+                                        color: Colors.orange[50],
+                                      ),
+                                      textAlign: TextAlign.center,
                                     ),
                                   ),
-                                );
-                              }
-                              return const Center(
-                                  child: CircularProgressIndicator());
-                            },
+                                  Flexible(
+                                    child: Text(
+                                      'Coming soon',
+                                      style: kStyleDefaultBold.copyWith(
+                                        fontSize: 25.sp,
+                                        color: Colors.orange[50],
+                                      ),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
                           ),
                         ),
                       ),
@@ -147,18 +135,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                               ),
                             ),
                             confirm: GestureDetector(
-                              onTap: () async {
-                                try {
-                                  await usersRef.once().then((value) {
-                                    log.wtf(value);
-                                  });
-                                  await FirebaseAuth.instance.currentUser!
-                                      .delete();
-                                  await Get.offAllNamed('/');
-                                } catch (e) {
-                                  log.e(e);
-                                }
-                              },
+                              onTap: () async {},
                               child: Text(
                                 S.current.delete,
                                 style: kStyleDefaultBold.copyWith(

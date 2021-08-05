@@ -1,6 +1,5 @@
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/beach_page/beach_page.dart';
-import 'package:blue_waves/pages/landing_page.dart';
 import 'package:blue_waves/pages/register_login_page/login_page.dart';
 import 'package:blue_waves/pages/register_login_page/register_page.dart';
 import 'package:blue_waves/states/loading_state.dart';

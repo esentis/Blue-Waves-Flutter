@@ -1,7 +1,6 @@
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
-import 'package:blue_waves/models/member.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
 import 'package:blue_waves/states/loading_state.dart';
