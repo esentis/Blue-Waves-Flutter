@@ -1,13 +1,17 @@
 import 'dart:async';
+import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/generated/l10n.dart';
 
 import 'package:blue_waves/models/beach.dart';
 import 'package:animate_do/animate_do.dart';
+import 'package:blue_waves/pages/components/snack_bar.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -25,6 +29,7 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  late StreamSubscription<ConnectivityResult> _connectionStatus;
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isLoading = true;
   bool isAdmin = false;
@@ -95,9 +100,24 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     _manager = _initClusterManager();
-    preparePage();
-    super.initState();
 
+    super.initState();
+    _connectionStatus = Connectivity()
+        .onConnectivityChanged
+        .listen((ConnectivityResult result) {
+      if (result == ConnectivityResult.none) {
+        showSnack(
+          title: S.current.error,
+          message: S.current.noConnection,
+          firstColor: Colors.red[200]!,
+          secondColor: Colors.red,
+          duration: 10000,
+        );
+      } else {
+        preparePage();
+      }
+      // Got a new connectivity status!
+    });
     WidgetsBinding.instance!.addPostFrameCallback((_) {
       setMapStyle();
     });
@@ -105,9 +125,9 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void dispose() {
-    mapController.dispose();
-    // myBanner..dispose();
     super.dispose();
+    mapController.dispose();
+    _connectionStatus.cancel();
   }
 
   @override
