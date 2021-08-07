@@ -12,15 +12,15 @@ class SunMoon extends StatelessWidget {
       crossFadeState:
           isDark ? CrossFadeState.showFirst : CrossFadeState.showSecond,
       firstCurve: Curves.easeInOut,
-      firstChild: Lottie.network(
-        'https://assets8.lottiefiles.com/packages/lf20_sCwGNr.json',
+      firstChild: Lottie.asset(
+        'assets/images/moon.json',
         animate: true,
         repeat: true,
         width: 35.w,
       ),
       secondCurve: Curves.easeInOut,
-      secondChild: Lottie.network(
-        'https://assets10.lottiefiles.com/private_files/lf30_Um0Z9o.json',
+      secondChild: Lottie.asset(
+        'assets/images/sun.json',
         animate: true,
         repeat: true,
         width: 70.w,

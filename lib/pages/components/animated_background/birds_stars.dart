@@ -15,8 +15,8 @@ class BurdsStars extends StatelessWidget {
       firstChild: SizedBox(
         width: ScreenUtil().screenWidth,
         height: 200.h,
-        child: Lottie.network(
-          'https://assets7.lottiefiles.com/packages/lf20_k6GHT3.json',
+        child: Lottie.asset(
+          'assets/images/birds.json',
           animate: true,
           repeat: true,
           width: 250.w,
@@ -26,8 +26,8 @@ class BurdsStars extends StatelessWidget {
       secondChild: SizedBox(
         width: ScreenUtil().screenWidth,
         height: 200.h,
-        child: Lottie.network(
-          'https://assets2.lottiefiles.com/packages/lf20_dxry6ndt.json',
+        child: Lottie.asset(
+          'assets/images/stars.json',
           animate: true,
           repeat: true,
           //width: 250.w,
