@@ -41,6 +41,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "loading": MessageLookupByLibrary.simpleMessage("Φορτώνει..."),
         "login": MessageLookupByLibrary.simpleMessage("Είσοδος"),
         "logout": MessageLookupByLibrary.simpleMessage("Αποσύνδεση"),
+        "noConnection": MessageLookupByLibrary.simpleMessage(
+            "Δεν βρέθηκε ενεργή σύνδεση στο ίντερνετ"),
         "or": MessageLookupByLibrary.simpleMessage("Ή"),
         "pageBeachRated":
             MessageLookupByLibrary.simpleMessage("Έχεις ήδη βαθμολογήσει : "),

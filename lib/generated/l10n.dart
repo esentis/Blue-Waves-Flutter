@@ -320,6 +320,16 @@ class S {
     );
   }
 
+  /// `No internet active internet connection found`
+  String get noConnection {
+    return Intl.message(
+      'No internet active internet connection found',
+      name: 'noConnection',
+      desc: '',
+      args: [],
+    );
+  }
+
   /// `Loading...`
   String get loading {
     return Intl.message(

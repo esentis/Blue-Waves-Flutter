@@ -26,5 +26,6 @@
     "favoritedBeaches": "Favorite beaches",
     "ratedBeaches": "Rated beaches",
     "editProfile": "Edit profile",
+    "noConnection": "No internet active internet connection found",
     "loading": "Loading..."
 }

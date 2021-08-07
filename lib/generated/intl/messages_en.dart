@@ -39,6 +39,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
         "login": MessageLookupByLibrary.simpleMessage("Sign in"),
         "logout": MessageLookupByLibrary.simpleMessage("Sign out"),
+        "noConnection": MessageLookupByLibrary.simpleMessage(
+            "No internet active internet connection found"),
         "or": MessageLookupByLibrary.simpleMessage("Or"),
         "pageBeachRated":
             MessageLookupByLibrary.simpleMessage("You have already rated : "),
