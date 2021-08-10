@@ -339,6 +339,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Menu`
+  String get menu {
+    return Intl.message(
+      'Menu',
+      name: 'menu',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `You're currently not logged`
+  String get notLogged {
+    return Intl.message(
+      'You\'re currently not logged',
+      name: 'notLogged',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

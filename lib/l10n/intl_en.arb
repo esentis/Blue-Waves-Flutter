@@ -27,5 +27,7 @@
     "ratedBeaches": "Rated beaches",
     "editProfile": "Edit profile",
     "noConnection": "No internet active internet connection found",
-    "loading": "Loading..."
+    "loading": "Loading...",
+    "menu": "Menu",
+    "notLogged": "You're currently not logged"
 }
