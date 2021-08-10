@@ -11,6 +11,7 @@ import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
+import 'package:blue_waves/states/theme_state.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -19,6 +20,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:package_info/package_info.dart';
 import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
 import 'components/loader.dart';
@@ -30,6 +32,8 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late StreamSubscription<ConnectivityResult> _connectionStatus;
+  PackageInfo? packageInfo;
+  final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey(); // Create a key
   FirebaseAuth auth = FirebaseAuth.instance;
   bool isLoading = true;
   bool isAdmin = false;
@@ -61,7 +65,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> preparePage() async {
     _beaches = await Api.instance.getAllBeaches();
-
+    packageInfo = await PackageInfo.fromPlatform();
     for (final Beach b in _beaches) {
       _items.add(ClusterItem(LatLng(b.latitude!, b.longitude!), item: b));
     }
@@ -133,6 +137,71 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      key: _scaffoldKey,
+      drawer: Stack(
+        children: [
+          Positioned(
+            top: 90.h,
+            bottom: 0,
+            child: Container(
+              decoration: BoxDecoration(
+                color: kColorBlueDark2,
+                borderRadius: BorderRadius.only(
+                  topLeft: Radius.circular(16.r),
+                ),
+              ),
+              width: 200.w,
+              height: 450.h,
+              child: Padding(
+                padding: EdgeInsets.symmetric(vertical: 8.0.h),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      S.current.menu,
+                      style: kStyleDefault,
+                    ),
+                    if (FirebaseAuth.instance.currentUser == null) ...[
+                      TextButton(
+                        onPressed: () async {
+                          await Get.toNamed('/auth');
+                        },
+                        child: Text(
+                          S.current.notLogged,
+                          style: kStyleDefault.copyWith(
+                            fontSize: 15.sp,
+                          ),
+                        ),
+                      )
+                    ],
+                    if (packageInfo != null)
+                      Text(
+                        '${S.current.version} ${packageInfo?.version}',
+                        style: kStyleDefault.copyWith(
+                          fontSize: 14.sp,
+                          color: kColorOrangeLight,
+                        ),
+                      ),
+                  ],
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+      floatingActionButton: IconButton(
+        onPressed: () {
+          _scaffoldKey.currentState?.openDrawer();
+        },
+        icon: Icon(
+          Icons.menu,
+          color: ThemeState.of(context, listen: true).isDark
+              ? kColorWhite
+              : kColorOrangeLight2,
+          size: 45,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
       body: SafeArea(
         child: Stack(
           children: [
@@ -146,22 +215,28 @@ class _HomePageState extends State<HomePage> {
                 bottom: 0,
                 child: FadeInUp(
                   delay: const Duration(milliseconds: 600),
-                  child: SizedBox(
-                    height: MediaQuery.of(context).size.height * .8,
-                    width: MediaQuery.of(context).size.width,
-                    child: GoogleMap(
-                      markers: markers,
-                      myLocationButtonEnabled: false,
-                      initialCameraPosition: greeceCamera,
-                      zoomControlsEnabled: false,
-                      onCameraMove: _manager.onCameraMove,
-                      onCameraIdle: _manager.updateMap,
-                      onMapCreated: (GoogleMapController controller) {
-                        mapController = controller;
-                        _manager.setMapController(controller);
-                        mapController.setMapStyle(_mapStyle);
-                        _controller.complete(controller);
-                      },
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.only(
+                      topRight: Radius.circular(16.r),
+                      topLeft: Radius.circular(16.r),
+                    ),
+                    child: SizedBox(
+                      height: 600.h,
+                      width: MediaQuery.of(context).size.width,
+                      child: GoogleMap(
+                        markers: markers,
+                        myLocationButtonEnabled: false,
+                        initialCameraPosition: greeceCamera,
+                        zoomControlsEnabled: false,
+                        onCameraMove: _manager.onCameraMove,
+                        onCameraIdle: _manager.updateMap,
+                        onMapCreated: (GoogleMapController controller) {
+                          mapController = controller;
+                          _manager.setMapController(controller);
+                          mapController.setMapStyle(_mapStyle);
+                          _controller.complete(controller);
+                        },
+                      ),
                     ),
                   ),
                 ),
@@ -227,8 +302,8 @@ class _HomePageState extends State<HomePage> {
   Future<BitmapDescriptor> _getMarkerBitmap(int size, {String? text}) async {
     final PictureRecorder pictureRecorder = PictureRecorder();
     final Canvas canvas = Canvas(pictureRecorder);
-    final Paint paint1 = Paint()..color = const Color(0xff18A6EC);
-    final Paint paint2 = Paint()..color = const Color(0xff005295);
+    final Paint paint1 = Paint()..color = kColorBlueLight;
+    final Paint paint2 = Paint()..color = kColorOrange;
 
     canvas.drawCircle(Offset(size / 2, size / 2), size / 2.0, paint1);
     canvas.drawCircle(Offset(size / 2, size / 2), size / 2.2, paint2);
@@ -240,7 +315,7 @@ class _HomePageState extends State<HomePage> {
         text: text,
         style: kStyleDefaultBold.copyWith(
           fontSize: (size / 3).sp,
-          color: Colors.orange[100],
+          color: kColorBlue,
         ),
       );
       painter.layout();
