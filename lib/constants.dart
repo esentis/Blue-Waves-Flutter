@@ -19,14 +19,24 @@ BaseOptions blueWavesOptions = BaseOptions(
     });
 
 Logger log = Logger();
+
+///```dart
+/// fontSize: 20.sp,
+/// color: kColorWhite,
+///```
 TextStyle kStyleDefault = GoogleFonts.adventPro(
   fontSize: 20.sp,
-  color: Colors.white,
+  color: kColorWhite,
 );
 
+///```dart
+/// fontSize: 20.sp,
+/// color: kColorWhite,
+/// fontWeight: FontWeight.bold
+///```
 TextStyle kStyleDefaultBold = GoogleFonts.adventPro(
   fontSize: 20.sp,
-  color: Colors.white,
+  color: kColorWhite,
   fontWeight: FontWeight.bold,
 );
 
@@ -54,3 +64,73 @@ Future<UserCredential?> googleSign() async {
     log.e(error);
   }
 }
+
+/// ```dart
+///  const Color(0xff252525);
+/// ```
+Color kColorBlack = const Color(0xff252525);
+
+/// ```dart
+/// const Color(0xff081422);
+/// ```
+Color kColorBlueDark2 = const Color(0xff081422);
+
+/// ```dart
+/// const Color(0xff150485);
+/// ```
+Color kColorBlueDark = const Color(0xff150485);
+
+/// ```dart
+/// const Color(0xff31326F);
+/// ```
+Color kColorPurpleDark = const Color(0xff31326F);
+
+/// ```dart
+/// const Color(0xff005295);
+/// ```
+Color kColorBlue = const Color(0xff005295);
+
+/// ```dart
+/// const Color(0xff34626C);
+/// ```
+Color kColorGreenArmy = const Color(0xff34626C);
+
+/// ```dart
+/// const Color(0xff1AA6B7);
+/// ```
+Color kColorBlueLight = const Color(0xff1AA6B7);
+
+/// ```dart
+/// const Color(0xff18A6EC);
+/// ```
+Color kColorBlueLight2 = const Color(0xff18A6EC);
+
+/// ```dart
+/// const Color(0xff709FB0);
+/// ```
+Color kColorGreenLight = const Color(0xff709FB0);
+
+/// ```dart
+/// const Color(0xff9DDAC6);
+/// ```
+Color kColorGreelLight2 = const Color(0xff9DDAC6);
+
+/// ```dart
+/// const Color(0xffEAA819);
+/// ```
+Color kColorOrange = const Color(0xffEAA819);
+
+/// ```dart
+/// Colors.orange[200];
+/// ```
+Color? kColorOrangeLight2 = Colors.orange[200];
+
+/// ```dart
+/// Colors.orange[50];
+/// ```
+Color? kColorOrangeLight = Colors.orange[50];
+
+/// ```dart
+/// const Color(0xffF9F9F9);
+/// ```
+Color kColorWhite = const Color(0xffF9F9F9);
