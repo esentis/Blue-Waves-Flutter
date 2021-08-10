@@ -28,8 +28,7 @@ class BWTextField extends StatelessWidget {
         decoration: InputDecoration(
           labelText: labelText,
           labelStyle: kStyleDefaultBold.copyWith(
-            fontSize: 26.sp,
-            color: Colors.orange[50]!.withOpacity(0.4),
+            color: kColorOrangeLight!.withOpacity(0.4),
           ),
           contentPadding: EdgeInsets.symmetric(
             vertical: 15.h,
@@ -38,21 +37,21 @@ class BWTextField extends StatelessWidget {
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
-              color: Colors.orange[50]!,
+              color: kColorOrangeLight!,
               width: 2.w,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
-              color: Colors.orange[200]!,
+              color: kColorOrangeLight2!,
               width: 2.w,
             ),
           ),
         ),
         style: kStyleDefaultBold.copyWith(
           fontSize: 25.sp,
-          color: Colors.orange[50],
+          color: kColorOrangeLight,
         ),
       ),
     );

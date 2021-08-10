@@ -1,14 +1,11 @@
-import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/beach_page/beach_page.dart';
-import 'package:blue_waves/pages/register_login_page/login_page.dart';
-import 'package:blue_waves/pages/register_login_page/register_page.dart';
+import 'package:blue_waves/pages/register_login_page/auth_page.dart';
 
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/pages/home_page.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -107,12 +104,8 @@ class MyApp extends StatelessWidget {
               transition: Transition.fadeIn,
             ),
             GetPage(
-              name: '/register',
-              page: () => RegisterPage(),
-            ),
-            GetPage(
-              name: '/login',
-              page: () => LoginPage(),
+              name: '/auth',
+              page: () => AuthPage(),
             ),
           ],
         ),

@@ -52,7 +52,6 @@ class _BWPasswordFieldState extends State<BWPasswordField> {
                   ? const Icon(Icons.visibility)
                   : const Icon(Icons.visibility_off)),
           labelStyle: kStyleDefaultBold.copyWith(
-            fontSize: 26.sp,
             color: Colors.orange[50]!.withOpacity(0.4),
           ),
           contentPadding: EdgeInsets.symmetric(

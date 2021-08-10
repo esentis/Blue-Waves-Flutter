@@ -14,12 +14,12 @@ class BurdsStars extends StatelessWidget {
       firstCurve: Curves.easeInOut,
       firstChild: SizedBox(
         width: ScreenUtil().screenWidth,
-        height: 200.h,
+        height: 250.h,
         child: Lottie.asset(
           'assets/images/birds.json',
           animate: true,
           repeat: true,
-          width: 250.w,
+          width: ScreenUtil().screenWidth,
         ),
       ),
       secondCurve: Curves.easeInOut,

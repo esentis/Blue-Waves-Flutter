@@ -16,14 +16,14 @@ class SunMoon extends StatelessWidget {
         'assets/images/moon.json',
         animate: true,
         repeat: true,
-        width: 35.w,
+        width: 40.w,
       ),
       secondCurve: Curves.easeInOut,
       secondChild: Lottie.asset(
         'assets/images/sun.json',
         animate: true,
         repeat: true,
-        width: 70.w,
+        width: 40.w,
       ),
     );
   }

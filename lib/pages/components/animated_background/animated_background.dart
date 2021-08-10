@@ -33,18 +33,6 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
               : Colors.orange[100],
         ),
         Positioned(
-          top: 0,
-          right: 0,
-          left: 0,
-          child: BurdsStars(
-            isDark: ThemeState.of(context, listen: true).isDark,
-          ),
-        ),
-        Positioned(
-          top: 10.h,
-          child: TropicalIsland(),
-        ),
-        Positioned(
           bottom: 0,
           left: 0,
           right: 0,
@@ -58,13 +46,23 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
           const SizedBox(),
         const Abyss(),
         Positioned(
-          left: ThemeState.of(context, listen: true).isDark ? 50.w : 30.w,
+          right: ThemeState.of(context, listen: true).isDark ? 30.w : 30.w,
           child: GestureDetector(
             onTap: () {
               ThemeState.of(context).toggleTheme();
               log.wtf('tapping weather');
             },
             child: SunMoon(
+              isDark: ThemeState.of(context, listen: true).isDark,
+            ),
+          ),
+        ),
+        Positioned(
+          top: ThemeState.of(context).isDark ? -15 : -45,
+          right: 0,
+          left: 0,
+          child: IgnorePointer(
+            child: BurdsStars(
               isDark: ThemeState.of(context, listen: true).isDark,
             ),
           ),

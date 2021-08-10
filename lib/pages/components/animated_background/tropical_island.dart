@@ -6,7 +6,7 @@ class TropicalIsland extends StatelessWidget {
   Widget build(BuildContext context) {
     return Image.asset(
       './assets/images/tropical_island.png',
-      height: 120.h,
+      height: 50.h,
     );
   }
 }

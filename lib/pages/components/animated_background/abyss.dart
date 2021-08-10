@@ -1,3 +1,4 @@
+import 'package:blue_waves/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -17,7 +18,7 @@ class Abyss extends StatelessWidget {
             end: Alignment.topCenter,
             colors: [
               Colors.black,
-              const Color(0xff150485).withOpacity(0.5),
+              kColorBlueDark.withOpacity(0.5),
               Colors.transparent,
             ],
           ),

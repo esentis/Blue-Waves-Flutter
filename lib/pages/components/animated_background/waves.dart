@@ -1,3 +1,4 @@
+import 'package:blue_waves/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
@@ -11,51 +12,26 @@ class Waves extends StatelessWidget {
     return Stack(
       children: [
         SizedBox(
-          // height: ScreenUtil().screenHeight * .5,
-          height: 630.h,
+          height: 660.h,
           child: WaveWidget(
             backgroundColor: Colors.transparent,
             config: CustomConfig(
               gradients: [
                 [
-                  if (isDark)
-                    const Color(0xff31326F)
-                  else
-                    const Color(0xff709FB0),
-                  if (isDark)
-                    const Color(0xff34626C)
-                  else
-                    const Color(0xff9DDAC6),
+                  if (isDark) kColorPurpleDark else kColorGreenLight,
+                  if (isDark) kColorGreenArmy else kColorGreelLight2,
                 ],
                 [
-                  if (isDark)
-                    const Color(0xff31326F)
-                  else
-                    const Color(0xff1AA6B7),
-                  if (isDark)
-                    const Color(0xff31326F)
-                  else
-                    const Color(0xff005295),
+                  if (isDark) kColorPurpleDark else kColorBlueLight,
+                  if (isDark) kColorPurpleDark else kColorBlue,
                 ],
                 [
-                  if (isDark)
-                    const Color(0xff252525)
-                  else
-                    const Color(0xffF9F9F9),
-                  if (isDark)
-                    const Color(0xff16697A)
-                  else
-                    const Color(0xff18A6EC),
+                  if (isDark) kColorBlack else kColorWhite,
+                  if (isDark) kColorPurpleDark else kColorBlueLight,
                 ],
                 [
-                  if (isDark)
-                    const Color(0xff41AEA9)
-                  else
-                    const Color(0xff1AA6B7),
-                  if (isDark)
-                    const Color(0xff0F3057)
-                  else
-                    const Color(0xff005295),
+                  if (isDark) kColorGreenLight else kColorBlueLight,
+                  if (isDark) kColorPurpleDark else kColorBlue,
                 ]
               ],
               durations: isDark
