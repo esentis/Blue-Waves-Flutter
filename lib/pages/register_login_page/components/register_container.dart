@@ -48,7 +48,7 @@ class Register extends StatelessWidget {
         TextButton(
           onPressed: () async {
             loadingState.toggleLoading();
-            if (!emailController.text.isMail()) {
+            if (!emailController.text.isMail()!) {
               loadingState.toggleLoading();
               log.wtf('im here ${emailController.text}');
 

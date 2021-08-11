@@ -1,10 +1,13 @@
 // ignore: file_names
 import 'dart:convert';
 import 'package:blue_waves/constants.dart';
+import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
+// ignore: implementation_imports
+import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 
 String beachToMap(Beach data) => json.encode(data.toMap());
 
-class Beach {
+class Beach with ClusterItem {
   Beach({
     this.latitude,
     this.description,
@@ -46,4 +49,7 @@ class Beach {
         'averageRating': averageRating,
         'ratingCount': ratingCount,
       };
+
+  @override
+  LatLng get location => LatLng(latitude!, longitude!);
 }

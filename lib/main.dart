@@ -63,12 +63,13 @@ class MyApp extends StatelessWidget {
       persistenceEnabled: true,
       cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
     );
+
     return ScreenUtilInit(
       builder: () => MultiProvider(
         providers: [
           ListenableProvider<LoadingState>(
             create: (_) => LoadingState(
-              isLoading: false,
+              isLoading: true,
             ),
           ),
           ListenableProvider<ThemeState>(

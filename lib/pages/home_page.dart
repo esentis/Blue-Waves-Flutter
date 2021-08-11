@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:io';
 import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:ui';
@@ -11,6 +10,7 @@ import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
+import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -35,7 +35,7 @@ class _HomePageState extends State<HomePage> {
   PackageInfo? packageInfo;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey(); // Create a key
   FirebaseAuth auth = FirebaseAuth.instance;
-  bool isLoading = true;
+
   bool isAdmin = false;
   late GoogleMapController mapController;
   CameraPosition greeceCamera = const CameraPosition(
@@ -48,7 +48,7 @@ class _HomePageState extends State<HomePage> {
   String? _mapStyle;
   List<Beach> _beaches = [];
   late ClusterManager<Beach> _manager;
-  final List<ClusterItem<Beach>> _items = [];
+  // final List<ClusterItem<Beach>> _items = [];
 
   final Completer<GoogleMapController> _controller = Completer();
 
@@ -66,10 +66,9 @@ class _HomePageState extends State<HomePage> {
   Future<void> preparePage() async {
     _beaches = await Api.instance.getAllBeaches();
     packageInfo = await PackageInfo.fromPlatform();
-    for (final Beach b in _beaches) {
-      _items.add(ClusterItem(LatLng(b.latitude!, b.longitude!), item: b));
-    }
-    _manager.setItems(_items);
+    _manager.setItems(_beaches);
+
+    LoadingState.of(context).toggleLoading();
   }
 
   /// Method to create a list of Markers and set them to the map.
@@ -77,11 +76,6 @@ class _HomePageState extends State<HomePage> {
     final assetBytes = await getBytesFromAsset('assets/images/marker.png', 64);
     myMarker = BitmapDescriptor.fromBytes(assetBytes);
     _mapStyle = await rootBundle.loadString('map_styles.txt');
-
-    // await isAdminCheck();
-    setState(() {
-      isLoading = false;
-    });
   }
 
   void _updateMarkers(Set<Marker> markers) {
@@ -94,7 +88,7 @@ class _HomePageState extends State<HomePage> {
   ClusterManager<Beach> _initClusterManager() {
     log.i('Initializing cluster manager');
     return ClusterManager<Beach>(
-      _items,
+      _beaches,
       _updateMarkers,
       markerBuilder: _markerBuilder,
       stopClusteringZoom: 17.0,
@@ -189,26 +183,28 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
-      floatingActionButton: IconButton(
-        onPressed: () {
-          _scaffoldKey.currentState?.openDrawer();
-        },
-        icon: Icon(
-          Icons.menu,
-          color: ThemeState.of(context, listen: true).isDark
-              ? kColorWhite
-              : kColorOrangeLight2,
-          size: 45,
-        ),
-      ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+      floatingActionButton: LoadingState.of(context, listen: true).isLoading!
+          ? const SizedBox.shrink()
+          : IconButton(
+              onPressed: () {
+                _scaffoldKey.currentState?.openDrawer();
+              },
+              icon: Icon(
+                Icons.menu,
+                color: ThemeState.of(context, listen: true).isDark
+                    ? kColorWhite
+                    : kColorBlue,
+                size: 45,
+              ),
+            ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
       body: SafeArea(
         child: Stack(
           children: [
             const AnimatedBackground(
               showTitle: true,
             ),
-            if (isLoading)
+            if (LoadingState.of(context, listen: true).isLoading!)
               const Center(child: Loader())
             else
               Positioned(
@@ -232,7 +228,7 @@ class _HomePageState extends State<HomePage> {
                         onCameraIdle: _manager.updateMap,
                         onMapCreated: (GoogleMapController controller) {
                           mapController = controller;
-                          _manager.setMapController(controller);
+                          _manager.setMapId(controller.mapId);
                           mapController.setMapStyle(_mapStyle);
                           _controller.complete(controller);
                         },
@@ -241,8 +237,6 @@ class _HomePageState extends State<HomePage> {
                   ),
                 ),
               ),
-            //TODO: Add new menu
-            if (isLoading) const SizedBox() else const SizedBox()
           ],
         ),
       ),
@@ -258,11 +252,11 @@ class _HomePageState extends State<HomePage> {
               ? () async {
                   if (cluster.count == 2) {
                     final LatLng latLng_1 = LatLng(
-                        cluster.markers.first.location.latitude,
-                        cluster.markers.first.location.longitude);
+                        cluster.items.first.location.latitude,
+                        cluster.items.first.location.longitude);
                     final LatLng latLng_2 = LatLng(
-                        cluster.markers.last.location.latitude,
-                        cluster.markers.last.location.longitude);
+                        cluster.items.last.location.latitude,
+                        cluster.items.last.location.longitude);
 
                     final LatLngBounds bound = LatLngBounds(
                       southwest: latLng_1.latitude > latLng_2.latitude
@@ -285,7 +279,7 @@ class _HomePageState extends State<HomePage> {
           infoWindow: cluster.isMultiple
               ? const InfoWindow()
               : InfoWindow(
-                  title: cluster.items.first?.name,
+                  title: cluster.items.first.name,
                   onTap: () async {
                     await Get.to(
                       () => BeachPage(
