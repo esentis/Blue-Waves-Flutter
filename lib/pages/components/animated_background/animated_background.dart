@@ -2,22 +2,23 @@ import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
 import 'abyss.dart';
 import 'birds_stars.dart';
 import 'sun_moon.dart';
 import 'title.dart';
-import 'tropical_island.dart';
 import 'waves.dart';
 
 class AnimatedBackground extends StatefulWidget {
   const AnimatedBackground({
     Key? key,
     this.showTitle,
+    this.showBack = false,
   }) : super(key: key);
 
   final bool? showTitle;
-
+  final bool showBack;
   @override
   _AnimatedBackgroundState createState() => _AnimatedBackgroundState();
 }
@@ -36,9 +37,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
           bottom: 0,
           left: 0,
           right: 0,
-          child: Waves(
-            isDark: ThemeState.of(context, listen: true).isDark,
-          ),
+          child: Waves(),
         ),
         if (widget.showTitle!)
           Align(alignment: Alignment.topCenter, child: BlueWavesTitle())
@@ -58,7 +57,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
           ),
         ),
         Positioned(
-          top: ThemeState.of(context).isDark ? -15 : -45,
+          top: ThemeState.of(context, listen: true).isDark ? -15 : -45,
           right: 0,
           left: 0,
           child: IgnorePointer(
@@ -67,6 +66,26 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
             ),
           ),
         ),
+        if (widget.showBack)
+          Positioned(
+            child: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: Container(
+                width: 50.w,
+                height: 40.w,
+                color: Colors.transparent,
+                child: Icon(
+                  Icons.arrow_back,
+                  size: 30.w,
+                  color: ThemeState.of(context, listen: true).isDark
+                      ? kColorOrangeLight
+                      : kColorBlueDark2,
+                ),
+              ),
+            ),
+          ),
       ],
     );
   }
