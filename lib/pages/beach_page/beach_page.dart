@@ -141,6 +141,7 @@ class _BeachPageState extends State<BeachPage> {
           children: [
             const AnimatedBackground(
               showTitle: false,
+              showBack: true,
             ),
             if (isLoading)
               const Loader()
@@ -152,238 +153,262 @@ class _BeachPageState extends State<BeachPage> {
                 top: 120.h,
                 child: FadeIn(
                   duration: const Duration(milliseconds: 700),
-                  child: Container(
-                    decoration: BoxDecoration(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12.r),
+                    child: Container(
+                      decoration: BoxDecoration(
                         color: ThemeState.of(context, listen: true).isDark
-                            ? const Color(0xff0F044C).withOpacity(0.5)
-                            : const Color(0xff9DDAC6).withOpacity(0.5),
-                        borderRadius: BorderRadius.circular(12.r)),
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Stack(
+                            ? kColorBlueDark2.withOpacity(0.5)
+                            : kColorGreelLight2.withOpacity(0.9),
+                      ),
+                      child: SingleChildScrollView(
+                        child: Column(
+                          children: [
+                            // Padding(
+                            //   padding: const EdgeInsets.all(8.0),
+                            //   child: Stack(
+                            //     children: [
+                            //       // ClipRRect(
+                            //       //   borderRadius: BorderRadius.circular(12.r),
+                            //         // child: PhotoViewGallery.builder(
+                            //         //   scrollPhysics:
+                            //         //       const BouncingScrollPhysics(),
+                            //         //   builder: (BuildContext context, int index) {
+                            //         //     return PhotoViewGalleryPageOptions(
+                            //         //       imageProvider: NetworkImage(
+                            //         //         widget.beach!.images![index],
+                            //         //       ),
+                            //         //       minScale:
+                            //         //           PhotoViewComputedScale.contained,
+                            //         //       initialScale:
+                            //         //           PhotoViewComputedScale.covered,
+                            //         //       tightMode: true,
+                            //         //       onTapDown: (context, details,
+                            //         //           controllerValue) {
+                            //         //         open(context, index);
+                            //         //       },
+                            //         //       heroAttributes: PhotoViewHeroAttributes(
+                            //         //           tag: widget.beach!.images![index]),
+                            //         //     );
+                            //         //   },
+                            //         //   itemCount: widget.beach!.images!.length,
+                            //         //   loadingBuilder: (context, event) => Center(
+                            //         //     child: SizedBox(
+                            //         //       width: 20.0,
+                            //         //       height: 20.0,
+                            //         //       child: CircularProgressIndicator(
+                            //         //         value: event == null
+                            //         //             ? 0
+                            //         //             : event.cumulativeBytesLoaded /
+                            //         //                 event.expectedTotalBytes!,
+                            //         //       ),
+                            //         //     ),
+                            //         //   ),
+                            //         //   pageController: _pageController,
+                            //         //   onPageChanged: (index) {
+                            //         //     setState(
+                            //         //       () {
+                            //         //         currentIndex = index + 1;
+                            //         //       },
+                            //         //     );
+                            //         //   },
+                            //         // ),
+                            //     //  ),
+                            //       // Align(
+                            //       //   alignment: Alignment.bottomRight,
+                            //       //   child: Padding(
+                            //       //     padding: const EdgeInsets.all(8.0),
+                            //       //     child: Text(
+                            //       //       '$currentIndex/${widget.beach!.images!.length}',
+                            //       //       style: kStyleDefaultBold,
+                            //       //     ),
+                            //       //   ),
+                            //       // ),
+                            //     ],
+                            //   ),
+                            // ),
+                            Column(
                               children: [
-                                ClipRRect(
-                                  borderRadius: BorderRadius.circular(12.r),
-                                  // child: PhotoViewGallery.builder(
-                                  //   scrollPhysics:
-                                  //       const BouncingScrollPhysics(),
-                                  //   builder: (BuildContext context, int index) {
-                                  //     return PhotoViewGalleryPageOptions(
-                                  //       imageProvider: NetworkImage(
-                                  //         widget.beach!.images![index],
-                                  //       ),
-                                  //       minScale:
-                                  //           PhotoViewComputedScale.contained,
-                                  //       initialScale:
-                                  //           PhotoViewComputedScale.covered,
-                                  //       tightMode: true,
-                                  //       onTapDown: (context, details,
-                                  //           controllerValue) {
-                                  //         open(context, index);
-                                  //       },
-                                  //       heroAttributes: PhotoViewHeroAttributes(
-                                  //           tag: widget.beach!.images![index]),
-                                  //     );
-                                  //   },
-                                  //   itemCount: widget.beach!.images!.length,
-                                  //   loadingBuilder: (context, event) => Center(
-                                  //     child: SizedBox(
-                                  //       width: 20.0,
-                                  //       height: 20.0,
-                                  //       child: CircularProgressIndicator(
-                                  //         value: event == null
-                                  //             ? 0
-                                  //             : event.cumulativeBytesLoaded /
-                                  //                 event.expectedTotalBytes!,
-                                  //       ),
-                                  //     ),
-                                  //   ),
-                                  //   pageController: _pageController,
-                                  //   onPageChanged: (index) {
-                                  //     setState(
-                                  //       () {
-                                  //         currentIndex = index + 1;
-                                  //       },
-                                  //     );
-                                  //   },
-                                  // ),
+                                SizedBox(
+                                  height: 10.h,
                                 ),
-                                // Align(
-                                //   alignment: Alignment.bottomRight,
-                                //   child: Padding(
-                                //     padding: const EdgeInsets.all(8.0),
-                                //     child: Text(
-                                //       '$currentIndex/${widget.beach!.images!.length}',
-                                //       style: kStyleDefaultBold,
-                                //     ),
-                                //   ),
-                                // ),
+                                Text(
+                                  widget.beach!.name!,
+                                  style: kStyleDefault.copyWith(
+                                    fontSize: 23.sp,
+                                    color: ThemeState.of(context, listen: true)
+                                            .isDark
+                                        ? kColorOrangeLight
+                                        : kColorBlueDark2,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                Text(
+                                  '${S.current.pageBeachRating} ${actualRating.toStringAsFixed(1)} / 5',
+                                  style: kStyleDefault.copyWith(
+                                    fontSize: 16.sp,
+                                    color: ThemeState.of(context, listen: true)
+                                            .isDark
+                                        ? kColorOrangeLight
+                                        : kColorBlueDark2,
+                                  ),
+                                ),
+                                SizedBox(
+                                  height: 5.h,
+                                ),
+                                Text(
+                                  ' ($totalRatings ${S.current.pageBeachRatings})',
+                                  style: kStyleDefault.copyWith(
+                                    fontSize: 14.sp,
+                                    color: ThemeState.of(context, listen: true)
+                                            .isDark
+                                        ? kColorOrangeLight
+                                        : kColorBlueDark2,
+                                  ),
+                                ),
                               ],
                             ),
-                          ),
-                          Column(
-                            children: [
-                              Text(
-                                widget.beach!.name!,
-                                style: kStyleDefault.copyWith(
-                                  fontSize: 23.sp,
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Text(
-                                '${S.current.pageBeachRating} ${actualRating.toStringAsFixed(1)} / 5',
-                                style: kStyleDefault.copyWith(
-                                  fontSize: 16.sp,
-                                  color: Colors.orange[50],
-                                ),
-                              ),
-                              SizedBox(
-                                height: 5.h,
-                              ),
-                              Text(
-                                ' ($totalRatings ${S.current.pageBeachRatings})',
-                                style: kStyleDefault.copyWith(
-                                  fontSize: 14.sp,
-                                  color: Colors.orange[50],
-                                ),
-                              ),
-                            ],
-                          ),
-                          SizedBox(
-                            height: 10.h,
-                          ),
-                          if (FirebaseAuth.instance.currentUser != null)
-                            Padding(
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 25.0),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Flexible(
-                                    child: GestureDetector(
-                                      onTap: () {},
-                                      child: hasUserRated
-                                          ? Text(
-                                              S.current.pageBeachRated,
-                                              style: kStyleDefault.copyWith(
-                                                fontSize: 16.sp,
-                                                color: Colors.red,
-                                              ),
-                                            )
-                                          : RatingBar.builder(
-                                              initialRating: 0.5,
-                                              minRating: 0.5,
-                                              allowHalfRating: true,
-                                              itemPadding:
-                                                  const EdgeInsets.symmetric(
-                                                      horizontal: 4.0),
-                                              itemBuilder: (context, index) =>
-                                                  Image.asset(
-                                                'assets/images/sea.png',
-                                                color: Colors.orange,
-                                              ),
-                                              onRatingUpdate: (rating) async {
-                                                log.wtf('rated $rating');
-                                                await Api.instance.addRating(
-                                                  Rating(
-                                                    beachId: widget.beach!.id,
-                                                    rating: rating,
-                                                    review: 'test review',
-                                                    userUid: FirebaseAuth
-                                                        .instance
-                                                        .currentUser!
-                                                        .uid,
-                                                  ),
-                                                );
-                                                // setState(
-                                                //   () {
-                                                //     chosenRating = rating;
-                                                //     addRating(
-                                                //       Rating(
-                                                //         beachId: widget.beach!.id,
-                                                //         rating: rating,
-                                                //         beachName:
-                                                //             widget.beach!.name,
-                                                //         userUid: FirebaseAuth
-                                                //             .instance
-                                                //             .currentUser!
-                                                //             .uid,
-                                                //         username: FirebaseAuth
-                                                //             .instance
-                                                //             .currentUser!
-                                                //             .displayName,
-                                                //       ),
-                                                //     );
-                                                //     hasUserRated = true;
-                                                //     ratingSum = widget
-                                                //             .beach!.averageRating! *
-                                                //         widget.beach!.ratingCount!;
-                                                //     actualRating =
-                                                //         (ratingSum + rating) /
-                                                //             (totalRatings + 1);
-                                                //     totalRatings += 1;
-                                                //   },
-                                                // );
-                                              },
-                                              glowColor: Colors.blue,
-                                            ),
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 5.w,
-                                  ),
-                                  Text(
-                                    chosenRating.toString(),
-                                    style: kStyleDefault.copyWith(
-                                      fontSize: 25.sp,
-                                      color: Colors.orange[50],
-                                    ),
-                                  )
-                                ],
-                              ),
+                            SizedBox(
+                              height: 10.h,
                             ),
-                          Padding(
-                            padding: const EdgeInsets.all(12.0),
-                            child: Container(
+                            if (FirebaseAuth.instance.currentUser != null)
+                              Padding(
+                                padding:
+                                    EdgeInsets.symmetric(horizontal: 25.0.h),
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Flexible(
+                                      child: GestureDetector(
+                                        onTap: () {},
+                                        child: hasUserRated
+                                            ? Text(
+                                                S.current.pageBeachRated,
+                                                style: kStyleDefault.copyWith(
+                                                  fontSize: 16.sp,
+                                                  color: Colors.red,
+                                                ),
+                                              )
+                                            : RatingBar.builder(
+                                                initialRating: 0.5,
+                                                minRating: 0.5,
+                                                allowHalfRating: true,
+                                                itemPadding:
+                                                    EdgeInsets.symmetric(
+                                                        horizontal: 4.0.w),
+                                                itemBuilder: (context, index) =>
+                                                    Image.asset(
+                                                  'assets/images/sea.png',
+                                                  color: Colors.orange,
+                                                ),
+                                                onRatingUpdate: (rating) async {
+                                                  log.wtf('rated $rating');
+                                                  await Api.instance.addRating(
+                                                    Rating(
+                                                      beachId: widget.beach!.id,
+                                                      rating: rating,
+                                                      review: 'test review',
+                                                      userUid: FirebaseAuth
+                                                          .instance
+                                                          .currentUser!
+                                                          .uid,
+                                                    ),
+                                                  );
+                                                  // setState(
+                                                  //   () {
+                                                  //     chosenRating = rating;
+                                                  //     addRating(
+                                                  //       Rating(
+                                                  //         beachId: widget.beach!.id,
+                                                  //         rating: rating,
+                                                  //         beachName:
+                                                  //             widget.beach!.name,
+                                                  //         userUid: FirebaseAuth
+                                                  //             .instance
+                                                  //             .currentUser!
+                                                  //             .uid,
+                                                  //         username: FirebaseAuth
+                                                  //             .instance
+                                                  //             .currentUser!
+                                                  //             .displayName,
+                                                  //       ),
+                                                  //     );
+                                                  //     hasUserRated = true;
+                                                  //     ratingSum = widget
+                                                  //             .beach!.averageRating! *
+                                                  //         widget.beach!.ratingCount!;
+                                                  //     actualRating =
+                                                  //         (ratingSum + rating) /
+                                                  //             (totalRatings + 1);
+                                                  //     totalRatings += 1;
+                                                  //   },
+                                                  // );
+                                                },
+                                                glowColor: Colors.blue,
+                                              ),
+                                      ),
+                                    ),
+                                    SizedBox(
+                                      width: 5.w,
+                                    ),
+                                    Text(
+                                      chosenRating.toString(),
+                                      style: kStyleDefault.copyWith(
+                                        fontSize: 25.sp,
+                                        color: Colors.orange[50],
+                                      ),
+                                    )
+                                  ],
+                                ),
+                              ),
+                            SizedBox(
+                              height: 10.h,
+                            ),
+                            Container(
                               decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(12.r),
+                                  topRight: Radius.circular(12.r),
+                                ),
                                 boxShadow: [
                                   BoxShadow(
                                     blurRadius: 2,
                                     spreadRadius: 2,
-                                    color: Colors.black.withOpacity(0.2),
+                                    color: Colors.black.withOpacity(0.5),
                                   ),
                                 ],
                               ),
-                              child: Text(
-                                widget.beach!.description!,
-                                style: kStyleDefault.copyWith(
-                                  height: 1.7,
+                              child: Padding(
+                                padding: EdgeInsets.symmetric(
+                                    vertical: 10.0.h, horizontal: 8.0.w),
+                                child: Text(
+                                  widget.beach!.description!,
+                                  style: kStyleDefault.copyWith(
+                                    height: 1.7,
+                                  ),
                                 ),
                               ),
                             ),
-                          ),
-                          SizedBox(
-                            width: MediaQuery.of(context).size.width,
-                            height: MediaQuery.of(context).size.height / 2,
-                            child: ClipRRect(
-                              borderRadius: const BorderRadius.only(
-                                topRight: Radius.circular(12),
-                                topLeft: Radius.circular(12),
-                              ),
-                              child: GoogleMap(
-                                markers: {beachMarker!},
-                                myLocationButtonEnabled: false,
-                                initialCameraPosition: beachPlace,
-                                onMapCreated: _controller.complete,
+                            SizedBox(
+                              width: ScreenUtil().screenWidth,
+                              height: 400.h,
+                              child: ClipRRect(
+                                borderRadius: const BorderRadius.only(
+                                  topRight: Radius.circular(12),
+                                  topLeft: Radius.circular(12),
+                                ),
+                                child: GoogleMap(
+                                  markers: {beachMarker!},
+                                  myLocationButtonEnabled: false,
+                                  initialCameraPosition: beachPlace,
+                                  onMapCreated: _controller.complete,
+                                ),
                               ),
                             ),
-                          ),
-                        ],
+                          ],
+                        ),
                       ),
                     ),
                   ),
