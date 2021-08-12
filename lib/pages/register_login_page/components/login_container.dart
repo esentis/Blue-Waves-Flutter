@@ -1,30 +1,35 @@
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
+import 'package:blue_waves/models/member.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
-import 'package:blue_waves/pages/register_login_page/components/password_field.dart';
 import 'package:blue_waves/pages/register_login_page/components/text_field.dart';
 import 'package:blue_waves/states/loading_state.dart';
+import 'package:blue_waves/states/theme_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:string_extensions/string_extensions.dart';
 
 class Login extends StatelessWidget {
   const Login({
     Key? key,
     required this.emailController,
     required this.passwordController,
+    required this.usernameController,
     required this.loadingState,
     required this.auth,
     required this.onRegisterTap,
+    this.registering = false,
   }) : super(key: key);
-
+  final TextEditingController usernameController;
   final TextEditingController emailController;
   final TextEditingController passwordController;
   final LoadingState loadingState;
   final FirebaseAuth auth;
   final VoidCallback onRegisterTap;
+  final bool registering;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -33,42 +38,116 @@ class Login extends StatelessWidget {
         SizedBox(
           height: 10.h,
         ),
+        if (registering)
+          BWTextField(
+            controller: usernameController,
+            obscureText: false,
+            labelText: S.current.username,
+          ),
         BWTextField(
-          emailController: emailController,
+          controller: emailController,
+          obscureText: false,
           labelText: 'Email',
           type: TextInputType.emailAddress,
         ),
-        BWPasswordField(
-          emailController: passwordController,
+        BWTextField(
+          controller: passwordController,
+          type: TextInputType.emailAddress,
           labelText: S.current.pass,
+          isPassword: true,
         ),
-        TextButton(
-          onPressed: () async {
-            loadingState.toggleLoading();
+        SizedBox(
+          height: 20.h,
+        ),
+        ElevatedButton(
+          style: ButtonStyle(
+            backgroundColor: MaterialStateProperty.all(
+              ThemeState.of(context, listen: true).isDark
+                  ? kColorBlue
+                  : kColorOrangeLight,
+            ),
+          ),
+          onPressed: registering
+              ? () async {
+                  loadingState.toggleLoading();
+                  if (!emailController.text.isMail()!) {
+                    loadingState.toggleLoading();
+                    log.wtf('im here ${emailController.text}');
 
-            try {
-              await auth.signInWithEmailAndPassword(
-                  email: emailController.text,
-                  password: passwordController.text);
+                    return showSnack(
+                      title: S.current.error,
+                      message: S.current.errorMail,
+                      firstColor: Colors.red,
+                      secondColor: Colors.red[800]!,
+                      duration: 2800,
+                    );
+                  }
+                  try {
+                    await Api.instance.registerUser(
+                      Member(
+                        displayName: usernameController.text,
+                        email: emailController.text,
+                        password: passwordController.text,
+                      ),
+                    );
+                    loadingState.toggleLoading();
+                    await Get.offAllNamed('/home');
+                  } on FirebaseAuthException catch (e) {
+                    loadingState.toggleLoading();
+                    showSnack(
+                      title: S.current.error,
+                      message: e.message!,
+                      firstColor: Colors.red,
+                      secondColor: Colors.red[800]!,
+                      duration: 2800,
+                    );
+                    log.e(e);
+                  }
+                }
+              : () async {
+                  loadingState.toggleLoading();
 
-              loadingState.toggleLoading();
-              await Get.offAllNamed('/home');
-            } on FirebaseAuthException catch (e) {
-              loadingState.toggleLoading();
-              showSnack(
-                title: S.current.error,
-                message: e.message!,
-                firstColor: Colors.red,
-                secondColor: Colors.red[800]!,
-                duration: 2800,
-              );
-              log.e(e);
-            }
-          },
+                  try {
+                    await auth.signInWithEmailAndPassword(
+                        email: emailController.text,
+                        password: passwordController.text);
+
+                    loadingState.toggleLoading();
+                    await Get.offAllNamed('/home');
+                  } on FirebaseAuthException catch (e) {
+                    loadingState.toggleLoading();
+                    showSnack(
+                      title: S.current.error,
+                      message: e.message!,
+                      firstColor: Colors.red,
+                      secondColor: Colors.red[800]!,
+                      duration: 2800,
+                    );
+                    log.e(e);
+                  }
+                },
           child: Text(
-            S.current.login,
+            registering ? S.current.register : S.current.login,
+            style: kStyleDefaultBold.copyWith(
+              fontSize: 24.sp,
+              color: ThemeState.of(context, listen: true).isDark
+                  ? kColorOrangeLight
+                  : kColorBlue,
+            ),
+          ),
+        ),
+        SizedBox(
+          height: 10.h,
+        ),
+        GestureDetector(
+          onTap: onRegisterTap,
+          child: Text(
+            registering ? S.current.login : S.current.register,
             style: kStyleDefault.copyWith(
-              fontSize: 22.sp,
+              fontSize: 17.sp,
+              color: ThemeState.of(context, listen: true).isDark
+                  ? kColorOrangeLight!.withOpacity(0.6)
+                  : kColorWhite,
             ),
           ),
         ),
@@ -81,38 +160,27 @@ class Login extends StatelessWidget {
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                 child: Container(
-                  height: 1.h,
+                  height: 0.3.h,
                   color: kColorWhite,
                 ),
               ),
             ),
             Text(
               S.current.or,
-              style: kStyleDefault,
+              style: kStyleDefault.copyWith(
+                fontSize: 17.sp,
+              ),
             ),
             Flexible(
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 20.0.w),
                 child: Container(
-                  height: 1.h,
+                  height: 0.3.h,
                   color: kColorWhite,
                 ),
               ),
             ),
           ],
-        ),
-        SizedBox(
-          height: 10.h,
-        ),
-        GestureDetector(
-          onTap: onRegisterTap,
-          child: Text(
-            S.current.register,
-            style: kStyleDefault.copyWith(
-              fontSize: 18.sp,
-              color: kColorOrangeLight2,
-            ),
-          ),
         ),
         SizedBox(
           height: 10.h,

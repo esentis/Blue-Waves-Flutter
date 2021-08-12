@@ -1,8 +1,8 @@
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
+import 'package:blue_waves/pages/components/animated_background/waves.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/register_login_page/components/login_container.dart';
-import 'package:blue_waves/pages/register_login_page/components/register_container.dart';
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -22,7 +22,7 @@ class _AuthPageState extends State<AuthPage> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
-  bool signin = true;
+  bool registering = false;
   @override
   Widget build(BuildContext context) {
     final auth = FirebaseAuth.instance;
@@ -35,32 +35,22 @@ class _AuthPageState extends State<AuthPage> {
           child: Stack(children: [
             const AnimatedBackground(
               showTitle: true,
+              waveHeight: WaveHeight.small,
             ),
-            AnimatedSwitcher(
-              duration: const Duration(milliseconds: 700),
-              child: signin
-                  ? Login(
-                      emailController: emailController,
-                      passwordController: passwordController,
-                      loadingState: loadingState,
-                      auth: auth,
-                      onRegisterTap: () {
-                        setState(() {
-                          signin = !signin;
-                        });
-                      },
-                    )
-                  : Register(
-                      usernameController: usernameController,
-                      emailController: emailController,
-                      passwordController: passwordController,
-                      loadingState: loadingState,
-                      onLoginTap: () {
-                        setState(() {
-                          signin = !signin;
-                        });
-                      },
-                    ),
+            Login(
+              usernameController: usernameController,
+              emailController: emailController,
+              passwordController: passwordController,
+              loadingState: loadingState,
+              auth: auth,
+              registering: registering,
+              onRegisterTap: () {
+                setState(
+                  () {
+                    registering = !registering;
+                  },
+                );
+              },
             ),
 
             Positioned(
