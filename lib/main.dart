@@ -93,22 +93,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          initialRoute: '/home',
-          getPages: [
-            GetPage(
-              name: '/home',
-              page: () => HomePage(),
-            ),
-            GetPage(
-              name: '/beach',
-              page: () => const BeachPage(),
-              transition: Transition.fadeIn,
-            ),
-            GetPage(
-              name: '/auth',
-              page: () => AuthPage(),
-            ),
-          ],
+          home: HomePage(),
         ),
       ),
     );

@@ -10,6 +10,7 @@ import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
+import 'package:blue_waves/pages/register_login_page/auth_page.dart';
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -158,7 +159,7 @@ class _HomePageState extends State<HomePage> {
                     if (FirebaseAuth.instance.currentUser == null) ...[
                       TextButton(
                         onPressed: () async {
-                          await Get.toNamed('/auth');
+                          await Get.to(() => AuthPage());
                         },
                         child: Text(
                           S.current.notLogged,
