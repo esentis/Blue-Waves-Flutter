@@ -15,10 +15,12 @@ class AnimatedBackground extends StatefulWidget {
     Key? key,
     this.showTitle,
     this.showBack = false,
+    this.waveHeight = WaveHeight.big,
   }) : super(key: key);
 
   final bool? showTitle;
   final bool showBack;
+  final WaveHeight waveHeight;
   @override
   _AnimatedBackgroundState createState() => _AnimatedBackgroundState();
 }
@@ -37,7 +39,9 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
           bottom: 0,
           left: 0,
           right: 0,
-          child: Waves(),
+          child: Waves(
+            height: widget.waveHeight,
+          ),
         ),
         if (widget.showTitle!)
           Align(alignment: Alignment.topCenter, child: BlueWavesTitle())
