@@ -1,18 +1,30 @@
 import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/states/theme_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
-class BWTextField extends StatelessWidget {
+class BWTextField extends StatefulWidget {
   const BWTextField({
     required this.labelText,
-    this.emailController,
+    this.controller,
     this.type,
+    this.isPassword = false,
+    this.obscureText,
     Key? key,
   }) : super(key: key);
 
-  final TextEditingController? emailController;
+  final TextEditingController? controller;
   final String labelText;
   final TextInputType? type;
+  final bool isPassword;
+  final bool? obscureText;
+
+  @override
+  _BWTextFieldState createState() => _BWTextFieldState();
+}
+
+class _BWTextFieldState extends State<BWTextField> {
+  bool showingPassword = false;
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -21,14 +33,35 @@ class BWTextField extends StatelessWidget {
         horizontal: 20.w,
       ),
       child: TextField(
+        cursorColor: kColorBlueLight,
         autocorrect: false,
-        controller: emailController,
-        keyboardType: type,
+        obscureText: widget.obscureText ?? !showingPassword,
+        controller: widget.controller,
+        keyboardType: widget.type,
         showCursor: true,
         decoration: InputDecoration(
-          labelText: labelText,
-          labelStyle: kStyleDefaultBold.copyWith(
-            color: kColorOrangeLight!.withOpacity(0.4),
+          suffixIcon: widget.isPassword
+              ? GestureDetector(
+                  onTap: () {
+                    setState(() {
+                      if (!showingPassword) {
+                        showingPassword = true;
+                      } else {
+                        showingPassword = false;
+                      }
+                    });
+                  },
+                  child: showingPassword
+                      ? const Icon(Icons.visibility)
+                      : const Icon(Icons.visibility_off),
+                )
+              : const SizedBox.shrink(),
+          labelText: widget.labelText,
+          labelStyle: kStyleDefault.copyWith(
+            color: ThemeState.of(context, listen: true).isDark
+                ? kColorOrangeLight!
+                : kColorBlue,
+            fontSize: 15.sp,
           ),
           contentPadding: EdgeInsets.symmetric(
             vertical: 15.h,
@@ -38,14 +71,14 @@ class BWTextField extends StatelessWidget {
             borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
               color: kColorOrangeLight!,
-              width: 2.w,
+              width: 1.w,
             ),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12.r),
             borderSide: BorderSide(
               color: kColorOrangeLight2!,
-              width: 2.w,
+              width: 1.w,
             ),
           ),
         ),
