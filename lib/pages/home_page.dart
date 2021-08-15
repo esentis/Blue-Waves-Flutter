@@ -21,6 +21,7 @@ import 'package:get/get.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
 import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
@@ -280,7 +281,9 @@ class _HomePageState extends State<HomePage> {
           infoWindow: cluster.isMultiple
               ? const InfoWindow()
               : InfoWindow(
-                  title: cluster.items.first.name,
+                  title: Intl.systemLocale == 'el'
+                      ? cluster.items.first.nameEl
+                      : cluster.items.first.nameEn,
                   onTap: () async {
                     await Get.to(
                       () => BeachPage(

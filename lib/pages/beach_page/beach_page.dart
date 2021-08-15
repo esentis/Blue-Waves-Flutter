@@ -13,6 +13,7 @@ import 'package:flutter_neumorphic/flutter_neumorphic.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:intl/intl.dart';
 
 import '../components/animated_background/animated_background.dart';
 import '../components/loader.dart';
@@ -233,7 +234,9 @@ class _BeachPageState extends State<BeachPage> {
                                   height: 10.h,
                                 ),
                                 Text(
-                                  widget.beach!.name!,
+                                  Intl.systemLocale == 'el'
+                                      ? widget.beach!.nameEl!
+                                      : widget.beach!.nameEn!,
                                   style: kStyleDefault.copyWith(
                                     fontSize: 23.sp,
                                     color: ThemeState.of(context, listen: true)
@@ -384,13 +387,20 @@ class _BeachPageState extends State<BeachPage> {
                                 padding: EdgeInsets.symmetric(
                                     vertical: 10.0.h, horizontal: 8.0.w),
                                 child: Text(
-                                  widget.beach!.description!,
+                                  Intl.systemLocale == 'el'
+                                      ? widget.beach!.descriptionEl!.isEmpty
+                                          ? S.current.noDescription
+                                          : widget.beach!.descriptionEl!
+                                      : widget.beach!.descriptionEn!.isEmpty
+                                          ? S.current.noDescription
+                                          : widget.beach!.descriptionEn!,
                                   style: kStyleDefault.copyWith(
                                     height: 1.7,
                                   ),
                                 ),
                               ),
                             ),
+
                             SizedBox(
                               width: ScreenUtil().screenWidth,
                               height: 400.h,
