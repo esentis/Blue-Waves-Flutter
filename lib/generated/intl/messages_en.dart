@@ -24,6 +24,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "back": MessageLookupByLibrary.simpleMessage("Back to home"),
         "cancel": MessageLookupByLibrary.simpleMessage("Cancel"),
         "confirm": MessageLookupByLibrary.simpleMessage("Confirm"),
+        "contribute":
+            MessageLookupByLibrary.simpleMessage("Do you want to contribute ?"),
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "deleteAccount": MessageLookupByLibrary.simpleMessage("Delete account"),
         "deleteExplain": MessageLookupByLibrary.simpleMessage(
@@ -42,6 +44,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),
         "noConnection": MessageLookupByLibrary.simpleMessage(
             "No internet active internet connection found"),
+        "noDescription": MessageLookupByLibrary.simpleMessage(
+            "No description found for the beach"),
         "notLogged": MessageLookupByLibrary.simpleMessage(
             "You\'re currently not logged"),
         "or": MessageLookupByLibrary.simpleMessage("Or"),

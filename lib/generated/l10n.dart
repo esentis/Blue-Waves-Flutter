@@ -359,6 +359,26 @@ class S {
       args: [],
     );
   }
+
+  /// `No description found for the beach`
+  String get noDescription {
+    return Intl.message(
+      'No description found for the beach',
+      name: 'noDescription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Do you want to contribute ?`
+  String get contribute {
+    return Intl.message(
+      'Do you want to contribute ?',
+      name: 'contribute',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

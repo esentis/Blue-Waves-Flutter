@@ -29,5 +29,7 @@
     "noConnection": "No internet active internet connection found",
     "loading": "Loading...",
     "menu": "Menu",
-    "notLogged": "You're currently not logged"
+    "notLogged": "You're currently not logged",
+    "noDescription": "No description found for the beach",
+    "contribute": "Do you want to contribute ?"
 }

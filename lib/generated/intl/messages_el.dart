@@ -24,6 +24,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "back": MessageLookupByLibrary.simpleMessage("Επιστροφή στην αρχική"),
         "cancel": MessageLookupByLibrary.simpleMessage("Ακύρωση"),
         "confirm": MessageLookupByLibrary.simpleMessage("Επιβεβαίωση"),
+        "contribute":
+            MessageLookupByLibrary.simpleMessage("Θέλετε να συνεισφέρετε ;"),
         "delete": MessageLookupByLibrary.simpleMessage("Διαγραφή"),
         "deleteAccount":
             MessageLookupByLibrary.simpleMessage("Διαγραφή λογαριασμού"),
@@ -44,6 +46,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "menu": MessageLookupByLibrary.simpleMessage("Μενού"),
         "noConnection": MessageLookupByLibrary.simpleMessage(
             "Δεν βρέθηκε ενεργή σύνδεση στο ίντερνετ"),
+        "noDescription": MessageLookupByLibrary.simpleMessage(
+            "Δεν βρέθηκε περιγραφή για τη παραλία"),
         "notLogged":
             MessageLookupByLibrary.simpleMessage("Δεν είστε συνδεμένοι"),
         "or": MessageLookupByLibrary.simpleMessage("Ή"),
