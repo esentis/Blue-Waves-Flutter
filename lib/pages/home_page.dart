@@ -39,6 +39,8 @@ class _HomePageState extends State<HomePage> {
   FirebaseAuth auth = FirebaseAuth.instance;
 
   bool isAdmin = false;
+  bool hasConn = false;
+
   late GoogleMapController mapController;
   CameraPosition greeceCamera = const CameraPosition(
     target: LatLng(38.2, 23.9),
@@ -50,7 +52,8 @@ class _HomePageState extends State<HomePage> {
   String? _mapStyle;
   List<Beach> _beaches = [];
   late ClusterManager<Beach> _manager;
-  // final List<ClusterItem<Beach>> _items = [];
+  final _conn = Connectivity().checkConnectivity();
+  Stream<ConnectivityResult> _connStream = Connectivity().onConnectivityChanged;
 
   final Completer<GoogleMapController> _controller = Completer();
 
@@ -68,9 +71,12 @@ class _HomePageState extends State<HomePage> {
   Future<void> preparePage() async {
     _beaches = await Api.instance.getAllBeaches();
     packageInfo = await PackageInfo.fromPlatform();
+    final connResult = await _conn;
+    hasConn = connResult != ConnectivityResult.none;
+    log.wtf(connResult.toString());
+    log.wtf(
+        'Preparing page, has connection ${connResult.toString()} ${connResult != ConnectivityResult.none}');
     _manager.setItems(_beaches);
-
-    LoadingState.of(context).toggleLoading();
   }
 
   /// Method to create a list of Markers and set them to the map.
@@ -78,10 +84,11 @@ class _HomePageState extends State<HomePage> {
     final assetBytes = await getBytesFromAsset('assets/images/marker.png', 64);
     myMarker = BitmapDescriptor.fromBytes(assetBytes);
     _mapStyle = await rootBundle.loadString('map_styles.txt');
+    LoadingState.of(context).toggleLoading();
   }
 
   void _updateMarkers(Set<Marker> markers) {
-    log.i('Updated ${markers.length} markers');
+    log.i('Updated ${markers.length} markers and has connection $hasConn');
     setState(() {
       this.markers = markers;
     });
@@ -102,16 +109,15 @@ class _HomePageState extends State<HomePage> {
     _manager = _initClusterManager();
 
     super.initState();
-    _connectionStatus = Connectivity()
-        .onConnectivityChanged
-        .listen((ConnectivityResult result) {
+    _connectionStatus = _connStream.listen((ConnectivityResult result) {
+      log.i('Conn Status Changed :${result.toString()}');
       if (result == ConnectivityResult.none) {
         showSnack(
           title: S.current.error,
           message: S.current.noConnection,
           firstColor: Colors.red[200]!,
           secondColor: Colors.red,
-          duration: 10000,
+          duration: 3000,
         );
       } else {
         preparePage();
@@ -209,35 +215,55 @@ class _HomePageState extends State<HomePage> {
             if (LoadingState.of(context, listen: true).isLoading!)
               const Center(child: Loader())
             else
-              Positioned(
-                bottom: 0,
-                child: FadeInUp(
-                  delay: const Duration(milliseconds: 600),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.only(
-                      topRight: Radius.circular(16.r),
-                      topLeft: Radius.circular(16.r),
-                    ),
-                    child: SizedBox(
-                      height: 600.h,
-                      width: MediaQuery.of(context).size.width,
-                      child: GoogleMap(
-                        markers: markers,
-                        myLocationButtonEnabled: false,
-                        initialCameraPosition: greeceCamera,
-                        zoomControlsEnabled: false,
-                        onCameraMove: _manager.onCameraMove,
-                        onCameraIdle: _manager.updateMap,
-                        onMapCreated: (GoogleMapController controller) {
-                          mapController = controller;
-                          _manager.setMapId(controller.mapId);
-                          mapController.setMapStyle(_mapStyle);
-                          _controller.complete(controller);
-                        },
+              StreamBuilder<ConnectivityResult>(
+                stream: _connStream,
+                builder: (context, snapshot) {
+                  final c = snapshot.data;
+                  if (c == ConnectivityResult.none || !hasConn) {
+                    return Positioned.fill(
+                      child: Container(
+                        color: kColorBlack.withOpacity(0.8),
+                        child: Center(
+                          child: Text(
+                            S.current.noConnection,
+                            style: kStyleDefault,
+                          ),
+                        ),
+                      ),
+                    );
+                  }
+                  return Positioned(
+                    bottom: 0,
+                    child: FadeInUp(
+                      delay: const Duration(milliseconds: 600),
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topRight: Radius.circular(16.r),
+                          topLeft: Radius.circular(16.r),
+                        ),
+                        child: SizedBox(
+                          height: 600.h,
+                          width: MediaQuery.of(context).size.width,
+                          child: GoogleMap(
+                            markers: markers,
+                            buildingsEnabled: false,
+                            myLocationButtonEnabled: false,
+                            initialCameraPosition: greeceCamera,
+                            zoomControlsEnabled: false,
+                            onCameraMove: _manager.onCameraMove,
+                            onCameraIdle: _manager.updateMap,
+                            onMapCreated: (GoogleMapController controller) {
+                              mapController = controller;
+                              _manager.setMapId(controller.mapId);
+                              mapController.setMapStyle(_mapStyle);
+                              _controller.complete(controller);
+                            },
+                          ),
+                        ),
                       ),
                     ),
-                  ),
-                ),
+                  );
+                },
               ),
           ],
         ),
