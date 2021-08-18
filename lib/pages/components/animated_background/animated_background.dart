@@ -53,7 +53,6 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
           child: GestureDetector(
             onTap: () {
               ThemeState.of(context).toggleTheme();
-              log.wtf('tapping weather');
             },
             child: SunMoon(
               isDark: ThemeState.of(context, listen: true).isDark,
