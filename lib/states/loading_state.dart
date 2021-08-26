@@ -1,3 +1,4 @@
+import 'package:blue_waves/constants.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:provider/provider.dart';
 
@@ -13,6 +14,7 @@ class LoadingState extends ChangeNotifier {
   void getIsLoading() => isLoading;
 
   void toggleLoading() {
+    log.wtf('Toggled loading');
     isLoading = !isLoading!;
     notifyListeners();
   }

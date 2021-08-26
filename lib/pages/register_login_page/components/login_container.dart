@@ -3,6 +3,7 @@ import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/member.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
+import 'package:blue_waves/pages/home_page.dart';
 import 'package:blue_waves/pages/register_login_page/components/text_field.dart';
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
@@ -91,7 +92,7 @@ class Login extends StatelessWidget {
                       ),
                     );
                     loadingState.toggleLoading();
-                    await Get.offAllNamed('/home');
+                    await Get.offAll(() => HomePage());
                   } on FirebaseAuthException catch (e) {
                     loadingState.toggleLoading();
                     showSnack(
@@ -113,7 +114,7 @@ class Login extends StatelessWidget {
                         password: passwordController.text);
 
                     loadingState.toggleLoading();
-                    await Get.offAllNamed('/home');
+                    await Get.offAll(() => HomePage());
                   } on FirebaseAuthException catch (e) {
                     loadingState.toggleLoading();
                     showSnack(

@@ -1,6 +1,7 @@
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
+import 'package:blue_waves/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,7 +11,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'components/loader.dart';
 import 'components/snack_bar.dart';
-import 'landing_page.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -102,7 +102,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     TextButton(
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();
-                        await Get.to(LandingPage());
+                        await Get.offAll(() => HomePage());
                       },
                       child: Text(
                         S.current.logout,
