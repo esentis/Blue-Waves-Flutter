@@ -10,6 +10,9 @@ import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
+import 'package:blue_waves/pages/edit_profile_page.dart';
+import 'package:blue_waves/pages/favorites_page.dart';
+import 'package:blue_waves/pages/rated_beaches.dart';
 import 'package:blue_waves/pages/register_login_page/auth_page.dart';
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
@@ -53,9 +56,8 @@ class _HomePageState extends State<HomePage> {
   List<Beach> _beaches = [];
   late ClusterManager<Beach> _manager;
   final _conn = Connectivity().checkConnectivity();
-  Stream<ConnectivityResult> _connStream = Connectivity().onConnectivityChanged;
-
-  final Completer<GoogleMapController> _controller = Completer();
+  final Stream<ConnectivityResult> _connStream =
+      Connectivity().onConnectivityChanged;
 
   /// Method to magically create custom marker !!
   static Future<Uint8List> getBytesFromAsset(String path, int width) async {
@@ -71,27 +73,33 @@ class _HomePageState extends State<HomePage> {
   Future<void> preparePage() async {
     _beaches = await Api.instance.getAllBeaches();
     packageInfo = await PackageInfo.fromPlatform();
-    final connResult = await _conn;
-    hasConn = connResult != ConnectivityResult.none;
-    log.wtf(connResult.toString());
-    log.wtf(
-        'Preparing page, has connection ${connResult.toString()} ${connResult != ConnectivityResult.none}');
+
+    log.wtf('Preparing page');
     _manager.setItems(_beaches);
   }
 
+  // TODO: Prepare page is called twice on first app open. Needs improvement
   /// Method to create a list of Markers and set them to the map.
   Future<void> setMapStyle() async {
     final assetBytes = await getBytesFromAsset('assets/images/marker.png', 64);
     myMarker = BitmapDescriptor.fromBytes(assetBytes);
     _mapStyle = await rootBundle.loadString('map_styles.txt');
-    LoadingState.of(context).toggleLoading();
+    hasConn = await _conn != ConnectivityResult.none;
+    log.wtf('Connectivity is $hasConn');
+    if (!mounted) return;
+    if (LoadingState.of(context).isLoading!) {
+      LoadingState.of(context).toggleLoading();
+    }
+    preparePage();
   }
 
   void _updateMarkers(Set<Marker> markers) {
     log.i('Updated ${markers.length} markers and has connection $hasConn');
-    setState(() {
-      this.markers = markers;
-    });
+    if (mounted) {
+      setState(() {
+        this.markers = markers;
+      });
+    }
   }
 
   ClusterManager<Beach> _initClusterManager() {
@@ -119,12 +127,13 @@ class _HomePageState extends State<HomePage> {
           secondColor: Colors.red,
           duration: 3000,
         );
-      } else {
-        preparePage();
       }
-      // Got a new connectivity status!
+      if (result != ConnectivityResult.none) {
+        preparePage();
+        hasConn = result != ConnectivityResult.none;
+      }
     });
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
       setMapStyle();
     });
   }
@@ -175,7 +184,45 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ),
                       )
-                    ],
+                    ] else
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextButton(
+                            onPressed: () async {
+                              await Get.to(() => RatedBeaches());
+                            },
+                            child: Text(
+                              S.current.ratedBeaches,
+                              style: kStyleDefault.copyWith(
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await Get.to(() => FavoritesPage());
+                            },
+                            child: Text(
+                              S.current.favoritedBeaches,
+                              style: kStyleDefault.copyWith(
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await Get.to(() => EditProfilePage());
+                            },
+                            child: Text(
+                              S.current.editProfile,
+                              style: kStyleDefault.copyWith(
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
                     if (packageInfo != null)
                       Text(
                         '${S.current.version} ${packageInfo?.version}',
@@ -232,6 +279,8 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   }
+                  final Completer<GoogleMapController> _controller =
+                      Completer();
                   return Positioned(
                     bottom: 0,
                     child: FadeInUp(
