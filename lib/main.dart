@@ -1,32 +1,31 @@
 import 'package:blue_waves/generated/l10n.dart';
-import 'package:blue_waves/pages/beach_page/beach_page.dart';
-import 'package:blue_waves/pages/register_login_page/auth_page.dart';
-
-import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/pages/home_page.dart';
+import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:firebase_remote_config/firebase_remote_config.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import 'package:flutter_dotenv/flutter_dotenv.dart';
+// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
-// import 'package:firebase_crashlytics/firebase_crashlytics.dart';
-import 'package:flutter/services.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
-  await dotenv.load();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-
+  final RemoteConfig remoteConfig = RemoteConfig.instance;
+  await remoteConfig.setConfigSettings(RemoteConfigSettings(
+    fetchTimeout: const Duration(seconds: 10),
+    minimumFetchInterval: const Duration(hours: 10),
+  ));
   if (kDebugMode) {
     // Force disable Crashlytics collection while doing every day development.
     // Temporarily toggle this to true if you want to test crash reporting in your app.
@@ -34,13 +33,19 @@ Future<void> main() async {
   } else {
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   }
-
+  await remoteConfig.fetchAndActivate();
+  // final updated = await remoteConfig.fetchAndActivate();
+  // if (updated) {
+  //   // the config has been updated, new parameter values are available.
+  // } else {
+  //   // the config values were previously updated.
+  // }
   runApp(
     MyApp(),
   );
   // await SentryFlutter.init(
   //   (options) {
-  //     options.dsn = dotenv.env['SENTRY_DSN'];
+  //     options.dsn = AppConfig.instance.getSentryDsn();
   //   },
   //   appRunner: () => runApp(
   //     MyApp(),
