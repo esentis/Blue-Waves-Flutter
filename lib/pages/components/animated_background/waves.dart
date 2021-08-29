@@ -1,9 +1,9 @@
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:wave/config.dart';
 import 'package:wave/wave.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 enum WaveHeight {
   small,
@@ -60,10 +60,7 @@ class Waves extends StatelessWidget {
               gradientEnd: Alignment.topRight,
             ),
             waveFrequency: 0.9,
-            size: const Size(
-              double.infinity,
-              double.infinity,
-            ),
+            size: Size.infinite,
           ),
         ),
       ],
