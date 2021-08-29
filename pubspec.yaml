@@ -30,15 +30,13 @@ dependencies:
   firebase_auth: ^3.0.2
   firebase_core: ^1.5.0
   firebase_crashlytics: ^2.2.0
-  firebase_database: ^7.2.0
+  firebase_remote_config: ^0.10.0+5
   firebase_storage: ^10.0.2
   flutter:
     sdk: flutter
-  flutter_dotenv: ^5.0.2
   flutter_launcher_icons: ^0.9.0
   flutter_localizations:
     sdk: flutter
-  flutter_neumorphic: ^3.0.3
   flutter_rating_bar: ^4.0.0
   flutter_screenutil: ^5.0.0+2
   get: ^4.3.8
@@ -80,7 +78,6 @@ flutter:
   assets:
     - assets/images/
     - assets/launcher_icons/
-    - .env
     - map_styles.txt
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
