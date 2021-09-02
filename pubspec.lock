@@ -426,7 +426,7 @@ packages:
       name: google_maps
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.2.0"
+    version: "5.3.0"
   google_maps_cluster_manager:
     dependency: "direct main"
     description:
@@ -517,7 +517,7 @@ packages:
       name: image_picker
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.8.3+3"
+    version: "0.8.4"
   image_picker_for_web:
     dependency: transitive
     description:
@@ -566,7 +566,7 @@ packages:
       name: js_wrapping
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.7.2"
+    version: "0.7.3"
   lint:
     dependency: "direct main"
     description:
@@ -839,14 +839,14 @@ packages:
       name: sentry
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.0"
+    version: "6.0.0"
   sentry_flutter:
     dependency: "direct main"
     description:
       name: sentry_flutter
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "5.1.0"
+    version: "6.0.0"
   shelf:
     dependency: transitive
     description:
@@ -928,7 +928,7 @@ packages:
       name: string_extensions
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.3.0"
+    version: "0.3.1"
   string_scanner:
     dependency: transitive
     description:
@@ -1068,7 +1068,7 @@ packages:
       name: win32
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.7"
+    version: "2.2.8"
   xdg_directories:
     dependency: transitive
     description:
