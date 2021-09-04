@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/pages/locate_beach.dart';
-import 'package:flutter/material.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
@@ -160,7 +160,7 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          final image = await (ImagePicker().getImage(
+                          final image = await (ImagePicker().pickImage(
                             source: ImageSource.gallery,
                           ) as Future<PickedFile>);
                           log.wtf(image.path);
@@ -180,7 +180,7 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          final image = await (ImagePicker().getImage(
+                          final image = await (ImagePicker().pickImage(
                             source: ImageSource.gallery,
                           ) as Future<PickedFile>);
                           log.wtf(image.path);
@@ -200,7 +200,7 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          final image = await (ImagePicker().getImage(
+                          final image = await (ImagePicker().pickImage(
                             source: ImageSource.gallery,
                           ) as Future<PickedFile>);
                           log.wtf(image.path);
@@ -220,7 +220,7 @@ class _AdminPanelState extends State<AdminPanel> {
                           setState(() {
                             isLoading = true;
                           });
-                          final image = await (ImagePicker().getImage(
+                          final image = await (ImagePicker().pickImage(
                             source: ImageSource.gallery,
                           ) as Future<PickedFile>);
                           log.wtf(image.path);

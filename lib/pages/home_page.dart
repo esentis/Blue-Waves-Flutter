@@ -3,12 +3,11 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
+import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
-
 import 'package:blue_waves/models/beach.dart';
-import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
 import 'package:blue_waves/pages/edit_profile_page.dart';
 import 'package:blue_waves/pages/favorites_page.dart';
@@ -20,12 +19,13 @@ import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
+
 import 'beach_page/beach_page.dart';
 import 'components/animated_background/animated_background.dart';
 import 'components/loader.dart';
@@ -354,7 +354,7 @@ class _HomePageState extends State<HomePage> {
                 }
               : null,
           infoWindow: cluster.isMultiple
-              ? const InfoWindow()
+              ? InfoWindow.noText
               : InfoWindow(
                   title: Intl.systemLocale == 'el'
                       ? cluster.items.first.nameEl
