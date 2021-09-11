@@ -24,4 +24,8 @@ class AppConfig {
   String getAdmobId() {
     return remoteConfig.getString('admob_id');
   }
+
+  String getOneSignalId() {
+    return remoteConfig.getString('onesignal_id');
+  }
 }

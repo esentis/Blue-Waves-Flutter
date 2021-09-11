@@ -1,5 +1,8 @@
+import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/home_page.dart';
+import 'package:blue_waves/pages/register_login_page/auth_page.dart';
+import 'package:blue_waves/states/app_config.dart';
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -15,13 +18,16 @@ import 'package:flutter/services.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
+import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
   final RemoteConfig remoteConfig = RemoteConfig.instance;
+
   await remoteConfig.setConfigSettings(RemoteConfigSettings(
     fetchTimeout: const Duration(seconds: 10),
     minimumFetchInterval: const Duration(hours: 10),
@@ -34,12 +40,53 @@ Future<void> main() async {
     FirebaseCrashlytics.instance.setCrashlyticsCollectionEnabled(true);
   }
   await remoteConfig.fetchAndActivate();
-  // final updated = await remoteConfig.fetchAndActivate();
-  // if (updated) {
-  //   // the config has been updated, new parameter values are available.
-  // } else {
-  //   // the config values were previously updated.
-  // }
+
+  //Remove this method to stop OneSignal Debugging
+  OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
+  OneSignal.shared.setAppId(AppConfig.instance.getOneSignalId());
+
+  OneSignal.shared.setNotificationWillShowInForegroundHandler(
+      (OSNotificationReceivedEvent event) {
+    // Will be called whenever a notification is received in foreground
+    // Display Notification, pass null param for not displaying the notification
+    event.complete(event.notification);
+    log.wtf(event);
+  });
+
+  OneSignal.shared
+      .setNotificationOpenedHandler((OSNotificationOpenedResult result) async {
+    log.wtf(result.action?.actionId);
+    log.wtf(result.notification.title);
+    log.wtf(result.notification.additionalData);
+    log.wtf(result.notification.body);
+    if (result.notification.title == 'test') {
+      Get.to(() => AuthPage());
+    }
+    // Will be called whenever a notification is opened/button pressed.
+  });
+
+  OneSignal.shared.setPermissionObserver((OSPermissionStateChanges changes) {
+    // Will be called whenever the permission changes
+    // (ie. user taps Allow on the permission prompt in iOS)
+  });
+
+  OneSignal.shared
+      .setSubscriptionObserver((OSSubscriptionStateChanges changes) {
+    // Will be called whenever the subscription changes
+    // (ie. user gets registered with OneSignal and gets a user ID)
+  });
+
+  OneSignal.shared.setEmailSubscriptionObserver(
+      (OSEmailSubscriptionStateChanges emailChanges) {
+    // Will be called whenever then user's email subscription changes
+    // (ie. OneSignal.setEmail(email) is called and the user gets registered
+  });
+// The promptForPushNotificationsWithUserResponse function will show the iOS push notification prompt. We recommend removing the following code and instead using an In-App Message to prompt for notification permission
+  OneSignal.shared.promptUserForPushNotificationPermission().then(
+    (accepted) {
+      log.wtf("Accepted permission: $accepted");
+    },
+  );
   runApp(
     MyApp(),
   );

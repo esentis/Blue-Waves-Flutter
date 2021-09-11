@@ -51,6 +51,7 @@ dependencies:
   lint: ^1.6.0
   logger: ^1.0.0
   lottie: ^1.0.0
+  onesignal_flutter: ^3.2.3
   package_info: ^2.0.0
   permission_handler: ^8.1.1
   photo_view: ^0.12.0
