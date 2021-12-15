@@ -7,7 +7,6 @@ import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_analytics/observer.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:firebase_remote_config/firebase_remote_config.dart';
@@ -109,7 +108,7 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
     ]);
-    final analytics = FirebaseAnalytics();
+    final analytics = FirebaseAnalytics.instance;
     // 100 mb max cache memory.
     FirebaseFirestore.instance.settings = const Settings(
       persistenceEnabled: true,

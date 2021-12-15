@@ -71,11 +71,11 @@ class Login extends StatelessWidget {
           onPressed: registering
               ? () async {
                   loadingState.toggleLoading();
-                  if (!emailController.text.isMail()!) {
+                  if (!emailController.text.isMail!) {
                     loadingState.toggleLoading();
                     log.wtf('im here ${emailController.text}');
 
-                    return showSnack(
+                    showSnack(
                       title: S.current.error,
                       message: S.current.errorMail,
                       firstColor: Colors.red,

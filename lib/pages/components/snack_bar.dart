@@ -1,9 +1,9 @@
 import 'package:blue_waves/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:get/get.dart';
 
-void showSnack({
+SnackbarController showSnack({
   required String title,
   required String message,
   int duration = 1300,
