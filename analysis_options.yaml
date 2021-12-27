@@ -10,3 +10,10 @@ analyzer:
     strict-raw-types: true
   strong-mode:
     implicit-casts: true
+
+linter:
+  rules:
+    sort_pub_dependencies: false
+    avoid_web_libraries_in_flutter: false
+    avoid_dynamic_calls: false
+    file_names: false
