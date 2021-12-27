@@ -1,11 +1,10 @@
 import 'package:blue_waves/generated/l10n.dart';
+import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
-
-import 'components/animated_background/animated_background.dart';
 
 class RatedBeaches extends StatelessWidget {
   @override
@@ -53,11 +52,15 @@ class RatedBeaches extends StatelessWidget {
               child: StreamBuilder(
                 stream: FirebaseFirestore.instance
                     .collection('ratings')
-                    .where('userId',
-                        isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+                    .where(
+                      'userId',
+                      isEqualTo: FirebaseAuth.instance.currentUser!.uid,
+                    )
                     .snapshots(),
-                builder: (BuildContext context,
-                    AsyncSnapshot<QuerySnapshot> snapshot) {
+                builder: (
+                  BuildContext context,
+                  AsyncSnapshot<QuerySnapshot> snapshot,
+                ) {
                   if (snapshot.hasError) {
                     return Text(S.current.error);
                   }

@@ -1,14 +1,13 @@
 import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/pages/components/animated_background/abyss.dart';
+import 'package:blue_waves/pages/components/animated_background/birds_stars.dart';
+import 'package:blue_waves/pages/components/animated_background/sun_moon.dart';
+import 'package:blue_waves/pages/components/animated_background/title.dart';
+import 'package:blue_waves/pages/components/animated_background/waves.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
-
-import 'abyss.dart';
-import 'birds_stars.dart';
-import 'sun_moon.dart';
-import 'title.dart';
-import 'waves.dart';
 
 class AnimatedBackground extends StatefulWidget {
   const AnimatedBackground({

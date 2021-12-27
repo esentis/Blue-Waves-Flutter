@@ -110,8 +110,9 @@ class Login extends StatelessWidget {
 
                   try {
                     await auth.signInWithEmailAndPassword(
-                        email: emailController.text,
-                        password: passwordController.text);
+                      email: emailController.text,
+                      password: passwordController.text,
+                    );
 
                     loadingState.toggleLoading();
                     await Get.offAll(() => HomePage());
@@ -198,7 +199,9 @@ class Login extends StatelessWidget {
                 if (!isRegistered) {
                   log.i('Google user not registered.');
                   await Api.instance.registerGoogleUser(
-                      id: user.user!.uid, displayName: user.user!.email!);
+                    id: user.user!.uid,
+                    displayName: user.user!.email!,
+                  );
                 }
               }
             } catch (e) {

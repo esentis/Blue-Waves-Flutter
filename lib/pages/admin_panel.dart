@@ -1,13 +1,12 @@
 import 'dart:io';
 
 import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/locate_beach.dart';
 import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
-import 'components/loader.dart';
 
 firebase_storage.FirebaseStorage storage =
     firebase_storage.FirebaseStorage.instance;
@@ -156,85 +155,89 @@ class _AdminPanelState extends State<AdminPanel> {
                       ],
                     ),
                     TextButton(
-                        onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          final image = await (ImagePicker().pickImage(
-                            source: ImageSource.gallery,
-                          ) as Future<PickedFile>);
-                          log.wtf(image.path);
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        final image = await (ImagePicker().pickImage(
+                          source: ImageSource.gallery,
+                        ) as Future<PickedFile>);
+                        log.wtf(image.path);
 
-                          final fileName = image.path;
-                          final selectedPhoto = File(fileName);
-                          imageOne = selectedPhoto;
+                        final fileName = image.path;
+                        final selectedPhoto = File(fileName);
+                        imageOne = selectedPhoto;
 
-                          setState(() {
-                            imageOneLink = selectedPhoto.toString();
-                            isLoading = false;
-                          });
-                        },
-                        child: Text(imageOneLink)),
+                        setState(() {
+                          imageOneLink = selectedPhoto.toString();
+                          isLoading = false;
+                        });
+                      },
+                      child: Text(imageOneLink),
+                    ),
                     TextButton(
-                        onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          final image = await (ImagePicker().pickImage(
-                            source: ImageSource.gallery,
-                          ) as Future<PickedFile>);
-                          log.wtf(image.path);
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        final image = await (ImagePicker().pickImage(
+                          source: ImageSource.gallery,
+                        ) as Future<PickedFile>);
+                        log.wtf(image.path);
 
-                          final fileName = image.path;
-                          final selectedPhoto = File(fileName);
-                          imageTwo = selectedPhoto;
+                        final fileName = image.path;
+                        final selectedPhoto = File(fileName);
+                        imageTwo = selectedPhoto;
 
-                          setState(() {
-                            imageTwoLink = selectedPhoto.toString();
-                            isLoading = false;
-                          });
-                        },
-                        child: Text(imageTwoLink)),
+                        setState(() {
+                          imageTwoLink = selectedPhoto.toString();
+                          isLoading = false;
+                        });
+                      },
+                      child: Text(imageTwoLink),
+                    ),
                     TextButton(
-                        onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          final image = await (ImagePicker().pickImage(
-                            source: ImageSource.gallery,
-                          ) as Future<PickedFile>);
-                          log.wtf(image.path);
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        final image = await (ImagePicker().pickImage(
+                          source: ImageSource.gallery,
+                        ) as Future<PickedFile>);
+                        log.wtf(image.path);
 
-                          final fileName = image.path;
-                          final selectedPhoto = File(fileName);
-                          imageThree = selectedPhoto;
+                        final fileName = image.path;
+                        final selectedPhoto = File(fileName);
+                        imageThree = selectedPhoto;
 
-                          setState(() {
-                            imageThreeLink = selectedPhoto.toString();
-                            isLoading = false;
-                          });
-                        },
-                        child: Text(imageThreeLink)),
+                        setState(() {
+                          imageThreeLink = selectedPhoto.toString();
+                          isLoading = false;
+                        });
+                      },
+                      child: Text(imageThreeLink),
+                    ),
                     TextButton(
-                        onPressed: () async {
-                          setState(() {
-                            isLoading = true;
-                          });
-                          final image = await (ImagePicker().pickImage(
-                            source: ImageSource.gallery,
-                          ) as Future<PickedFile>);
-                          log.wtf(image.path);
+                      onPressed: () async {
+                        setState(() {
+                          isLoading = true;
+                        });
+                        final image = await (ImagePicker().pickImage(
+                          source: ImageSource.gallery,
+                        ) as Future<PickedFile>);
+                        log.wtf(image.path);
 
-                          final fileName = image.path;
-                          final selectedPhoto = File(fileName);
-                          imageFour = selectedPhoto;
+                        final fileName = image.path;
+                        final selectedPhoto = File(fileName);
+                        imageFour = selectedPhoto;
 
-                          setState(() {
-                            imageFourLink = selectedPhoto.toString();
-                            isLoading = false;
-                          });
-                        },
-                        child: Text(imageFourLink)),
+                        setState(() {
+                          imageFourLink = selectedPhoto.toString();
+                          isLoading = false;
+                        });
+                      },
+                      child: Text(imageFourLink),
+                    ),
                     TextButton(
                       onPressed: () async {
                         setState(() {

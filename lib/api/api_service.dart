@@ -26,8 +26,10 @@ class Api {
     Response<dynamic> response;
     try {
       response = await http.get('beaches');
-      return List<Beach>.generate(response.data['beaches'].length,
-          (index) => Beach.fromMap(response.data['beaches'][index]));
+      return List<Beach>.generate(
+        response.data['beaches'].length,
+        (index) => Beach.fromMap(response.data['beaches'][index]),
+      );
     } on DioError catch (e) {
       log.e(e.message);
       return <Beach>[];
@@ -45,13 +47,18 @@ class Api {
     }
   }
 
-  Future<bool> toggleFavorite(
-      {required String userId, required String beachId}) async {
+  Future<bool> toggleFavorite({
+    required String userId,
+    required String beachId,
+  }) async {
     try {
-      await http.post('favorites/', data: {
-        'userId': userId,
-        'beachId': beachId,
-      });
+      await http.post(
+        'favorites/',
+        data: {
+          'userId': userId,
+          'beachId': beachId,
+        },
+      );
       return true;
     } on DioError catch (e) {
       log.e(e.message);
@@ -59,14 +66,19 @@ class Api {
     }
   }
 
-  Future<bool> checkFavorite(
-      {required String userId, required String beachId}) async {
+  Future<bool> checkFavorite({
+    required String userId,
+    required String beachId,
+  }) async {
     Response<dynamic> response;
     try {
-      response = await http.post('favorites/check', data: {
-        'userId': userId,
-        'beachId': beachId,
-      });
+      response = await http.post(
+        'favorites/check',
+        data: {
+          'userId': userId,
+          'beachId': beachId,
+        },
+      );
       return response.data['results'];
     } on DioError catch (e) {
       log.e(e.message);
@@ -82,10 +94,13 @@ class Api {
     );
     Response<dynamic> response;
     try {
-      response = await http.post('users/', data: {
-        'id': userCredential.user!.uid,
-        'username': user.displayName,
-      });
+      response = await http.post(
+        'users/',
+        data: {
+          'id': userCredential.user!.uid,
+          'username': user.displayName,
+        },
+      );
       return response.data['createdAt'];
     } on DioError catch (e) {
       log.e(e.message);
@@ -93,14 +108,19 @@ class Api {
     }
   }
 
-  Future<String> registerGoogleUser(
-      {required String id, required String displayName}) async {
+  Future<String> registerGoogleUser({
+    required String id,
+    required String displayName,
+  }) async {
     Response<dynamic> response;
     try {
-      response = await http.post('users/', data: {
-        'id': id,
-        'username': displayName,
-      });
+      response = await http.post(
+        'users/',
+        data: {
+          'id': id,
+          'username': displayName,
+        },
+      );
       return response.data['createdAt'];
     } on DioError catch (e) {
       log.e(e.message);
@@ -111,9 +131,12 @@ class Api {
   Future<bool> checkUser(String id) async {
     Response<dynamic> response;
     try {
-      response = await http.post('users/check', data: {
-        'id': id,
-      });
+      response = await http.post(
+        'users/check',
+        data: {
+          'id': id,
+        },
+      );
       return response.data['success'];
     } on DioError catch (e) {
       log.e(e.message);
@@ -124,12 +147,15 @@ class Api {
   Future<String> addRating(Rating rating) async {
     Response<dynamic> response;
     try {
-      response = await http.post('ratings/', data: {
-        'beachId': rating.beachId,
-        'userId': rating.userUid,
-        'rating': rating.rating,
-        'review': rating.review,
-      });
+      response = await http.post(
+        'ratings/',
+        data: {
+          'beachId': rating.beachId,
+          'userId': rating.userUid,
+          'rating': rating.rating,
+          'review': rating.review,
+        },
+      );
       return response.data['createdAt'];
     } on DioError catch (e) {
       log.e(e.message);

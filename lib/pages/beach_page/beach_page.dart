@@ -6,6 +6,8 @@ import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:blue_waves/models/rating.dart';
+import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
+import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -13,9 +15,6 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-
-import '../components/animated_background/animated_background.dart';
-import '../components/loader.dart';
 
 class BeachPage extends StatefulWidget {
   const BeachPage({this.beach});
@@ -38,8 +37,6 @@ class _BeachPageState extends State<BeachPage> {
   int currentIndex = 1;
   bool verticalGallery = false;
   bool isLoading = false;
-
-  final PageController _pageController = PageController();
 
   Future<void> open(BuildContext context, int index) async {
     // await Get.to(
@@ -299,7 +296,8 @@ class _BeachPageState extends State<BeachPage> {
                                                 allowHalfRating: true,
                                                 itemPadding:
                                                     EdgeInsets.symmetric(
-                                                        horizontal: 4.0.w),
+                                                  horizontal: 4.0.w,
+                                                ),
                                                 itemBuilder: (context, index) =>
                                                     Image.asset(
                                                   'assets/images/sea.png',
@@ -384,7 +382,9 @@ class _BeachPageState extends State<BeachPage> {
                               ),
                               child: Padding(
                                 padding: EdgeInsets.symmetric(
-                                    vertical: 10.0.h, horizontal: 8.0.w),
+                                  vertical: 10.0.h,
+                                  horizontal: 8.0.w,
+                                ),
                                 child: Text(
                                   Intl.systemLocale == 'el'
                                       ? widget.beach!.descriptionEl!.isEmpty

@@ -17,10 +17,12 @@ SnackbarController showSnack({
       milliseconds: duration,
     ),
     backgroundColor: Colors.orange[50],
-    backgroundGradient: LinearGradient(colors: [
-      firstColor,
-      secondColor,
-    ]),
+    backgroundGradient: LinearGradient(
+      colors: [
+        firstColor,
+        secondColor,
+      ],
+    ),
     titleText: Text(
       title,
       textAlign: TextAlign.center,

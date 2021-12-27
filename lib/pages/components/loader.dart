@@ -1,8 +1,8 @@
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:flutter/material.dart';
-import 'package:lottie/lottie.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 
 class Loader extends StatelessWidget {
   const Loader({

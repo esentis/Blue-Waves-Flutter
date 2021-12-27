@@ -1,11 +1,10 @@
+import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
+import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:animate_do/animate_do.dart';
-
-import 'components/animated_background/animated_background.dart';
 
 class LandingPage extends StatefulWidget {
   @override
@@ -36,39 +35,40 @@ class _LandingPageState extends State<LandingPage> {
     return Material(
       child: SafeArea(
         child: FadeIn(
-            duration: const Duration(milliseconds: 700),
-            child: Stack(
-              children: [
-                const AnimatedBackground(
-                  showTitle: true,
-                ),
-                Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      TextButton(
-                        onPressed: () async {
-                          await Navigator.pushNamed(context, '/register');
-                        },
-                        child: Text(
-                          S.current.register,
-                          style: kStyleDefault,
-                        ),
+          duration: const Duration(milliseconds: 700),
+          child: Stack(
+            children: [
+              const AnimatedBackground(
+                showTitle: true,
+              ),
+              Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        await Navigator.pushNamed(context, '/register');
+                      },
+                      child: Text(
+                        S.current.register,
+                        style: kStyleDefault,
                       ),
-                      TextButton(
-                        onPressed: () async {
-                          await Navigator.pushNamed(context, '/login');
-                        },
-                        child: Text(
-                          S.current.login,
-                          style: kStyleDefault,
-                        ),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        await Navigator.pushNamed(context, '/login');
+                      },
+                      child: Text(
+                        S.current.login,
+                        style: kStyleDefault,
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
-              ],
-            )),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

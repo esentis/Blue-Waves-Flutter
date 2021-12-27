@@ -1,6 +1,9 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
+// ignore_for_file: require_trailing_commas, always_use_package_imports
+
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+
 import 'intl/messages_all.dart';
 
 // **************************************************************************

@@ -1,16 +1,15 @@
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
+import 'package:blue_waves/pages/components/loader.dart';
+import 'package:blue_waves/pages/components/snack_bar.dart';
 import 'package:blue_waves/pages/home_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:package_info/package_info.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-
-import 'components/loader.dart';
-import 'components/snack_bar.dart';
 
 class EditProfilePage extends StatefulWidget {
   @override
@@ -54,7 +53,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                       alignment: Alignment.topCenter,
                       child: Padding(
                         padding: EdgeInsets.only(
-                            top: MediaQuery.of(context).size.height / 5),
+                          top: MediaQuery.of(context).size.height / 5,
+                        ),
                         child: SizedBox(
                           height: MediaQuery.of(context).size.height / 6.1,
                           width: MediaQuery.of(context).size.width / 2.5,
@@ -115,35 +115,36 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     TextButton(
                       onPressed: () async {
                         await Get.defaultDialog(
-                            title: S.current.confirm,
-                            backgroundColor: Colors.orange[50],
-                            middleText: S.current.deleteExplain,
-                            middleTextStyle: kStyleDefault.copyWith(
-                              color: Colors.black.withOpacity(0.8),
-                            ),
-                            titleStyle: kStyleDefault.copyWith(
-                              fontSize: 30.sp,
-                              color: Colors.red.withOpacity(0.8),
-                            ),
-                            cancel: GestureDetector(
-                              onTap: Get.back,
-                              child: Text(
-                                S.current.cancel,
-                                style: kStyleDefault.copyWith(
-                                  color: Colors.red.withOpacity(0.8),
-                                ),
+                          title: S.current.confirm,
+                          backgroundColor: Colors.orange[50],
+                          middleText: S.current.deleteExplain,
+                          middleTextStyle: kStyleDefault.copyWith(
+                            color: Colors.black.withOpacity(0.8),
+                          ),
+                          titleStyle: kStyleDefault.copyWith(
+                            fontSize: 30.sp,
+                            color: Colors.red.withOpacity(0.8),
+                          ),
+                          cancel: GestureDetector(
+                            onTap: Get.back,
+                            child: Text(
+                              S.current.cancel,
+                              style: kStyleDefault.copyWith(
+                                color: Colors.red.withOpacity(0.8),
                               ),
                             ),
-                            confirm: GestureDetector(
-                              onTap: () async {},
-                              child: Text(
-                                S.current.delete,
-                                style: kStyleDefaultBold.copyWith(
-                                  color: Colors.red.withOpacity(0.8),
-                                  fontWeight: FontWeight.bold,
-                                ),
+                          ),
+                          confirm: GestureDetector(
+                            onTap: () async {},
+                            child: Text(
+                              S.current.delete,
+                              style: kStyleDefaultBold.copyWith(
+                                color: Colors.red.withOpacity(0.8),
+                                fontWeight: FontWeight.bold,
                               ),
-                            ));
+                            ),
+                          ),
+                        );
                       },
                       child: Text(
                         S.current.deleteAccount,

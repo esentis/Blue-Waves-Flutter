@@ -1,5 +1,8 @@
 // ignore: file_names
+// ignore_for_file: depend_on_referenced_packages
+
 import 'dart:convert';
+
 import 'package:blue_waves/constants.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 // ignore: implementation_imports

@@ -8,6 +8,9 @@ import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
+import 'package:blue_waves/pages/beach_page/beach_page.dart';
+import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
+import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
 import 'package:blue_waves/pages/edit_profile_page.dart';
 import 'package:blue_waves/pages/favorites_page.dart';
@@ -25,10 +28,6 @@ import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
 import 'package:package_info/package_info.dart';
-
-import 'beach_page/beach_page.dart';
-import 'components/animated_background/animated_background.dart';
-import 'components/loader.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -62,8 +61,10 @@ class _HomePageState extends State<HomePage> {
   /// Method to magically create custom marker !!
   static Future<Uint8List> getBytesFromAsset(String path, int width) async {
     final data = await rootBundle.load(path);
-    final codec = await ui.instantiateImageCodec(data.buffer.asUint8List(),
-        targetWidth: width);
+    final codec = await ui.instantiateImageCodec(
+      data.buffer.asUint8List(),
+      targetWidth: width,
+    );
     final fi = await codec.getNextFrame();
     return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
         .buffer
@@ -329,11 +330,13 @@ class _HomePageState extends State<HomePage> {
               ? () async {
                   if (cluster.count == 2) {
                     final LatLng latLng_1 = LatLng(
-                        cluster.items.first.location.latitude,
-                        cluster.items.first.location.longitude);
+                      cluster.items.first.location.latitude,
+                      cluster.items.first.location.longitude,
+                    );
                     final LatLng latLng_2 = LatLng(
-                        cluster.items.last.location.latitude,
-                        cluster.items.last.location.longitude);
+                      cluster.items.last.location.latitude,
+                      cluster.items.last.location.longitude,
+                    );
 
                     final LatLngBounds bound = LatLngBounds(
                       southwest: latLng_1.latitude > latLng_2.latitude
@@ -349,7 +352,8 @@ class _HomePageState extends State<HomePage> {
                     await mapController.animateCamera(u2);
                   } else {
                     await mapController.animateCamera(
-                        CameraUpdate.newLatLngZoom(cluster.location, 7));
+                      CameraUpdate.newLatLngZoom(cluster.location, 7),
+                    );
                   }
                 }
               : null,
@@ -367,8 +371,10 @@ class _HomePageState extends State<HomePage> {
                     );
                   },
                 ),
-          icon: await _getMarkerBitmap(cluster.isMultiple ? 110 : 50,
-              text: cluster.isMultiple ? cluster.count.toString() : null),
+          icon: await _getMarkerBitmap(
+            cluster.isMultiple ? 110 : 50,
+            text: cluster.isMultiple ? cluster.count.toString() : null,
+          ),
         );
       };
 
