@@ -82,27 +82,28 @@ class Login extends StatelessWidget {
                       secondColor: Colors.red[800]!,
                       duration: 2800,
                     );
-                  }
-                  try {
-                    await Api.instance.registerUser(
-                      Member(
-                        displayName: usernameController.text,
-                        email: emailController.text,
-                        password: passwordController.text,
-                      ),
-                    );
-                    loadingState.toggleLoading();
-                    await Get.offAll(() => HomePage());
-                  } on FirebaseAuthException catch (e) {
-                    loadingState.toggleLoading();
-                    showSnack(
-                      title: S.current.error,
-                      message: e.message!,
-                      firstColor: Colors.red,
-                      secondColor: Colors.red[800]!,
-                      duration: 2800,
-                    );
-                    log.e(e);
+                  } else {
+                    try {
+                      await Api.instance.registerUser(
+                        Member(
+                          displayName: usernameController.text,
+                          email: emailController.text,
+                          password: passwordController.text,
+                        ),
+                      );
+                      loadingState.toggleLoading();
+                      await Get.offAll(() => HomePage());
+                    } on FirebaseAuthException catch (e) {
+                      loadingState.toggleLoading();
+                      showSnack(
+                        title: S.current.error,
+                        message: e.message!,
+                        firstColor: Colors.red,
+                        secondColor: Colors.red[800]!,
+                        duration: 2800,
+                      );
+                      log.e(e);
+                    }
                   }
                 }
               : () async {
