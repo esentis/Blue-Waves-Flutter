@@ -14,12 +14,12 @@ class AppConfig {
 
   PackageInfo? get getVersionInformation => versionInformation;
 
-  String getApiKey() {
-    return remoteConfig.getString('api_key');
-  }
-
   String getSentryDsn() {
     return remoteConfig.getString('sentry_dsn');
+  }
+
+  String getSupabaseKey() {
+    return remoteConfig.getString('supabase_key');
   }
 
   String getAdUnitId() {

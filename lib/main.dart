@@ -21,10 +21,20 @@ import 'package:onesignal_flutter/onesignal_flutter.dart';
 import 'package:package_info/package_info.dart';
 import 'package:provider/provider.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  await Supabase.initialize(
+    url: 'https://xalypheaznoombgcgysf.supabase.co',
+    anonKey: AppConfig.instance.getSupabaseKey(),
+    // authCallbackUrlHostname: 'login-callback', // optional
+    debug: true // optional
+    ,
+  );
+
   AppConfig.instance.versionInformation = await PackageInfo.fromPlatform();
   final RemoteConfig remoteConfig = RemoteConfig.instance;
 
