@@ -1,22 +1,21 @@
-# Blue Waves Flutter
+<p align="center">
+  <img src="https://i.imgur.com/ivqOpFJ.png" width="400" alt="Blue Waves" /> <br /><br />
+  <span>Blue Waves app is about discovering and sharing new beaches ! Beautiful and exotic beaches (currently only Greece) under your fingertip.</span>
+</p>
 
-[![forthebadge](https://forthebadge.com/images/badges/built-with-love.svg)](https://forthebadge.com)
-[![forthebadge](https://forthebadge.com/images/badges/for-you.svg)](https://forthebadge.com)
-
-![Flutter/Dart](https://img.shields.io/badge/version-0.2.0-orange?style=for-the-badge)
-![Last commit](https://img.shields.io/github/last-commit/esentis/Blue-Waves-Flutter?style=for-the-badge)
-
+<p align="center">
+ <img src="https://img.shields.io/github/last-commit/esentis/Blue-Waves-Flutter?style=for-the-badge" alt="Last Commit" /></br>
+  <img src="https://img.shields.io/badge/Dart-0175C2?style=for-the-badge&logo=dart&logoColor=white" alt="Dart" /> <img src="https://img.shields.io/badge/Flutter-02569B?style=for-the-badge&logo=flutter&logoColor=white" alt="Dart" /> <img src="https://img.shields.io/badge/Android-3DDC84?style=for-the-badge&logo=android&logoColor=white" alt="Android" /><br>
 <a href="https://play.google.com/store/apps/details?id=gr.esentis.blue_waves_flutter"><img src="https://steverichey.github.io/google-play-badge-svg/img/el_get.svg" width="250" title="Blue Waves Open Beta" alt="Blue Waves Open Beta"></a>
+</p>
 
-Blue Waves app is about discovering and sharing new beaches ! Beautiful and exotic beaches (currently only Greece) under your fingertip.
+---
 
 > The app is currently in alpha
 
-## Screenshots
-
-
 https://user-images.githubusercontent.com/52862600/147742598-d3c7fb86-b888-4460-8ec2-86027e1f6014.mov
 
+## Screenshots
 
 | Navigate                                            | Beach Page                                          | Favorite                                                |
 | --------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------- |
