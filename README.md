@@ -16,6 +16,8 @@ Blue Waves app is about discovering and sharing new beaches ! Beautiful and exot
 
 ## Screenshots
 
+https://github.com/esentis/Blue-Waves-Flutter/blob/develop/blue_waves.mov
+
 | Navigate                                            | Beach Page                                          | Favorite                                                |
 | --------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------- |
 | ![Alt text](/screenshots/navigate.gif "Navigation") | ![Alt text](/screenshots/to_beach.gif "Beach Page") | ![Alt text](/screenshots/favorite.gif "Favorite Beach") |
