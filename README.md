@@ -13,7 +13,7 @@
 
 > The app is currently in alpha
 
-https://user-images.githubusercontent.com/52862600/147742598-d3c7fb86-b888-4460-8ec2-86027e1f6014.mov
+https://user-images.githubusercontent.com/52862600/147743268-37457eb1-ea11-4e02-8872-9f919ce93431.mov
 
 ## Screenshots
 
