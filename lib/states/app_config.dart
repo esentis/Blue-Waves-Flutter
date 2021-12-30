@@ -1,4 +1,5 @@
 import 'package:firebase_remote_config/firebase_remote_config.dart';
+import 'package:package_info/package_info.dart';
 
 class AppConfig {
   factory AppConfig() {
@@ -8,6 +9,10 @@ class AppConfig {
   AppConfig._internal();
 
   RemoteConfig remoteConfig = RemoteConfig.instance;
+
+  PackageInfo? versionInformation;
+
+  PackageInfo? get getVersionInformation => versionInformation;
 
   String getApiKey() {
     return remoteConfig.getString('api_key');

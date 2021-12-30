@@ -16,6 +16,7 @@ import 'package:blue_waves/pages/edit_profile_page.dart';
 import 'package:blue_waves/pages/favorites_page.dart';
 import 'package:blue_waves/pages/rated_beaches.dart';
 import 'package:blue_waves/pages/register_login_page/auth_page.dart';
+import 'package:blue_waves/states/app_config.dart';
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -27,7 +28,6 @@ import 'package:get/get.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:intl/intl.dart';
-import 'package:package_info/package_info.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -36,7 +36,6 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   late StreamSubscription<ConnectivityResult> _connectionStatus;
-  PackageInfo? packageInfo;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey(); // Create a key
   FirebaseAuth auth = FirebaseAuth.instance;
 
@@ -73,7 +72,6 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> preparePage() async {
     _beaches = await Api.instance.getAllBeaches();
-    packageInfo = await PackageInfo.fromPlatform();
 
     log.wtf('Preparing page');
     _manager.setItems(_beaches);
@@ -224,14 +222,13 @@ class _HomePageState extends State<HomePage> {
                           ),
                         ],
                       ),
-                    if (packageInfo != null)
-                      Text(
-                        '${S.current.version} ${packageInfo?.version}',
-                        style: kStyleDefault.copyWith(
-                          fontSize: 14.sp,
-                          color: kColorOrangeLight,
-                        ),
+                    Text(
+                      '${S.current.version} ${AppConfig.instance.versionInformation?.version}',
+                      style: kStyleDefault.copyWith(
+                        fontSize: 14.sp,
+                        color: kColorOrangeLight,
                       ),
+                    ),
                   ],
                 ),
               ),
