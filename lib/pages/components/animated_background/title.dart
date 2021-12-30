@@ -1,6 +1,6 @@
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/pages/edit_profile_page.dart';
-import 'package:blue_waves/pages/landing_page.dart';
+import 'package:blue_waves/pages/register_login_page/auth_page.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -12,7 +12,7 @@ class BlueWavesTitle extends StatelessWidget {
     return GestureDetector(
       onDoubleTap: () async {
         await FirebaseAuth.instance.signOut();
-        await Get.offAll(() => LandingPage());
+        await Get.offAll(() => AuthPage());
       },
       onLongPress: () async {
         await Get.to(() => EditProfilePage());
