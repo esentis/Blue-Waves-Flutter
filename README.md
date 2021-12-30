@@ -12,13 +12,9 @@
 
 Blue Waves app is about discovering and sharing new beaches ! Beautiful and exotic beaches (currently only Greece) under your fingertip.
 
-> In this phase, the App is in Beta and it's serverless (Firebase/Firestore/Realtime Database). **A backend is currently WIP**.
+> The app is currently in alpha
 
 ## Screenshots
-
-| Landing Page                                              | Register/Login Page                                                | Successful Login                                               |
-| --------------------------------------------------------- | ------------------------------------------------------------------ | -------------------------------------------------------------- |
-| ![Alt text](/screenshots/landing_page.gif "Landing Page") | ![Alt text](/screenshots/register_login.gif "Register/Login Page") | ![Alt text](/screenshots/success_login.gif "Successful Login") |
 
 | Navigate                                            | Beach Page                                          | Favorite                                                |
 | --------------------------------------------------- | --------------------------------------------------- | ------------------------------------------------------- |
