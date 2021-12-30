@@ -1,7 +1,7 @@
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
-import 'package:blue_waves/models/member.dart';
+import 'package:blue_waves/models/Member.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
 import 'package:blue_waves/pages/home_page.dart';
 import 'package:blue_waves/pages/register_login_page/components/text_field.dart';
@@ -193,16 +193,19 @@ class Login extends StatelessWidget {
             UserCredential? user;
             try {
               user = await googleSign();
+
               log.wtf(user);
               if (user != null) {
                 final isRegistered =
-                    await Api.instance.checkUser(user.user!.uid);
+                    await Api.instance.checkUser(user.user!.email!);
                 if (!isRegistered) {
                   log.i('Google user not registered.');
                   await Api.instance.registerGoogleUser(
                     id: user.user!.uid,
                     displayName: user.user!.email!,
                   );
+                } else {
+                  log.i('Google user is already registered with that email.');
                 }
               }
             } catch (e) {

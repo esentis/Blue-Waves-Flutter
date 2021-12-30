@@ -1,11 +1,9 @@
 import 'dart:async';
 
 import 'package:animate_do/animate_do.dart';
-import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
-import 'package:blue_waves/models/rating.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/states/theme_state.dart';
@@ -305,17 +303,17 @@ class _BeachPageState extends State<BeachPage> {
                                                 ),
                                                 onRatingUpdate: (rating) async {
                                                   log.wtf('rated $rating');
-                                                  await Api.instance.addRating(
-                                                    Rating(
-                                                      beachId: widget.beach!.id,
-                                                      rating: rating,
-                                                      review: 'test review',
-                                                      userUid: FirebaseAuth
-                                                          .instance
-                                                          .currentUser!
-                                                          .uid,
-                                                    ),
-                                                  );
+                                                  // await Api.instance.addRating(
+                                                  //   Rating(
+                                                  //     beachId: widget.beach!.id,
+                                                  //     rating: rating,
+                                                  //     review: 'test review',
+                                                  //     userUid: FirebaseAuth
+                                                  //         .instance
+                                                  //         .currentUser!
+                                                  //         .uid,
+                                                  //   ),
+                                                  // );
                                                   // setState(
                                                   //   () {
                                                   //     chosenRating = rating;
