@@ -12,7 +12,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 
 class BeachPage extends StatefulWidget {
   const BeachPage({this.beach});
@@ -228,9 +227,7 @@ class _BeachPageState extends State<BeachPage> {
                                   height: 10.h,
                                 ),
                                 Text(
-                                  Intl.systemLocale == 'el'
-                                      ? widget.beach!.nameEl!
-                                      : widget.beach!.nameEn!,
+                                  widget.beach?.name ?? '',
                                   style: kStyleDefault.copyWith(
                                     fontSize: 23.sp,
                                     color: ThemeState.of(context, listen: true)
@@ -384,13 +381,7 @@ class _BeachPageState extends State<BeachPage> {
                                   horizontal: 8.0.w,
                                 ),
                                 child: Text(
-                                  Intl.systemLocale == 'el'
-                                      ? widget.beach!.descriptionEl!.isEmpty
-                                          ? S.current.noDescription
-                                          : widget.beach!.descriptionEl!
-                                      : widget.beach!.descriptionEn!.isEmpty
-                                          ? S.current.noDescription
-                                          : widget.beach!.descriptionEn!,
+                                  widget.beach?.description ?? '',
                                   style: kStyleDefault.copyWith(
                                     height: 1.7,
                                   ),

@@ -1,10 +1,13 @@
+import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
+import 'package:blue_waves/models/Rating.dart';
 import 'package:blue_waves/pages/components/animated_background/abyss.dart';
 import 'package:blue_waves/pages/components/animated_background/birds_stars.dart';
 import 'package:blue_waves/pages/components/animated_background/sun_moon.dart';
 import 'package:blue_waves/pages/components/animated_background/title.dart';
 import 'package:blue_waves/pages/components/animated_background/waves.dart';
 import 'package:blue_waves/states/theme_state.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -50,7 +53,16 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
         Positioned(
           right: ThemeState.of(context, listen: true).isDark ? 30.w : 30.w,
           child: GestureDetector(
-            onTap: () {
+            onTap: () async {
+              await Api.instance.addRating(
+                Rating(
+                  beachId: 1,
+                  rating: 10,
+                  userMail: FirebaseAuth.instance.currentUser?.email ?? '',
+                  review: 'This is like the best beach ever',
+                ),
+              );
+
               ThemeState.of(context).toggleTheme();
             },
             child: SunMoon(

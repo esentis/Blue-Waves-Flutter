@@ -27,7 +27,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:intl/intl.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -353,13 +352,13 @@ class _HomePageState extends State<HomePage> {
                     );
                   }
                 }
-              : null,
+              : () {
+                  log.wtf('Tapped on ${cluster.items.first.name}');
+                },
           infoWindow: cluster.isMultiple
               ? InfoWindow.noText
               : InfoWindow(
-                  title: Intl.systemLocale == 'el'
-                      ? cluster.items.first.nameEl
-                      : cluster.items.first.nameEn,
+                  title: cluster.items.first.name,
                   onTap: () async {
                     await Get.to(
                       () => BeachPage(
