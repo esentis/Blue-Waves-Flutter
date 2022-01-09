@@ -1,5 +1,6 @@
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/models/Member.dart';
+import 'package:blue_waves/models/Rating.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,14 +16,15 @@ class Api {
   Future<List<Beach>> getAllBeaches() async {
     PostgrestResponse<dynamic> response;
     try {
-      response = await Supabase.instance.client.from('beaches').execute();
+      response =
+          await Supabase.instance.client.from('beaches').select().execute();
       log.wtf(response.data);
-      if (response.data == null) {
+      if (response.data == null || response.data.isEmpty) {
         return [];
       }
       return List<Beach>.generate(
-        response.data['beaches'].length,
-        (index) => Beach.fromMap(response.data['beaches'][index]),
+        response.data.length,
+        (index) => Beach.fromMap(response.data[index]),
       );
     } on DioError catch (e) {
       log.e(e.message);
@@ -30,55 +32,21 @@ class Api {
     }
   }
 
-  // Future<Beach?> getBeach({required String id}) async {
-  //   Response<dynamic> response;
-  //   try {
-  //     response = await http.get('beaches/$id');
-  //     return Beach.fromMap(response.data['results']);
-  //   } on DioError catch (e) {
-  //     log.e(e.message);
-  //     return null;
-  //   }
-  // }
+  Future<Beach?> getBeach({required String id}) async {
+    PostgrestResponse<dynamic> response;
+    try {
+      response = await Supabase.instance.client
+          .from('beaches')
+          .select()
+          .eq('id', id)
+          .execute();
 
-  // Future<bool> toggleFavorite({
-  //   required String userId,
-  //   required String beachId,
-  // }) async {
-  //   try {
-  //     await http.post(
-  //       'favorites/',
-  //       data: {
-  //         'userId': userId,
-  //         'beachId': beachId,
-  //       },
-  //     );
-  //     return true;
-  //   } on DioError catch (e) {
-  //     log.e(e.message);
-  //     return false;
-  //   }
-  // }
-
-  // Future<bool> checkFavorite({
-  //   required String userId,
-  //   required String beachId,
-  // }) async {
-  //   Response<dynamic> response;
-  //   try {
-  //     response = await http.post(
-  //       'favorites/check',
-  //       data: {
-  //         'userId': userId,
-  //         'beachId': beachId,
-  //       },
-  //     );
-  //     return response.data['results'];
-  //   } on DioError catch (e) {
-  //     log.e(e.message);
-  //     return false;
-  //   }
-  // }
+      return Beach.fromMap(response.data['results']);
+    } on DioError catch (e) {
+      log.e(e.message);
+      return null;
+    }
+  }
 
   Future<String> registerUser(Member user) async {
     final userCredential =
@@ -129,7 +97,7 @@ class Api {
           .eq('email', email)
           .execute();
 
-      if (response.data == null) {
+      if (response.data == null || response.data.isEmpty) {
         return false;
       }
       return true;
@@ -139,22 +107,48 @@ class Api {
     }
   }
 
-  // Future<String> addRating(Rating rating) async {
-  //   Response<dynamic> response;
-  //   try {
-  //     response = await http.post(
-  //       'ratings/',
-  //       data: {
-  //         'beachId': rating.beachId,
-  //         'userId': rating.userUid,
-  //         'rating': rating.rating,
-  //         'review': rating.review,
-  //       },
-  //     );
-  //     return response.data['createdAt'];
-  //   } on DioError catch (e) {
-  //     log.e(e.message);
-  //     return e.message;
-  //   }
-  // }
+  /// Checks whether the user with [email] has already rated
+  Future<bool> checkRating(String email, int beachId) async {
+    PostgrestResponse<dynamic> response;
+    try {
+      response = await Supabase.instance.client
+          .from('ratings')
+          .select()
+          .eq('member', email)
+          .eq('beach', beachId)
+          .execute();
+
+      if (response.data == null || response.data.isEmpty) {
+        return true;
+      }
+      return false;
+    } on DioError catch (e) {
+      log.e(e.message);
+      return true;
+    }
+  }
+
+  /// Adds a new rating for the Beach.
+  ///
+  /// [Rating] has required [beach] id, [rating] & [userMail].
+  Future<String> addRating(Rating rating) async {
+    PostgrestResponse<dynamic> response;
+    if (await checkRating(rating.userMail, rating.beachId)) {
+      try {
+        response = await Supabase.instance.client.from('ratings').insert({
+          'beach': rating.beachId,
+          'member': rating.userMail,
+          'rating': rating.rating,
+          'review': rating.review,
+        }).execute();
+        log.wtf(response.data);
+        return response.data.first['created_at'];
+      } on DioError catch (e) {
+        log.e(e.message);
+        return e.message;
+      }
+    }
+    log.wtf('User has already rated this beach');
+    return '';
+  }
 }
