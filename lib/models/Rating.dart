@@ -1,24 +1,24 @@
 import 'package:blue_waves/constants.dart';
 
 class Rating {
-  final String? beachId;
-  final double? rating;
-  final String? userUid;
+  final int beachId;
+  final double rating;
+  final String userMail;
   final String? date;
   final String? review;
   const Rating({
-    this.beachId,
-    this.rating,
-    this.userUid,
+    required this.beachId,
+    required this.rating,
+    required this.userMail,
     this.date,
     this.review,
   });
 
   factory Rating.fromJson(Json json) => Rating(
-        beachId: json['beachId'],
-        date: json['date'],
+        beachId: json['beach'],
+        date: json['created_at'],
         rating: json['rating'],
-        userUid: json['userId'],
+        userMail: json['member'],
         review: json['review'],
       );
 }
