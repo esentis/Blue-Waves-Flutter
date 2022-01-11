@@ -13,6 +13,7 @@ class Api {
   static final Api instance = Api._internal();
   Api._internal();
 
+  /// Returns all beaches.
   Future<List<Beach>> getAllBeaches() async {
     PostgrestResponse<dynamic> response;
     try {
@@ -32,6 +33,7 @@ class Api {
     }
   }
 
+  /// Returns a beach with the provided [id].
   Future<Beach?> getBeach({required String id}) async {
     PostgrestResponse<dynamic> response;
     try {
@@ -48,6 +50,7 @@ class Api {
     }
   }
 
+  /// Registers the user in Firebase so as to Supabase.
   Future<String> registerUser(Member user) async {
     final userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
@@ -68,6 +71,7 @@ class Api {
     }
   }
 
+  /// Starts Google Auth registration.
   Future<String> registerGoogleUser({
     required String id,
     required String displayName,
@@ -88,6 +92,7 @@ class Api {
     }
   }
 
+  /// Check if the user is already registered.
   Future<bool> checkUser(String email) async {
     PostgrestResponse<dynamic> response;
     try {
