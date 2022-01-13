@@ -22,7 +22,6 @@ environment:
 
 dependencies:
   animate_do: ^2.0.0
-  cloud_firestore: ^3.1.4
   connectivity_plus: ^2.1.0
   cupertino_icons: ^1.0.0
   dio: ^4.0.0
@@ -31,7 +30,6 @@ dependencies:
   firebase_core: ^1.5.0
   firebase_crashlytics: ^2.2.0
   firebase_remote_config: ^1.0.2
-  firebase_storage: ^10.0.2
   flutter:
     sdk: flutter
   flutter_launcher_icons: ^0.9.0
@@ -43,7 +41,6 @@ dependencies:
   google_fonts: ^2.1.0
   google_maps_cluster_manager: ^3.0.0+1
   google_maps_flutter: ^2.0.6
-  google_maps_flutter_web: ^0.3.0+2
   google_sign_in: ^5.0.5
   image_picker: ^0.8.0+3
   intl: ^0.17.0
