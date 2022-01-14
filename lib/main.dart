@@ -5,7 +5,6 @@ import 'package:blue_waves/pages/register_login_page/auth_page.dart';
 import 'package:blue_waves/states/app_config.dart';
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_crashlytics/firebase_crashlytics.dart';
@@ -122,11 +121,6 @@ class MyApp extends StatelessWidget {
       DeviceOrientation.portraitDown,
     ]);
     final analytics = FirebaseAnalytics.instance;
-    // 100 mb max cache memory.
-    FirebaseFirestore.instance.settings = const Settings(
-      persistenceEnabled: true,
-      cacheSizeBytes: Settings.CACHE_SIZE_UNLIMITED,
-    );
 
     return ScreenUtilInit(
       builder: () => MultiProvider(

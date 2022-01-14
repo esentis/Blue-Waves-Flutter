@@ -3,13 +3,9 @@ import 'dart:io';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/locate_beach.dart';
-import 'package:firebase_storage/firebase_storage.dart' as firebase_storage;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
-
-firebase_storage.FirebaseStorage storage =
-    firebase_storage.FirebaseStorage.instance;
 
 class AdminPanel extends StatefulWidget {
   @override
@@ -47,50 +43,6 @@ class _AdminPanelState extends State<AdminPanel> {
   File? imageFour;
 
   bool isLoading = false;
-
-  Future<List<String>> uploadPhotos() async {
-    final imageUrls = [];
-
-    // Start uploading
-    if (imageOne != null) {
-      await storage.ref().child(imageOne.toString()).putFile(imageOne!).then(
-        (snapshot) async {
-          final downloadLink = await snapshot.ref.getDownloadURL();
-          imageUrls.add(downloadLink);
-        },
-      );
-    }
-    if (imageTwo != null) {
-      await storage.ref().child(imageTwo.toString()).putFile(imageTwo!).then(
-        (snapshot) async {
-          final downloadLink = await snapshot.ref.getDownloadURL();
-          imageUrls.add(downloadLink);
-        },
-      );
-    }
-    if (imageThree != null) {
-      await storage
-          .ref()
-          .child(imageThree.toString())
-          .putFile(imageThree!)
-          .then(
-        (snapshot) async {
-          final downloadLink = await snapshot.ref.getDownloadURL();
-          imageUrls.add(downloadLink);
-        },
-      );
-    }
-    if (imageFour != null) {
-      await storage.ref().child(imageFour.toString()).putFile(imageFour!).then(
-        (snapshot) async {
-          final downloadLink = await snapshot.ref.getDownloadURL();
-          imageUrls.add(downloadLink);
-        },
-      );
-    }
-
-    return imageUrls as Future<List<String>>;
-  }
 
   @override
   void initState() {
@@ -243,7 +195,6 @@ class _AdminPanelState extends State<AdminPanel> {
                         setState(() {
                           isLoading = true;
                         });
-                        final images = await uploadPhotos();
 
                         // await addBeach(
                         //   // ignore: missing_required_param
@@ -259,7 +210,7 @@ class _AdminPanelState extends State<AdminPanel> {
                         log.wtf('DESCRIPTION ${_descriptionController.text}');
                         log.wtf('LATITUDE ${_latitudeController.text}');
                         log.wtf('LONGITUDE ${_longitudeController.text}');
-                        log.wtf(images);
+
                         setState(() {
                           isLoading = false;
                           imageOneLink = imageTwoLink = imageThreeLink =
