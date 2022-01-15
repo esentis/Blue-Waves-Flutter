@@ -20,23 +20,32 @@ class Beach with ClusterItem {
     this.averageRating,
     this.ratingCount,
     this.countryId,
+    this.descriptionEn,
+    this.descriptionSource,
+    this.nameEn,
   });
 
   double? latitude;
   String? description;
+  String? descriptionEn;
+  Uri? descriptionSource;
   String? countryId;
   double? longitude;
   String? id;
   String? name;
+  String? nameEn;
   int? ratingCount;
   num? averageRating;
 
   factory Beach.fromMap(Json json) => Beach(
         latitude: json['latitude'],
         description: json['description'],
+        descriptionEn: json['description_en'],
+        descriptionSource: Uri.tryParse(json['description_source']),
         longitude: json['longitude'],
         id: json['_id'],
         name: json['name'],
+        nameEn: json['name_en'],
         countryId: json['countryId'],
         averageRating: json['averageRating'] ?? 0.0,
         ratingCount: json['ratingCount'] ?? 0,
@@ -45,10 +54,13 @@ class Beach with ClusterItem {
   Map<String, dynamic> toMap() => {
         'latitude': latitude,
         'description': description,
+        'description_en': descriptionEn,
+        'description_source': descriptionSource.toString(),
         'longitude': longitude,
         'countryId': countryId,
         'id': id,
         'name_el': name,
+        'name_en': nameEn,
         'averageRating': averageRating,
         'ratingCount': ratingCount,
       };
