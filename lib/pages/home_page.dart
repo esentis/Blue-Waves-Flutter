@@ -334,14 +334,34 @@ class _HomePageState extends State<HomePage> {
                       cluster.items.last.location.longitude,
                     );
 
-                    final LatLngBounds bound = LatLngBounds(
-                      southwest: latLng_1.latitude > latLng_2.latitude
-                          ? latLng_2
-                          : latLng_1,
-                      northeast: latLng_1.latitude > latLng_2.latitude
-                          ? latLng_1
-                          : latLng_2,
-                    );
+                    // Calculate bounds between two geocoords
+                    LatLngBounds bound;
+                    if (latLng_1.latitude > latLng_2.latitude &&
+                        latLng_1.longitude > latLng_2.longitude) {
+                      bound = LatLngBounds(
+                        southwest: latLng_2,
+                        northeast: latLng_1,
+                      );
+                    } else if (latLng_1.longitude > latLng_2.longitude) {
+                      bound = LatLngBounds(
+                        southwest:
+                            LatLng(latLng_1.latitude, latLng_2.longitude),
+                        northeast:
+                            LatLng(latLng_2.latitude, latLng_1.longitude),
+                      );
+                    } else if (latLng_1.latitude > latLng_2.latitude) {
+                      bound = LatLngBounds(
+                        southwest:
+                            LatLng(latLng_2.latitude, latLng_1.longitude),
+                        northeast:
+                            LatLng(latLng_1.latitude, latLng_2.longitude),
+                      );
+                    } else {
+                      bound = LatLngBounds(
+                        southwest: latLng_1,
+                        northeast: latLng_2,
+                      );
+                    }
 
                     final CameraUpdate u2 =
                         CameraUpdate.newLatLngBounds(bound, 50);
