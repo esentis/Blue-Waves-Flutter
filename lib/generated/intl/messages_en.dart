@@ -40,6 +40,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "favoritedBeaches":
             MessageLookupByLibrary.simpleMessage("Favorite beaches"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
+        "logged_as": MessageLookupByLibrary.simpleMessage("Logged in as"),
         "login": MessageLookupByLibrary.simpleMessage("Sign in"),
         "logout": MessageLookupByLibrary.simpleMessage("Sign out"),
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),

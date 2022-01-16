@@ -31,5 +31,6 @@
     "menu": "Menu",
     "notLogged": "You're currently not logged",
     "noDescription": "No description found for the beach",
-    "contribute": "Do you want to contribute ?"
+    "contribute": "Do you want to contribute ?",
+    "logged_as": "Logged in as"
 }

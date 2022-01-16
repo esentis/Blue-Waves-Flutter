@@ -42,6 +42,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "favoritedBeaches":
             MessageLookupByLibrary.simpleMessage("Αγαπημένες παραλίες"),
         "loading": MessageLookupByLibrary.simpleMessage("Φορτώνει..."),
+        "logged_as": MessageLookupByLibrary.simpleMessage("Συνδεμένος ως"),
         "login": MessageLookupByLibrary.simpleMessage("Είσοδος"),
         "logout": MessageLookupByLibrary.simpleMessage("Αποσύνδεση"),
         "menu": MessageLookupByLibrary.simpleMessage("Μενού"),
