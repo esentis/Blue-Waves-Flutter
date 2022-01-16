@@ -3,13 +3,13 @@ import 'dart:typed_data';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
-import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:blue_waves/pages/beach_page/beach_page.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
+import 'package:blue_waves/pages/components/animated_background/title.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
 import 'package:blue_waves/pages/edit_profile_page.dart';
@@ -18,7 +18,6 @@ import 'package:blue_waves/pages/rated_beaches.dart';
 import 'package:blue_waves/pages/register_login_page/auth_page.dart';
 import 'package:blue_waves/states/app_config.dart';
 import 'package:blue_waves/states/loading_state.dart';
-import 'package:blue_waves/states/theme_state.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -28,18 +27,18 @@ import 'package:get/get.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
-class HomePage extends StatefulWidget {
+class GlobeView extends StatefulWidget {
   @override
-  _HomePageState createState() => _HomePageState();
+  _GlobeViewState createState() => _GlobeViewState();
 }
 
-class _HomePageState extends State<HomePage> {
+class _GlobeViewState extends State<GlobeView> {
   late StreamSubscription<ConnectivityResult> _connectionStatus;
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey(); // Create a key
   FirebaseAuth auth = FirebaseAuth.instance;
 
   bool isAdmin = false;
-  bool hasConn = false;
+  bool? hasConn;
 
   late GoogleMapController mapController;
   CameraPosition greeceCamera = const CameraPosition(
@@ -72,7 +71,6 @@ class _HomePageState extends State<HomePage> {
   Future<void> preparePage() async {
     _beaches = await Api.instance.getAllBeaches();
 
-    log.wtf('Preparing page');
     _manager.setItems(_beaches);
   }
 
@@ -83,7 +81,7 @@ class _HomePageState extends State<HomePage> {
     myMarker = BitmapDescriptor.fromBytes(assetBytes);
     _mapStyle = await rootBundle.loadString('map_styles.txt');
     hasConn = await _conn != ConnectivityResult.none;
-    log.wtf('Connectivity is $hasConn');
+
     if (!mounted) return;
     if (LoadingState.of(context).isLoading!) {
       LoadingState.of(context).toggleLoading();
@@ -147,93 +145,137 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: Stack(
-        children: [
-          Positioned(
-            top: 90.h,
-            bottom: 0,
-            child: Container(
-              decoration: BoxDecoration(
-                color: kColorBlueDark2,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(16.r),
-                ),
-              ),
-              width: 200.w,
-              height: 450.h,
-              child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 8.0.h),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
+      drawer: Container(
+        decoration: BoxDecoration(
+          color: kColorBlueDark2,
+          borderRadius: BorderRadius.only(
+            topRight: Radius.circular(22.r),
+            bottomRight: Radius.circular(22.r),
+          ),
+        ),
+        width: 200.w,
+        height: 450.h,
+        child: Padding(
+          padding: EdgeInsets.symmetric(vertical: 12.0.h),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  if (FirebaseAuth.instance.currentUser != null) ...[
                     Text(
-                      S.current.menu,
+                      S.current.logged_as,
+                      style: kStyleDefault.copyWith(
+                        fontSize: 13.sp,
+                      ),
+                    ),
+                    Text(
+                      FirebaseAuth.instance.currentUser?.displayName ?? '',
                       style: kStyleDefault,
                     ),
-                    if (FirebaseAuth.instance.currentUser == null) ...[
-                      TextButton(
-                        onPressed: () async {
-                          await Get.to(() => AuthPage());
+                  ],
+                  if (FirebaseAuth.instance.currentUser != null)
+                    Padding(
+                      padding: EdgeInsets.only(top: 12.0.h),
+                      child: GestureDetector(
+                        onTap: () async {
+                          await FirebaseAuth.instance.signOut();
+                          setState(() {});
                         },
                         child: Text(
-                          S.current.notLogged,
+                          S.current.logout,
                           style: kStyleDefault.copyWith(
                             fontSize: 15.sp,
                           ),
                         ),
-                      )
-                    ] else
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextButton(
-                            onPressed: () async {
-                              await Get.to(() => RatedBeaches());
-                            },
-                            child: Text(
-                              S.current.ratedBeaches,
-                              style: kStyleDefault.copyWith(
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              await Get.to(() => FavoritesPage());
-                            },
-                            child: Text(
-                              S.current.favoritedBeaches,
-                              style: kStyleDefault.copyWith(
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              await Get.to(() => EditProfilePage());
-                            },
-                            child: Text(
-                              S.current.editProfile,
-                              style: kStyleDefault.copyWith(
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                          ),
-                        ],
                       ),
+                    ),
+                  if (FirebaseAuth.instance.currentUser == null)
                     Text(
-                      '${S.current.version} ${AppConfig.instance.versionInformation?.version}',
+                      S.current.notLogged,
                       style: kStyleDefault.copyWith(
-                        fontSize: 14.sp,
-                        color: kColorOrangeLight,
+                        fontSize: 15.sp,
+                      ),
+                    ),
+                ],
+              ),
+              if (FirebaseAuth.instance.currentUser == null)
+                TextButton(
+                  onPressed: () async {
+                    await Get.to(() => AuthPage());
+                  },
+                  child: Text(
+                    S.current.login,
+                    style: kStyleDefault.copyWith(
+                      fontSize: 15.sp,
+                    ),
+                  ),
+                )
+              else
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    TextButton(
+                      onPressed: () async {
+                        await Get.to(() => RatedBeaches());
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.resolveWith(
+                          (states) => EdgeInsets.zero,
+                        ),
+                      ),
+                      child: Text(
+                        S.current.ratedBeaches,
+                        style: kStyleDefault.copyWith(
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        await Get.to(() => FavoritesPage());
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.resolveWith(
+                          (states) => EdgeInsets.zero,
+                        ),
+                      ),
+                      child: Text(
+                        S.current.favoritedBeaches,
+                        style: kStyleDefault.copyWith(
+                          fontSize: 15.sp,
+                        ),
+                      ),
+                    ),
+                    TextButton(
+                      onPressed: () async {
+                        await Get.to(() => EditProfilePage());
+                      },
+                      style: ButtonStyle(
+                        padding: MaterialStateProperty.resolveWith(
+                          (states) => EdgeInsets.zero,
+                        ),
+                      ),
+                      child: Text(
+                        S.current.editProfile,
+                        style: kStyleDefault.copyWith(
+                          fontSize: 15.sp,
+                        ),
                       ),
                     ),
                   ],
                 ),
+              Text(
+                '${S.current.version} ${AppConfig.instance.versionInformation?.version}',
+                style: kStyleDefault.copyWith(
+                  fontSize: 14.sp,
+                  color: kColorOrangeLight,
+                ),
               ),
-            ),
+            ],
           ),
-        ],
+        ),
       ),
       floatingActionButton: LoadingState.of(context, listen: true).isLoading!
           ? const SizedBox.shrink()
@@ -243,27 +285,24 @@ class _HomePageState extends State<HomePage> {
               },
               icon: Icon(
                 Icons.menu,
-                color: ThemeState.of(context, listen: true).isDark
-                    ? kColorWhite
-                    : kColorBlue,
+                color: kColorWhite,
                 size: 45,
               ),
             ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.startTop,
-      body: SafeArea(
-        child: Stack(
-          children: [
-            const AnimatedBackground(
-              showTitle: true,
-            ),
-            if (LoadingState.of(context, listen: true).isLoading!)
-              const Center(child: Loader())
-            else
-              StreamBuilder<ConnectivityResult>(
-                stream: _connStream,
-                builder: (context, snapshot) {
-                  final c = snapshot.data;
-                  if (c == ConnectivityResult.none || !hasConn) {
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      body: Stack(
+        children: [
+          if (LoadingState.of(context, listen: true).isLoading!)
+            const AnimatedBackground(),
+          if (LoadingState.of(context, listen: true).isLoading!)
+            const Center(child: Loader())
+          else
+            StreamBuilder<ConnectivityResult>(
+              stream: _connStream,
+              builder: (context, snapshot) {
+                final c = snapshot.data;
+                if (hasConn != null) {
+                  if (c == ConnectivityResult.none || !hasConn!) {
                     return Positioned.fill(
                       child: Container(
                         color: kColorBlack.withOpacity(0.8),
@@ -276,43 +315,38 @@ class _HomePageState extends State<HomePage> {
                       ),
                     );
                   }
-                  final Completer<GoogleMapController> _controller =
-                      Completer();
-                  return Positioned(
-                    bottom: 0,
-                    child: FadeInUp(
-                      delay: const Duration(milliseconds: 600),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.only(
-                          topRight: Radius.circular(16.r),
-                          topLeft: Radius.circular(16.r),
-                        ),
-                        child: SizedBox(
-                          height: 600.h,
-                          width: MediaQuery.of(context).size.width,
-                          child: GoogleMap(
-                            markers: markers,
-                            buildingsEnabled: false,
-                            myLocationButtonEnabled: false,
-                            initialCameraPosition: greeceCamera,
-                            zoomControlsEnabled: false,
-                            onCameraMove: _manager.onCameraMove,
-                            onCameraIdle: _manager.updateMap,
-                            onMapCreated: (GoogleMapController controller) {
-                              mapController = controller;
-                              _manager.setMapId(controller.mapId);
-                              mapController.setMapStyle(_mapStyle);
-                              _controller.complete(controller);
-                            },
-                          ),
-                        ),
-                      ),
-                    ),
-                  );
-                },
+                }
+                final Completer<GoogleMapController> _controller = Completer();
+                return SizedBox(
+                  height: 1.sh,
+                  width: MediaQuery.of(context).size.width,
+                  child: GoogleMap(
+                    markers: markers,
+                    buildingsEnabled: false,
+                    myLocationButtonEnabled: false,
+                    initialCameraPosition: greeceCamera,
+                    zoomControlsEnabled: false,
+                    onCameraMove: _manager.onCameraMove,
+                    onCameraIdle: _manager.updateMap,
+                    onMapCreated: (GoogleMapController controller) {
+                      mapController = controller;
+                      _manager.setMapId(controller.mapId);
+                      mapController.setMapStyle(_mapStyle);
+                      _controller.complete(controller);
+                    },
+                  ),
+                );
+              },
+            ),
+          const SafeArea(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: BlueWavesTitle(
+                isBlurred: true,
               ),
-          ],
-        ),
+            ),
+          ),
+        ],
       ),
     );
   }
