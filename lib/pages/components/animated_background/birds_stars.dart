@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 
-class BurdsStars extends StatelessWidget {
+class BirdsStars extends StatelessWidget {
   final bool isDark;
-  const BurdsStars({required this.isDark});
+  const BirdsStars({required this.isDark});
   @override
   Widget build(BuildContext context) {
     return AnimatedCrossFade(

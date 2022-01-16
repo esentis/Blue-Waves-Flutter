@@ -19,7 +19,7 @@ class Api {
     try {
       response =
           await Supabase.instance.client.from('beaches').select().execute();
-      log.wtf(response.data);
+
       if (response.data == null || response.data.isEmpty) {
         return [];
       }

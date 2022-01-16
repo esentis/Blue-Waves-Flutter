@@ -3,7 +3,7 @@ import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/Member.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
-import 'package:blue_waves/pages/home_page.dart';
+import 'package:blue_waves/pages/globe_view.dart';
 import 'package:blue_waves/pages/register_login_page/components/text_field.dart';
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
@@ -92,7 +92,7 @@ class Login extends StatelessWidget {
                         ),
                       );
                       loadingState.toggleLoading();
-                      await Get.offAll(() => HomePage());
+                      await Get.offAll(() => GlobeView());
                     } on FirebaseAuthException catch (e) {
                       loadingState.toggleLoading();
                       showSnack(
@@ -116,7 +116,7 @@ class Login extends StatelessWidget {
                     );
 
                     loadingState.toggleLoading();
-                    await Get.offAll(() => HomePage());
+                    await Get.offAll(() => GlobeView());
                   } on FirebaseAuthException catch (e) {
                     loadingState.toggleLoading();
                     showSnack(
@@ -206,6 +206,7 @@ class Login extends StatelessWidget {
                   );
                 } else {
                   log.i('Google user is already registered with that email.');
+                  Get.offAll(() => GlobeView());
                 }
               }
             } catch (e) {

@@ -1,38 +1,47 @@
+import 'dart:ui';
+
 import 'package:blue_waves/constants.dart';
-import 'package:blue_waves/pages/edit_profile_page.dart';
-import 'package:blue_waves/pages/register_login_page/auth_page.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:get/get.dart';
 
 class BlueWavesTitle extends StatelessWidget {
+  const BlueWavesTitle({this.isBlurred = false});
+  final bool isBlurred;
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onDoubleTap: () async {
-        await FirebaseAuth.instance.signOut();
-        await Get.offAll(() => AuthPage());
-      },
-      onLongPress: () async {
-        await Get.to(() => EditProfilePage());
-      },
-      child: RichText(
-        text: TextSpan(
-          text: 'Blue ',
-          style: kStyleDefaultBold.copyWith(
-            fontSize: 45.sp,
-            color: kColorBlue,
-          ),
-          children: <TextSpan>[
-            TextSpan(
-              text: 'Waves',
-              style: kStyleDefaultBold.copyWith(
-                fontSize: 45.sp,
-                color: kColorBlueLight2,
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(16.r),
+      child: BackdropFilter(
+        filter: ImageFilter.blur(
+          sigmaX: isBlurred ? 5 : 0,
+          sigmaY: isBlurred ? 5 : 0,
+        ),
+        child: Container(
+          color: isBlurred ? Colors.black.withOpacity(0.2) : Colors.transparent,
+          child: Padding(
+            padding: EdgeInsets.symmetric(
+              vertical: 4.0.h,
+              horizontal: 14.w,
+            ),
+            child: RichText(
+              text: TextSpan(
+                text: 'Blue ',
+                style: kStyleDefaultBold.copyWith(
+                  fontSize: 45.sp,
+                  color: kColorBlue,
+                ),
+                children: <TextSpan>[
+                  TextSpan(
+                    text: 'Waves',
+                    style: kStyleDefaultBold.copyWith(
+                      fontSize: 45.sp,
+                      color: kColorBlueLight2,
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

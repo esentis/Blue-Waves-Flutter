@@ -45,8 +45,13 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
             height: widget.waveHeight,
           ),
         ),
-        if (widget.showTitle!)
-          Align(alignment: Alignment.topCenter, child: BlueWavesTitle())
+        if (widget.showTitle ?? false)
+          SafeArea(
+            child: Align(
+              alignment: Alignment.topCenter,
+              child: BlueWavesTitle(),
+            ),
+          )
         else
           const SizedBox(),
         const Abyss(),
@@ -65,8 +70,10 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
 
               ThemeState.of(context).toggleTheme();
             },
-            child: SunMoon(
-              isDark: ThemeState.of(context, listen: true).isDark,
+            child: SafeArea(
+              child: SunMoon(
+                isDark: ThemeState.of(context, listen: true).isDark,
+              ),
             ),
           ),
         ),
@@ -75,7 +82,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
           right: 0,
           left: 0,
           child: IgnorePointer(
-            child: BurdsStars(
+            child: BirdsStars(
               isDark: ThemeState.of(context, listen: true).isDark,
             ),
           ),

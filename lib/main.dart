@@ -1,6 +1,6 @@
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
-import 'package:blue_waves/pages/home_page.dart';
+import 'package:blue_waves/pages/globe_view.dart';
 import 'package:blue_waves/pages/register_login_page/auth_page.dart';
 import 'package:blue_waves/states/app_config.dart';
 import 'package:blue_waves/states/loading_state.dart';
@@ -151,7 +151,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: HomePage(),
+          home: GlobeView(),
         ),
       ),
     );

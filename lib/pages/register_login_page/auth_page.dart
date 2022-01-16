@@ -28,50 +28,48 @@ class _AuthPageState extends State<AuthPage> {
     final loadingState = context.watch<LoadingState>();
     return Scaffold(
       resizeToAvoidBottomInset: false,
-      body: SafeArea(
-        child: FadeIn(
-          duration: const Duration(milliseconds: 700),
-          child: Stack(
-            children: [
-              const AnimatedBackground(
-                showTitle: true,
-                waveHeight: WaveHeight.small,
-              ),
-              Login(
-                usernameController: usernameController,
-                emailController: emailController,
-                passwordController: passwordController,
-                loadingState: loadingState,
-                auth: auth,
-                registering: registering,
-                onRegisterTap: () {
-                  setState(
-                    () {
-                      registering = !registering;
-                    },
-                  );
-                },
-              ),
+      body: FadeIn(
+        duration: const Duration(milliseconds: 700),
+        child: Stack(
+          children: [
+            const AnimatedBackground(
+              showTitle: true,
+              waveHeight: WaveHeight.small,
+            ),
+            Login(
+              usernameController: usernameController,
+              emailController: emailController,
+              passwordController: passwordController,
+              loadingState: loadingState,
+              auth: auth,
+              registering: registering,
+              onRegisterTap: () {
+                setState(
+                  () {
+                    registering = !registering;
+                  },
+                );
+              },
+            ),
 
-              Positioned(
-                bottom: 45.h,
-                left: 50.w,
-                right: 50.w,
-                child: TextButton(
-                  onPressed: Get.back,
-                  child: Text(
-                    S.current.back,
-                    style: kStyleDefaultBold.copyWith(
-                      fontSize: 18.sp,
-                      color: kColorWhite.withOpacity(0.8),
-                    ),
+            Positioned(
+              bottom: 45.h,
+              left: 50.w,
+              right: 50.w,
+              child: TextButton(
+                onPressed: Get.back,
+                child: Text(
+                  S.current.back,
+                  style: kStyleDefaultBold.copyWith(
+                    fontSize: 18.sp,
+                    color: kColorWhite.withOpacity(0.8),
                   ),
                 ),
               ),
-              // ignore: prefer_if_elements_to_conditional_expressions
-              loadingState.isLoading! ? const Loader() : const SizedBox(),
-            ],
-          ),
+            ),
+            // ignore: prefer_if_elements_to_conditional_expressions
+            loadingState.isLoading! ? const Loader() : const SizedBox(),
+          ],
         ),
       ),
     );

@@ -3,7 +3,7 @@ import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
-import 'package:blue_waves/pages/home_page.dart';
+import 'package:blue_waves/pages/globe_view.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -102,7 +102,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     TextButton(
                       onPressed: () async {
                         await FirebaseAuth.instance.signOut();
-                        await Get.offAll(() => HomePage());
+                        await Get.offAll(() => GlobeView());
                       },
                       child: Text(
                         S.current.logout,
