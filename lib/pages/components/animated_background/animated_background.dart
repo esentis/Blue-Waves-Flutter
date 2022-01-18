@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/models/Rating.dart';
@@ -46,7 +48,7 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
           ),
         ),
         if (widget.showTitle ?? false)
-          SafeArea(
+          const SafeArea(
             child: Align(
               alignment: Alignment.topCenter,
               child: BlueWavesTitle(),
