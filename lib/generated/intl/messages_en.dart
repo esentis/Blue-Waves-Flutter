@@ -30,15 +30,13 @@ class MessageLookup extends MessageLookupByLibrary {
         "delete": MessageLookupByLibrary.simpleMessage("Delete"),
         "deleteAccount": MessageLookupByLibrary.simpleMessage("Delete account"),
         "deleteExplain": MessageLookupByLibrary.simpleMessage(
-          "Delete your account permanently, there is no retrieve option.",
-        ),
+            "Delete your account permanently, there is no retrieve option."),
         "editProfile": MessageLookupByLibrary.simpleMessage("Edit profile"),
         "error": MessageLookupByLibrary.simpleMessage("Error"),
         "errorMail":
             MessageLookupByLibrary.simpleMessage("Your email is not correct"),
         "errorText": MessageLookupByLibrary.simpleMessage(
-          "Something went wrong, try again later !",
-        ),
+            "Something went wrong, try again later !"),
         "favoritedBeaches":
             MessageLookupByLibrary.simpleMessage("Favorite beaches"),
         "loading": MessageLookupByLibrary.simpleMessage("Loading..."),
@@ -47,14 +45,11 @@ class MessageLookup extends MessageLookupByLibrary {
         "logout": MessageLookupByLibrary.simpleMessage("Sign out"),
         "menu": MessageLookupByLibrary.simpleMessage("Menu"),
         "noConnection": MessageLookupByLibrary.simpleMessage(
-          "No internet active internet connection found",
-        ),
+            "No internet active internet connection found"),
         "noDescription": MessageLookupByLibrary.simpleMessage(
-          "No description found for the beach",
-        ),
+            "No description found for the beach"),
         "notLogged": MessageLookupByLibrary.simpleMessage(
-          "You\'re currently not logged",
-        ),
+            "You\'re currently not logged"),
         "or": MessageLookupByLibrary.simpleMessage("Or"),
         "pageBeachRated":
             MessageLookupByLibrary.simpleMessage("You have already rated : "),
@@ -63,8 +58,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pass": MessageLookupByLibrary.simpleMessage("Password"),
         "points": MessageLookupByLibrary.simpleMessage("Points"),
         "pointsExplain": MessageLookupByLibrary.simpleMessage(
-          "Everytime you contribute in any way, either by rating or adding beach information, you gain Karma points.",
-        ),
+            "Everytime you contribute in any way, either by rating or adding beach information, you gain Karma points."),
         "pointsQuestion":
             MessageLookupByLibrary.simpleMessage("What are points ?"),
         "ratedBeaches": MessageLookupByLibrary.simpleMessage("Rated beaches"),
@@ -72,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "report": MessageLookupByLibrary.simpleMessage("Report"),
         "reportText":
             MessageLookupByLibrary.simpleMessage("Report a problem/issue."),
+        "source": MessageLookupByLibrary.simpleMessage("source"),
         "username": MessageLookupByLibrary.simpleMessage("Username"),
         "version": MessageLookupByLibrary.simpleMessage("Version")
       };

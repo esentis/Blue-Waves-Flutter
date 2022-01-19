@@ -31,16 +31,14 @@ class MessageLookup extends MessageLookupByLibrary {
         "deleteAccount":
             MessageLookupByLibrary.simpleMessage("Διαγραφή λογαριασμού"),
         "deleteExplain": MessageLookupByLibrary.simpleMessage(
-          "Διαγραφή λογαριασμού οριστικά, δεν υπάρχει δυνατότητα επαναφοράς.",
-        ),
+            "Διαγραφή λογαριασμού οριστικά, δεν υπάρχει δυνατότητα επαναφοράς."),
         "editProfile":
             MessageLookupByLibrary.simpleMessage("Επεξεργασία προφίλ"),
         "error": MessageLookupByLibrary.simpleMessage("Σφάλμα"),
         "errorMail":
             MessageLookupByLibrary.simpleMessage("Το email δεν είναι σωστό"),
         "errorText": MessageLookupByLibrary.simpleMessage(
-          "Κάτι πήγε στραβά, δοκιμάστε ξανά αργότερα !",
-        ),
+            "Κάτι πήγε στραβά, δοκιμάστε ξανά αργότερα !"),
         "favoritedBeaches":
             MessageLookupByLibrary.simpleMessage("Αγαπημένες παραλίες"),
         "loading": MessageLookupByLibrary.simpleMessage("Φορτώνει..."),
@@ -49,11 +47,9 @@ class MessageLookup extends MessageLookupByLibrary {
         "logout": MessageLookupByLibrary.simpleMessage("Αποσύνδεση"),
         "menu": MessageLookupByLibrary.simpleMessage("Μενού"),
         "noConnection": MessageLookupByLibrary.simpleMessage(
-          "Δεν βρέθηκε ενεργή σύνδεση στο ίντερνετ",
-        ),
+            "Δεν βρέθηκε ενεργή σύνδεση στο ίντερνετ"),
         "noDescription": MessageLookupByLibrary.simpleMessage(
-          "Δεν βρέθηκε περιγραφή για τη παραλία",
-        ),
+            "Δεν βρέθηκε περιγραφή για τη παραλία"),
         "notLogged":
             MessageLookupByLibrary.simpleMessage("Δεν είστε συνδεμένοι"),
         "or": MessageLookupByLibrary.simpleMessage("Ή"),
@@ -64,8 +60,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pass": MessageLookupByLibrary.simpleMessage("Κωδικός"),
         "points": MessageLookupByLibrary.simpleMessage("Πόντοι"),
         "pointsExplain": MessageLookupByLibrary.simpleMessage(
-          "Κάθε φορά που συνεισφέρεις με οποιόδηποτε τρόπο, είτε με βαθμολογία είτε με κάποια προσθήκη παραλίας, κερδίζεις Karma πόντους !",
-        ),
+            "Κάθε φορά που συνεισφέρεις με οποιόδηποτε τρόπο, είτε με βαθμολογία είτε με κάποια προσθήκη παραλίας, κερδίζεις Karma πόντους !"),
         "pointsQuestion":
             MessageLookupByLibrary.simpleMessage("Τι είναι οι πόντοι ;"),
         "ratedBeaches":
@@ -73,8 +68,8 @@ class MessageLookup extends MessageLookupByLibrary {
         "register": MessageLookupByLibrary.simpleMessage("Εγγραφή"),
         "report": MessageLookupByLibrary.simpleMessage("Αναφορά"),
         "reportText": MessageLookupByLibrary.simpleMessage(
-          "Αναφορά προβλήματος/ζητήματος.",
-        ),
+            "Αναφορά προβλήματος/ζητήματος."),
+        "source": MessageLookupByLibrary.simpleMessage("πηγή"),
         "username": MessageLookupByLibrary.simpleMessage("Όνομα χρήστη"),
         "version": MessageLookupByLibrary.simpleMessage("Έκδοση")
       };
