@@ -1,9 +1,13 @@
 import 'dart:async';
+import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
+import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
+import 'package:blue_waves/models/photo.dart';
+import 'package:blue_waves/pages/beach_page/beach_image_wrapper.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/states/theme_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -12,10 +16,12 @@ import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
+import 'package:string_extensions/string_extensions.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 
 class BeachPage extends StatefulWidget {
-  const BeachPage({this.beach});
-  final Beach? beach;
+  const BeachPage({required this.beach});
+  final Beach beach;
   @override
   _BeachPageState createState() => _BeachPageState();
 }
@@ -23,117 +29,79 @@ class BeachPage extends StatefulWidget {
 class _BeachPageState extends State<BeachPage> {
   final Completer<GoogleMapController> _controller = Completer();
   late CameraPosition beachPlace;
+
+  final PageController _imageController = PageController(viewportFraction: 0.8);
   Marker? beachMarker;
-  bool hasUserRated = false;
-  bool isBeachFavorited = false;
+
+  double? chosenRating;
   double ratingSum = 0;
   double actualRating = 0;
-  // List foundRatings = [];
+
+  List<Photo> images = [];
+
   int totalRatings = 0;
-  double? chosenRating;
   int currentIndex = 1;
+
+  bool hasUserRated = false;
   bool verticalGallery = false;
   bool isLoading = false;
+  bool isBeachFavorited = false;
 
   Future<void> open(BuildContext context, int index) async {
-    // await Get.to(
-    //   GalleryPhotoViewWrapper(
-    //     images: widget.beach!.images,
-    //     backgroundDecoration: const BoxDecoration(
-    //       color: Color(0xff005295),
-    //     ),
-    //     initialIndex: index,
-    //     scrollDirection: verticalGallery ? Axis.vertical : Axis.horizontal,
-    //   ),
-    // );
+    await Get.to(
+      () => GalleryPhotoViewWrapper(
+        images: images,
+        backgroundDecoration: const BoxDecoration(
+          color: Color(0xff005295),
+        ),
+        initialIndex: index,
+        scrollDirection: verticalGallery ? Axis.vertical : Axis.horizontal,
+      ),
+    );
   }
-
-  // Future<void> addFavorite(Favorite favorite) async {
-  //   // Checking if user has already favorited the beach
-  //   final fav = await favorites
-  //       .child(favorite.beachId! + favorite.userId!)
-  //       .once()
-  //       .then((snapshot) => snapshot.value);
-
-  //   if (fav != null) {
-  //     await favorites.child(favorite.beachId! + favorite.userId!).remove();
-  //     return log.e('Beach removed from favorites.');
-  //   }
-
-  //   // If we are ok to procceed we add the review.
-  //   await favorites.child(favorite.beachId! + favorite.userId!).set({
-  //     'beachId': favorite.beachId,
-  //     'userId': favorite.userId,
-  //     'beachName': favorite.beachName,
-  //     'date': DateFormat('dd-MM-yyy').format(DateTime.now()),
-  //   }).then((value) {
-  //     log.i('Beach added to favorites!');
-  //     // ignore: invalid_return_type_for_catch_error
-  //   }).catchError((onError) => log.e(onError));
-  // }
-
-  // Future<Rating?> getRatings() async {
-  //   // ignore: omit_local_variable_types
-  //   final Rating? rate = await ratings
-  //       .child(widget.beach!.id! + FirebaseAuth.instance.currentUser!.uid)
-  //       .once()
-  //       .then(
-  //     (value) {
-  //       if (value.value != null) {
-  //         return Rating.fromJson(value.value as Map<String, dynamic>);
-  //       }
-  //       return null;
-  //     },
-  //   );
-
-  //   await favorites
-  //       .child(widget.beach!.id! + FirebaseAuth.instance.currentUser!.uid)
-  //       .once()
-  //       .then((value) {
-  //     if (value.value != null) {
-  //       log.wtf('BEACH WAS FAVORITED AND IT SHOULD SHOW TO REMOVE');
-
-  //       isBeachFavorited = true;
-  //       return;
-  //     }
-  //     return;
-  //   });
-
-  //   actualRating = widget.beach!.averageRating!;
-  //   totalRatings = widget.beach!.ratingCount!;
-
-  //   hasUserRated = rate != null;
-
-  //   log.i('Has user reviewed the beach ? $hasUserRated');
-  //   isLoading = false;
-  //   chosenRating = rate == null ? 0 : rate.rating;
-  //   setState(() {});
-  // }
 
   @override
   void initState() {
+    super.initState();
+    if (Platform.isAndroid) WebView.platform = AndroidWebView();
+
     beachPlace = CameraPosition(
-      target: LatLng(widget.beach!.latitude!, widget.beach!.longitude!),
+      target: LatLng(widget.beach.latitude!, widget.beach.longitude!),
       zoom: 14.4746,
     );
     beachMarker = Marker(
       markerId: const MarkerId('beachMarker'),
-      position: LatLng(widget.beach!.latitude!, widget.beach!.longitude!),
+      position: LatLng(widget.beach.latitude!, widget.beach.longitude!),
     );
-
-    super.initState();
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      images = await Api.instance.getImages(widget.beach.id);
+      setState(() {});
       //    getRatings();
     });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Material(
-      color: ThemeState.of(context, listen: true).isDark
+    return Scaffold(
+      backgroundColor: ThemeState.of(context, listen: true).isDark
           ? kColorBlueDark2.withOpacity(0.5)
           : kColorGreelLight2.withOpacity(0.9),
-      child: SafeArea(
+      appBar: AppBar(
+        backgroundColor: ThemeState.of(context, listen: true).isDark
+            ? kColorBlueDark2.withOpacity(0.5)
+            : kColorGreelLight2.withOpacity(0.9),
+        centerTitle: true,
+        title: Text(
+          widget.beach.name ?? '',
+          style: kStyleDefault.copyWith(
+            fontSize: 23.sp,
+            color: ThemeState.of(context, listen: true).isDark
+                ? kColorOrangeLight
+                : kColorBlueDark2,
+          ),
+        ),
+      ),
+      body: SafeArea(
         child: Stack(
           children: [
             if (isLoading)
@@ -153,39 +121,7 @@ class _BeachPageState extends State<BeachPage> {
                         Column(
                           children: [
                             SizedBox(
-                              height: 10.h,
-                            ),
-                            Padding(
-                              padding: EdgeInsets.symmetric(horizontal: 12.0.w),
-                              child: Row(
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceBetween,
-                                children: [
-                                  IconButton(
-                                    onPressed: () => Get.back(),
-                                    iconSize: 30.r,
-                                    icon: const Icon(
-                                      Icons.arrow_back,
-                                    ),
-                                  ),
-                                  SizedBox(
-                                    width: 12.w,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Text(
-                              widget.beach?.name ?? '',
-                              style: kStyleDefault.copyWith(
-                                fontSize: 23.sp,
-                                color:
-                                    ThemeState.of(context, listen: true).isDark
-                                        ? kColorOrangeLight
-                                        : kColorBlueDark2,
-                              ),
-                            ),
-                            SizedBox(
-                              height: 5.h,
+                              height: 25.h,
                             ),
                             Text(
                               '${S.current.pageBeachRating} ${actualRating.toStringAsFixed(1)} / 5',
@@ -323,7 +259,7 @@ class _BeachPageState extends State<BeachPage> {
                               horizontal: 8.0.w,
                             ),
                             child: Text(
-                              widget.beach?.description ?? '',
+                              widget.beach.description ?? '',
                               style: kStyleDefault.copyWith(
                                 height: 1.7,
                               ),
@@ -331,8 +267,70 @@ class _BeachPageState extends State<BeachPage> {
                           ),
                         ),
                         SizedBox(
+                          width: 1.sw,
+                          height: 250.h,
+                          child: PageView(
+                            controller: _imageController,
+                            children: [
+                              for (var i = 0; i < images.length; i++)
+                                Padding(
+                                  padding: EdgeInsets.all(8.0.r),
+                                  child: GestureDetector(
+                                    onTap: () async {
+                                      await open(context, i);
+                                    },
+                                    child: Hero(
+                                      tag: images[i].url.toString(),
+                                      child: Image.network(
+                                        images[i].url.toString(),
+                                      ),
+                                    ),
+                                  ),
+                                )
+                            ],
+                          ),
+                        ),
+                        TextButton(
+                          onPressed: () {
+                            Get.to(
+                              () => Scaffold(
+                                appBar: AppBar(
+                                  title: Text(
+                                    '${widget.beach.name} ${S.current.source}',
+                                    style: kStyleDefault.copyWith(
+                                      fontSize: 23.sp,
+                                      color:
+                                          ThemeState.of(context, listen: true)
+                                                  .isDark
+                                              ? kColorOrangeLight
+                                              : kColorBlueDark2,
+                                    ),
+                                  ),
+                                  backgroundColor:
+                                      ThemeState.of(context, listen: true)
+                                              .isDark
+                                          ? kColorBlueDark2.withOpacity(0.5)
+                                          : kColorGreelLight2.withOpacity(0.9),
+                                  centerTitle: true,
+                                ),
+                                body: WebView(
+                                  initialUrl:
+                                      widget.beach.descriptionSource.toString(),
+                                ),
+                              ),
+                            );
+                          },
+                          child: Text(
+                            S.current.source.toTitleCase!,
+                            style: kStyleDefaultBold.copyWith(
+                              fontSize: 25.sp,
+                              color: kColorBlueDark2,
+                            ),
+                          ),
+                        ),
+                        SizedBox(
                           width: ScreenUtil().screenWidth,
-                          height: 300.h,
+                          height: 250.h,
                           child: GoogleMap(
                             markers: {beachMarker!},
                             myLocationButtonEnabled: false,
@@ -351,30 +349,3 @@ class _BeachPageState extends State<BeachPage> {
     );
   }
 }
-
-// FutureBuilder<bool>(
-//                                 future: Api.instance.checkFavorite(
-//                                   userId:
-//                                       FirebaseAuth.instance.currentUser!.uid,
-//                                   beachId: widget.beach!.id!,
-//                                 ),
-//                                 builder: (context, snapshot) {
-//                                   if (!snapshot.hasData) {
-//                                     log.wtf(snapshot.data);
-//                                     return const Loader();
-//                                   }
-//                                   isBeachFavorited = snapshot.data!;
-//                                   return FavoriteIcon(
-//                                     isBeachFavorited: isBeachFavorited,
-//                                     onTap: () async {
-//                                       await Api.instance.toggleFavorite(
-//                                         userId: FirebaseAuth
-//                                             .instance.currentUser!.uid,
-//                                         beachId: widget.beach!.id!,
-//                                       );
-
-//                                       setState(() {});
-//                                     },
-//                                   );
-//                                 },
-//                               )

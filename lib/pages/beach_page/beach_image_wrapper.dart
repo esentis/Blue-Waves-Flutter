@@ -1,3 +1,4 @@
+import 'package:blue_waves/models/photo.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -21,7 +22,7 @@ class GalleryPhotoViewWrapper extends StatefulWidget {
   final dynamic maxScale;
   final int initialIndex;
   final PageController pageController;
-  final List<dynamic>? images;
+  final List<Photo> images;
   final Axis scrollDirection;
 
   @override
@@ -32,11 +33,16 @@ class GalleryPhotoViewWrapper extends StatefulWidget {
 
 class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
   late int currentIndex;
+  late List<String> imageUrls;
 
   @override
   void initState() {
-    currentIndex = widget.initialIndex;
     super.initState();
+    currentIndex = widget.initialIndex;
+    imageUrls = List<String>.generate(
+      widget.images.length,
+      (index) => widget.images[index].url.toString(),
+    );
   }
 
   void onPageChanged(int index) {
@@ -60,7 +66,7 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
             PhotoViewGallery.builder(
               scrollPhysics: const BouncingScrollPhysics(),
               builder: _buildItem,
-              itemCount: widget.images!.length,
+              itemCount: widget.images.length,
               loadingBuilder: widget.loadingBuilder,
               backgroundDecoration:
                   widget.backgroundDecoration as BoxDecoration?,
@@ -104,13 +110,11 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     return PhotoViewGalleryPageOptions(
-      imageProvider:
-          Image.network((widget.images as List<String>?)![index]).image,
+      imageProvider: Image.network(imageUrls[index]).image,
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       maxScale: PhotoViewComputedScale.covered * 4.1,
-      heroAttributes:
-          PhotoViewHeroAttributes(tag: widget.images![index].toString()),
+      heroAttributes: PhotoViewHeroAttributes(tag: imageUrls[index]),
     );
   }
 }
