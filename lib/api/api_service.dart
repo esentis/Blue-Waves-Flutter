@@ -1,7 +1,8 @@
 import 'package:blue_waves/constants.dart';
-import 'package:blue_waves/models/Member.dart';
-import 'package:blue_waves/models/Rating.dart';
 import 'package:blue_waves/models/beach.dart';
+import 'package:blue_waves/models/member.dart';
+import 'package:blue_waves/models/photo.dart';
+import 'package:blue_waves/models/rating.dart';
 import 'package:dio/dio.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
@@ -155,5 +156,31 @@ class Api {
     }
     log.wtf('User has already rated this beach');
     return '';
+  }
+
+  Future<List<Photo>> getImages(int id) async {
+    PostgrestResponse<dynamic> response;
+
+    try {
+      response = await Supabase.instance.client
+          .from('images')
+          .select()
+          .eq('beach', id)
+          .execute();
+
+      log.wtf(response.data);
+      if (response.data == null || response.data.isEmpty) {
+        return [];
+      }
+      return List<Photo>.generate(
+        response.data.length,
+        (index) => Photo.fromJson(
+          response.data[index],
+        ),
+      );
+    } on DioError catch (e) {
+      log.e(e.message);
+      return [];
+    }
   }
 }
