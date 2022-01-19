@@ -1,7 +1,7 @@
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
-import 'package:blue_waves/models/Member.dart';
+import 'package:blue_waves/models/member.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
 import 'package:blue_waves/pages/globe_view.dart';
 import 'package:blue_waves/pages/register_login_page/components/text_field.dart';

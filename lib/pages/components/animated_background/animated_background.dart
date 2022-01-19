@@ -2,7 +2,7 @@
 
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
-import 'package:blue_waves/models/Rating.dart';
+import 'package:blue_waves/models/rating.dart';
 import 'package:blue_waves/pages/components/animated_background/abyss.dart';
 import 'package:blue_waves/pages/components/animated_background/birds_stars.dart';
 import 'package:blue_waves/pages/components/animated_background/sun_moon.dart';

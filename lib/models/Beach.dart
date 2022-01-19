@@ -15,7 +15,7 @@ class Beach with ClusterItem {
     this.latitude,
     this.description,
     this.longitude,
-    this.id,
+    required this.id,
     this.name,
     this.averageRating,
     this.ratingCount,
@@ -26,15 +26,19 @@ class Beach with ClusterItem {
   });
 
   double? latitude;
-  String? description;
-  String? descriptionEn;
-  Uri? descriptionSource;
-  String? countryId;
   double? longitude;
-  String? id;
+
+  Uri? descriptionSource;
+
   String? name;
   String? nameEn;
+  String? countryId;
+  String? description;
+  String? descriptionEn;
+
+  int id;
   int? ratingCount;
+
   num? averageRating;
 
   factory Beach.fromMap(Json json) => Beach(
@@ -43,7 +47,7 @@ class Beach with ClusterItem {
         descriptionEn: json['description_en'],
         descriptionSource: Uri.tryParse(json['description_source']),
         longitude: json['longitude'],
-        id: json['_id'],
+        id: json['id'],
         name: json['name'],
         nameEn: json['name_en'],
         countryId: json['countryId'],
