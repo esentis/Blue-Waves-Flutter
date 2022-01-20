@@ -22,6 +22,7 @@ environment:
 
 dependencies:
   animate_do: ^2.0.0
+  cached_network_image: ^3.2.0
   connectivity_plus: ^2.1.0
   cupertino_icons: ^1.0.0
   dio: ^4.0.0
@@ -38,7 +39,6 @@ dependencies:
   flutter_rating_bar: ^4.0.0
   flutter_screenutil: ^5.0.0+2
   get: ^4.3.8
-  google_fonts: ^2.1.0
   google_maps_cluster_manager: ^3.0.0+1
   google_maps_flutter: ^2.0.6
   google_sign_in: ^5.0.5
@@ -79,6 +79,7 @@ flutter:
     - assets/images/
     - assets/launcher_icons/
     - map_styles.txt
+    - map_styles_light.txt
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
   # the material Icons class.
@@ -93,17 +94,14 @@ flutter:
   # "family" key with the font family name, and a "fonts" key with a
   # list giving the asset and other descriptors for the font. For
   # example:
-  # fonts:
-  #   - family: Schyler
-  #     fonts:
-  #       - asset: fonts/Schyler-Regular.ttf
-  #       - asset: fonts/Schyler-Italic.ttf
-  #         style: italic
-  #   - family: Trajan Pro
-  #     fonts:
-  #       - asset: fonts/TrajanPro.ttf
-  #       - asset: fonts/TrajanPro_Bold.ttf
-  #         weight: 700
+  fonts:
+    - family: AdventPro
+      fonts:
+        - asset: fonts/AdventPro-Regular.ttf
+        - asset: fonts/AdventPro-Bold.ttf
+          weight: 700
+        - asset: fonts/AdventPro-Thin.ttf
+          weight: 100
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/custom-fonts/#from-packages
