@@ -9,9 +9,12 @@ import 'package:blue_waves/models/beach.dart';
 import 'package:blue_waves/models/photo.dart';
 import 'package:blue_waves/pages/beach_page/beach_image_wrapper.dart';
 import 'package:blue_waves/pages/components/loader.dart';
+import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -27,7 +30,8 @@ class BeachPage extends StatefulWidget {
 }
 
 class _BeachPageState extends State<BeachPage> {
-  final Completer<GoogleMapController> _controller = Completer();
+  Completer<GoogleMapController> _controller = Completer();
+  late GoogleMapController mapController;
   late CameraPosition beachPlace;
 
   final PageController _imageController = PageController(viewportFraction: 0.8);
@@ -47,6 +51,8 @@ class _BeachPageState extends State<BeachPage> {
   bool isLoading = false;
   bool isBeachFavorited = false;
 
+  String? _mapStyle;
+
   Future<void> open(BuildContext context, int index) async {
     await Get.to(
       () => GalleryPhotoViewWrapper(
@@ -58,6 +64,17 @@ class _BeachPageState extends State<BeachPage> {
         scrollDirection: verticalGallery ? Axis.vertical : Axis.horizontal,
       ),
     );
+  }
+
+  Future<void> setMapStyle() async {
+    _mapStyle = ThemeState.of(context).isDark
+        ? await rootBundle.loadString('map_styles.txt')
+        : await rootBundle.loadString('map_styles_light.txt');
+
+    if (!mounted) return;
+    if (LoadingState.of(context).isLoading!) {
+      LoadingState.of(context).toggleLoading();
+    }
   }
 
   @override
@@ -74,9 +91,9 @@ class _BeachPageState extends State<BeachPage> {
       position: LatLng(widget.beach.latitude!, widget.beach.longitude!),
     );
     WidgetsBinding.instance!.addPostFrameCallback((_) async {
+      await setMapStyle();
       images = await Api.instance.getImages(widget.beach.id);
       setState(() {});
-      //    getRatings();
     });
   }
 
@@ -118,140 +135,137 @@ class _BeachPageState extends State<BeachPage> {
                   child: SingleChildScrollView(
                     child: Column(
                       children: [
-                        Column(
-                          children: [
-                            SizedBox(
-                              height: 25.h,
-                            ),
-                            Text(
-                              '${S.current.pageBeachRating} ${actualRating.toStringAsFixed(1)} / 5',
-                              style: kStyleDefault.copyWith(
-                                fontSize: 16.sp,
-                                color:
-                                    ThemeState.of(context, listen: true).isDark
-                                        ? kColorOrangeLight
-                                        : kColorBlueDark2,
+                        if (false)
+                          Column(
+                            children: [
+                              SizedBox(
+                                height: 25.h,
                               ),
-                            ),
-                            SizedBox(
-                              height: 5.h,
-                            ),
-                            Text(
-                              ' ($totalRatings ${S.current.pageBeachRatings})',
-                              style: kStyleDefault.copyWith(
-                                fontSize: 14.sp,
-                                color:
-                                    ThemeState.of(context, listen: true).isDark
-                                        ? kColorOrangeLight
-                                        : kColorBlueDark2,
+                              Text(
+                                '${S.current.pageBeachRating} ${actualRating.toStringAsFixed(1)} / 5',
+                                style: kStyleDefault.copyWith(
+                                  fontSize: 16.sp,
+                                  color: ThemeState.of(context, listen: true)
+                                          .isDark
+                                      ? kColorOrangeLight
+                                      : kColorBlueDark2,
+                                ),
                               ),
-                            ),
-                          ],
-                        ),
+                              SizedBox(
+                                height: 5.h,
+                              ),
+                              Text(
+                                ' ($totalRatings ${S.current.pageBeachRatings})',
+                                style: kStyleDefault.copyWith(
+                                  fontSize: 14.sp,
+                                  color: ThemeState.of(context, listen: true)
+                                          .isDark
+                                      ? kColorOrangeLight
+                                      : kColorBlueDark2,
+                                ),
+                              ),
+                            ],
+                          ),
                         SizedBox(
                           height: 10.h,
                         ),
-                        if (FirebaseAuth.instance.currentUser != null)
-                          Padding(
-                            padding: EdgeInsets.symmetric(horizontal: 25.0.h),
-                            child: Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: [
-                                Flexible(
-                                  child: GestureDetector(
-                                    onTap: () {},
-                                    child: hasUserRated
-                                        ? Text(
-                                            S.current.pageBeachRated,
-                                            style: kStyleDefault.copyWith(
-                                              fontSize: 16.sp,
-                                              color: Colors.red,
+                        if (false)
+                          if (FirebaseAuth.instance.currentUser != null)
+                            Padding(
+                              padding: EdgeInsets.symmetric(horizontal: 25.0.h),
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  Flexible(
+                                    child: GestureDetector(
+                                      onTap: () {},
+                                      child: hasUserRated
+                                          ? Text(
+                                              S.current.pageBeachRated,
+                                              style: kStyleDefault.copyWith(
+                                                fontSize: 16.sp,
+                                                color: Colors.red,
+                                              ),
+                                            )
+                                          : RatingBar.builder(
+                                              initialRating: 0.5,
+                                              minRating: 0.5,
+                                              allowHalfRating: true,
+                                              itemPadding: EdgeInsets.symmetric(
+                                                horizontal: 4.0.w,
+                                              ),
+                                              itemBuilder: (context, index) =>
+                                                  Image.asset(
+                                                'assets/images/sea.png',
+                                                color: Colors.orange,
+                                              ),
+                                              onRatingUpdate: (rating) async {
+                                                log.wtf('rated $rating');
+                                                // await Api.instance.addRating(
+                                                //   Rating(
+                                                //     beachId: widget.beach!.id,
+                                                //     rating: rating,
+                                                //     review: 'test review',
+                                                //     userUid: FirebaseAuth
+                                                //         .instance
+                                                //         .currentUser!
+                                                //         .uid,
+                                                //   ),
+                                                // );
+                                                // setState(
+                                                //   () {
+                                                //     chosenRating = rating;
+                                                //     addRating(
+                                                //       Rating(
+                                                //         beachId: widget.beach!.id,
+                                                //         rating: rating,
+                                                //         beachName:
+                                                //             widget.beach!.name,
+                                                //         userUid: FirebaseAuth
+                                                //             .instance
+                                                //             .currentUser!
+                                                //             .uid,
+                                                //         username: FirebaseAuth
+                                                //             .instance
+                                                //             .currentUser!
+                                                //             .displayName,
+                                                //       ),
+                                                //     );
+                                                //     hasUserRated = true;
+                                                //     ratingSum = widget
+                                                //             .beach!.averageRating! *
+                                                //         widget.beach!.ratingCount!;
+                                                //     actualRating =
+                                                //         (ratingSum + rating) /
+                                                //             (totalRatings + 1);
+                                                //     totalRatings += 1;
+                                                //   },
+                                                // );
+                                              },
+                                              glowColor: Colors.blue,
                                             ),
-                                          )
-                                        : RatingBar.builder(
-                                            initialRating: 0.5,
-                                            minRating: 0.5,
-                                            allowHalfRating: true,
-                                            itemPadding: EdgeInsets.symmetric(
-                                              horizontal: 4.0.w,
-                                            ),
-                                            itemBuilder: (context, index) =>
-                                                Image.asset(
-                                              'assets/images/sea.png',
-                                              color: Colors.orange,
-                                            ),
-                                            onRatingUpdate: (rating) async {
-                                              log.wtf('rated $rating');
-                                              // await Api.instance.addRating(
-                                              //   Rating(
-                                              //     beachId: widget.beach!.id,
-                                              //     rating: rating,
-                                              //     review: 'test review',
-                                              //     userUid: FirebaseAuth
-                                              //         .instance
-                                              //         .currentUser!
-                                              //         .uid,
-                                              //   ),
-                                              // );
-                                              // setState(
-                                              //   () {
-                                              //     chosenRating = rating;
-                                              //     addRating(
-                                              //       Rating(
-                                              //         beachId: widget.beach!.id,
-                                              //         rating: rating,
-                                              //         beachName:
-                                              //             widget.beach!.name,
-                                              //         userUid: FirebaseAuth
-                                              //             .instance
-                                              //             .currentUser!
-                                              //             .uid,
-                                              //         username: FirebaseAuth
-                                              //             .instance
-                                              //             .currentUser!
-                                              //             .displayName,
-                                              //       ),
-                                              //     );
-                                              //     hasUserRated = true;
-                                              //     ratingSum = widget
-                                              //             .beach!.averageRating! *
-                                              //         widget.beach!.ratingCount!;
-                                              //     actualRating =
-                                              //         (ratingSum + rating) /
-                                              //             (totalRatings + 1);
-                                              //     totalRatings += 1;
-                                              //   },
-                                              // );
-                                            },
-                                            glowColor: Colors.blue,
-                                          ),
+                                    ),
                                   ),
-                                ),
-                                SizedBox(
-                                  width: 5.w,
-                                ),
-                                Text(
-                                  chosenRating?.toString() ?? 'N/A',
-                                  style: kStyleDefault.copyWith(
-                                    fontSize: 25.sp,
-                                    color: Colors.orange[50],
+                                  SizedBox(
+                                    width: 5.w,
                                   ),
-                                )
-                              ],
+                                  Text(
+                                    chosenRating?.toString() ?? 'N/A',
+                                    style: kStyleDefault.copyWith(
+                                      fontSize: 25.sp,
+                                      color: Colors.orange[50],
+                                    ),
+                                  )
+                                ],
+                              ),
                             ),
-                          ),
                         SizedBox(
                           height: 10.h,
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            boxShadow: [
-                              BoxShadow(
-                                blurRadius: 2,
-                                spreadRadius: -2,
-                                color: kColorBlueDark.withOpacity(0.5),
-                              ),
-                            ],
+                            color: kColorGreelLight2,
+                            boxShadow: [kSmallShadow],
                           ),
                           child: Padding(
                             padding: EdgeInsets.symmetric(
@@ -262,6 +276,7 @@ class _BeachPageState extends State<BeachPage> {
                               widget.beach.description ?? '',
                               style: kStyleDefault.copyWith(
                                 height: 1.7,
+                                color: kColorPurpleDark,
                               ),
                             ),
                           ),
@@ -281,8 +296,22 @@ class _BeachPageState extends State<BeachPage> {
                                     },
                                     child: Hero(
                                       tag: images[i].url.toString(),
-                                      child: Image.network(
-                                        images[i].url.toString(),
+                                      child: Container(
+                                        width: 250.w,
+                                        height: 150.h,
+                                        decoration: BoxDecoration(
+                                          boxShadow: [
+                                            kSmallShadow,
+                                          ],
+                                          borderRadius:
+                                              BorderRadius.circular(16.r),
+                                          image: DecorationImage(
+                                            image: CachedNetworkImageProvider(
+                                              images[i].url.toString(),
+                                            ),
+                                            fit: BoxFit.cover,
+                                          ),
+                                        ),
                                       ),
                                     ),
                                   ),
@@ -290,6 +319,7 @@ class _BeachPageState extends State<BeachPage> {
                             ],
                           ),
                         ),
+                        // Source button
                         TextButton(
                           onPressed: () {
                             Get.to(
@@ -328,14 +358,20 @@ class _BeachPageState extends State<BeachPage> {
                             ),
                           ),
                         ),
+                        // Map location
                         SizedBox(
                           width: ScreenUtil().screenWidth,
                           height: 250.h,
                           child: GoogleMap(
                             markers: {beachMarker!},
                             myLocationButtonEnabled: false,
-                            initialCameraPosition: beachPlace,
-                            onMapCreated: _controller.complete,
+                            initialCameraPosition:
+                                beachPlace, //      mapController.setMapStyle(_mapStyle);
+                            onMapCreated: (GoogleMapController controller) {
+                              mapController = controller;
+                              mapController.setMapStyle(_mapStyle);
+                              _controller.complete(controller);
+                            },
                           ),
                         ),
                       ],

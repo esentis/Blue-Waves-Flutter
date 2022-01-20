@@ -1,7 +1,8 @@
+import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/models/photo.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 
@@ -92,7 +93,7 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
                       padding: const EdgeInsets.all(20.0),
                       child: Text(
                         '${currentIndex + 1}η φωτογραφία',
-                        style: GoogleFonts.adventPro(
+                        style: kStyleDefault.copyWith(
                           color: Colors.orange[50],
                           fontSize: 25.0,
                         ),
@@ -110,7 +111,7 @@ class _GalleryPhotoViewWrapperState extends State<GalleryPhotoViewWrapper> {
 
   PhotoViewGalleryPageOptions _buildItem(BuildContext context, int index) {
     return PhotoViewGalleryPageOptions(
-      imageProvider: Image.network(imageUrls[index]).image,
+      imageProvider: CachedNetworkImageProvider(imageUrls[index]),
       initialScale: PhotoViewComputedScale.contained,
       minScale: PhotoViewComputedScale.contained * (0.5 + index / 10),
       maxScale: PhotoViewComputedScale.covered * 4.1,
