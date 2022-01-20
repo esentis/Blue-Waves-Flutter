@@ -9,6 +9,7 @@ import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/models/beach.dart';
 import 'package:blue_waves/pages/beach_page/beach_page.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
+import 'package:blue_waves/pages/components/animated_background/sun_moon.dart';
 import 'package:blue_waves/pages/components/animated_background/title.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
@@ -18,6 +19,7 @@ import 'package:blue_waves/pages/rated_beaches.dart';
 import 'package:blue_waves/pages/register_login_page/auth_page.dart';
 import 'package:blue_waves/states/app_config.dart';
 import 'package:blue_waves/states/loading_state.dart';
+import 'package:blue_waves/states/theme_state.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -55,19 +57,6 @@ class _GlobeViewState extends State<GlobeView> {
   final Stream<ConnectivityResult> _connStream =
       Connectivity().onConnectivityChanged;
 
-  /// Method to magically create custom marker !!
-  static Future<Uint8List> getBytesFromAsset(String path, int width) async {
-    final data = await rootBundle.load(path);
-    final codec = await ui.instantiateImageCodec(
-      data.buffer.asUint8List(),
-      targetWidth: width,
-    );
-    final fi = await codec.getNextFrame();
-    return (await fi.image.toByteData(format: ui.ImageByteFormat.png))!
-        .buffer
-        .asUint8List();
-  }
-
   Future<void> preparePage() async {
     _beaches = await Api.instance.getAllBeaches();
 
@@ -77,9 +66,10 @@ class _GlobeViewState extends State<GlobeView> {
   // TODO: Prepare page is called twice on first app open. Needs improvement
   /// Method to create a list of Markers and set them to the map.
   Future<void> setMapStyle() async {
-    final assetBytes = await getBytesFromAsset('assets/images/marker.png', 64);
-    myMarker = BitmapDescriptor.fromBytes(assetBytes);
-    _mapStyle = await rootBundle.loadString('map_styles.txt');
+    _mapStyle = ThemeState.of(context).isDark
+        ? await rootBundle.loadString('map_styles.txt')
+        : await rootBundle.loadString('map_styles_light.txt');
+
     hasConn = await _conn != ConnectivityResult.none;
 
     if (!mounted) return;
@@ -145,9 +135,12 @@ class _GlobeViewState extends State<GlobeView> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: _scaffoldKey,
-      drawer: Container(
+      drawer: AnimatedContainer(
+        duration: const Duration(milliseconds: 500),
         decoration: BoxDecoration(
-          color: kColorBlueDark2,
+          color: ThemeState.of(context, listen: true).isDark
+              ? kColorBlueDark2
+              : kColorBlueLight,
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(22.r),
             bottomRight: Radius.circular(22.r),
@@ -266,12 +259,29 @@ class _GlobeViewState extends State<GlobeView> {
                     ),
                   ],
                 ),
-              Text(
-                '${S.current.version} ${AppConfig.instance.versionInformation?.version}',
-                style: kStyleDefault.copyWith(
-                  fontSize: 14.sp,
-                  color: kColorOrangeLight,
-                ),
+              Column(
+                children: [
+                  GestureDetector(
+                    onTap: () async {
+                      _mapStyle = ThemeState.of(context).isDark
+                          ? await rootBundle.loadString('map_styles_light.txt')
+                          : await rootBundle.loadString('map_styles.txt');
+                      // ignore: use_build_context_synchronously
+                      ThemeState.of(context).toggleTheme();
+                      setState(() {});
+                    },
+                    child: SunMoon(
+                      isDark: ThemeState.of(context, listen: true).isDark,
+                    ),
+                  ),
+                  Text(
+                    '${S.current.version} ${AppConfig.instance.versionInformation?.version}',
+                    style: kStyleDefault.copyWith(
+                      fontSize: 14.sp,
+                      color: kColorOrangeLight,
+                    ),
+                  ),
+                ],
               ),
             ],
           ),
@@ -321,6 +331,7 @@ class _GlobeViewState extends State<GlobeView> {
                   height: 1.sh,
                   width: MediaQuery.of(context).size.width,
                   child: GoogleMap(
+                    key: ValueKey(ThemeState.of(context, listen: true).isDark),
                     markers: markers,
                     buildingsEnabled: false,
                     myLocationButtonEnabled: false,
