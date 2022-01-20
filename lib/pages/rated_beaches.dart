@@ -1,8 +1,8 @@
+import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
 import 'package:blue_waves/pages/components/animated_background/animated_background.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class RatedBeaches extends StatelessWidget {
   @override
@@ -29,7 +29,7 @@ class RatedBeaches extends StatelessWidget {
         centerTitle: true,
         title: Text(
           S.current.ratedBeaches,
-          style: GoogleFonts.adventPro(
+          style: kStyleDefault.copyWith(
             fontSize: 25,
             fontWeight: FontWeight.bold,
             color: Colors.blue,

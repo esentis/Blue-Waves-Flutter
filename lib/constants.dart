@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:logger/logger.dart';
 
@@ -9,24 +8,31 @@ typedef Json = Map<String, dynamic>;
 
 Logger log = Logger();
 
-///```dart
-/// fontSize: 20.sp,
-/// color: kColorWhite,
-///```
-TextStyle kStyleDefault = GoogleFonts.adventPro(
-  fontSize: 20.sp,
-  color: kColorWhite,
+BoxShadow kSmallShadow = BoxShadow(
+  blurRadius: 4.0.r,
+  spreadRadius: -1.r,
 );
 
 ///```dart
 /// fontSize: 20.sp,
 /// color: kColorWhite,
-/// fontWeight: FontWeight.bold
 ///```
-TextStyle kStyleDefaultBold = GoogleFonts.adventPro(
+TextStyle kStyleDefault = TextStyle(
   fontSize: 20.sp,
   color: kColorWhite,
-  fontWeight: FontWeight.bold,
+  fontFamily: 'AdventPro',
+);
+
+///```dart
+/// fontSize: 20.sp,
+/// color: kColorWhite,
+/// fontWeight: FontWeight.w700
+///```
+TextStyle kStyleDefaultBold = TextStyle(
+  fontSize: 20.sp,
+  color: kColorWhite,
+  fontWeight: FontWeight.w700,
+  fontFamily: 'AdventPro',
 );
 
 GoogleSignIn googleSignIn = GoogleSignIn(
