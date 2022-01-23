@@ -21,4 +21,12 @@ class Rating {
         userMail: json['member'],
         review: json['review'],
       );
+
+  Map<String, dynamic> toJson() => {
+        "beachId": beachId,
+        "date": date,
+        "rating": rating,
+        "userMail": userMail,
+        "review": review,
+      };
 }
