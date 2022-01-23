@@ -32,7 +32,7 @@ class BeachPage extends StatefulWidget {
 }
 
 class _BeachPageState extends State<BeachPage> {
-  Completer<GoogleMapController> _controller = Completer();
+  final Completer<GoogleMapController> _controller = Completer();
   late GoogleMapController mapController;
   late CameraPosition beachPlace;
 
