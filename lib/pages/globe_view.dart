@@ -148,9 +148,13 @@ class _GlobeViewState extends State<GlobeView> {
         width: 200.w,
         height: 450.h,
         child: Padding(
-          padding: EdgeInsets.symmetric(vertical: 12.0.h),
+          padding: EdgeInsets.symmetric(
+            vertical: 12.0.h,
+            horizontal: 10.w,
+          ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -205,6 +209,11 @@ class _GlobeViewState extends State<GlobeView> {
                   ),
                 )
               else
+                Text(
+                  S.current.coming_soon,
+                  style: kStyleDefaultBold,
+                ),
+              if (false)
                 Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -258,29 +267,32 @@ class _GlobeViewState extends State<GlobeView> {
                     ),
                   ],
                 ),
-              Column(
-                children: [
-                  GestureDetector(
-                    onTap: () async {
-                      _mapStyle = ThemeState.of(context).isDark
-                          ? await rootBundle.loadString('map_styles_light.txt')
-                          : await rootBundle.loadString('map_styles.txt');
-                      // ignore: use_build_context_synchronously
-                      ThemeState.of(context).toggleTheme();
-                      setState(() {});
-                    },
-                    child: SunMoon(
-                      isDark: ThemeState.of(context, listen: true).isDark,
+              Center(
+                child: Column(
+                  children: [
+                    GestureDetector(
+                      onTap: () async {
+                        _mapStyle = ThemeState.of(context).isDark
+                            ? await rootBundle
+                                .loadString('map_styles_light.txt')
+                            : await rootBundle.loadString('map_styles.txt');
+                        // ignore: use_build_context_synchronously
+                        ThemeState.of(context).toggleTheme();
+                        setState(() {});
+                      },
+                      child: SunMoon(
+                        isDark: ThemeState.of(context, listen: true).isDark,
+                      ),
                     ),
-                  ),
-                  Text(
-                    '${S.current.version} ${AppConfig.instance.versionInformation?.version}',
-                    style: kStyleDefault.copyWith(
-                      fontSize: 14.sp,
-                      color: kColorOrangeLight,
+                    Text(
+                      '${S.current.version} ${AppConfig.instance.versionInformation?.version}',
+                      style: kStyleDefault.copyWith(
+                        fontSize: 14.sp,
+                        color: kColorOrangeLight,
+                      ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ],
           ),
@@ -328,7 +340,7 @@ class _GlobeViewState extends State<GlobeView> {
                 final Completer<GoogleMapController> _controller = Completer();
                 return SizedBox(
                   height: 1.sh,
-                  width: MediaQuery.of(context).size.width,
+                  width: 1.sw,
                   child: GoogleMap(
                     key: ValueKey(ThemeState.of(context, listen: true).isDark),
                     markers: markers,
