@@ -110,7 +110,7 @@ class _BeachPageState extends State<BeachPage> {
             ? kColorBlueDark2.withOpacity(0.5)
             : kColorGreelLight2.withOpacity(0.9),
         centerTitle: true,
-        title: Text(
+        title: SelectableText(
           widget.beach.name ?? '',
           style: kStyleDefault.copyWith(
             fontSize: 23.sp,
@@ -266,7 +266,9 @@ class _BeachPageState extends State<BeachPage> {
                         ),
                         Container(
                           decoration: BoxDecoration(
-                            color: kColorGreelLight2,
+                            color: ThemeState.of(context, listen: true).isDark
+                                ? kColorBlueDark2.withOpacity(0.5)
+                                : kColorGreelLight2,
                             boxShadow: [kSmallShadow],
                           ),
                           child: Padding(
@@ -274,11 +276,14 @@ class _BeachPageState extends State<BeachPage> {
                               vertical: 10.0.h,
                               horizontal: 8.0.w,
                             ),
-                            child: Text(
+                            child: SelectableText(
                               widget.beach.description ?? '',
                               style: kStyleDefault.copyWith(
                                 height: 1.7,
-                                color: kColorPurpleDark,
+                                color:
+                                    ThemeState.of(context, listen: true).isDark
+                                        ? kColorOrangeLight
+                                        : kColorPurpleDark,
                               ),
                             ),
                           ),
@@ -306,7 +311,7 @@ class _BeachPageState extends State<BeachPage> {
                                             kSmallShadow,
                                           ],
                                           borderRadius:
-                                              BorderRadius.circular(16.r),
+                                              BorderRadius.circular(8.r),
                                           image: DecorationImage(
                                             image: CachedNetworkImageProvider(
                                               images[i].url.toString(),
@@ -356,7 +361,9 @@ class _BeachPageState extends State<BeachPage> {
                             S.current.source.toTitleCase!,
                             style: kStyleDefaultBold.copyWith(
                               fontSize: 25.sp,
-                              color: kColorBlueDark2,
+                              color: ThemeState.of(context, listen: true).isDark
+                                  ? kColorGreenLight
+                                  : kColorBlueDark2,
                             ),
                           ),
                         ),

@@ -13,24 +13,23 @@ class BirdsStars extends StatelessWidget {
           isDark ? CrossFadeState.showSecond : CrossFadeState.showFirst,
       firstCurve: Curves.easeInOut,
       firstChild: SizedBox(
-        width: ScreenUtil().screenWidth,
+        width: 1.sw,
         height: 250.h,
         child: Lottie.asset(
           'assets/images/birds.json',
           animate: true,
           repeat: true,
-          width: ScreenUtil().screenWidth,
+          width: double.infinity,
         ),
       ),
       secondCurve: Curves.easeInOut,
       secondChild: SizedBox(
-        width: ScreenUtil().screenWidth,
+        width: double.infinity,
         height: 200.h,
         child: Lottie.asset(
           'assets/images/stars.json',
           animate: true,
           repeat: true,
-          //width: 250.w,
         ),
       ),
     );
