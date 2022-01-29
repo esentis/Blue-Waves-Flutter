@@ -24,6 +24,8 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "back": MessageLookupByLibrary.simpleMessage("Επιστροφή στην αρχική"),
         "cancel": MessageLookupByLibrary.simpleMessage("Ακύρωση"),
+        "coming_soon":
+            MessageLookupByLibrary.simpleMessage("Νέες επιλογές σύντομα..."),
         "confirm": MessageLookupByLibrary.simpleMessage("Επιβεβαίωση"),
         "contribute":
             MessageLookupByLibrary.simpleMessage("Θέλετε να συνεισφέρετε ;"),
