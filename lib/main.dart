@@ -101,14 +101,16 @@ Future<void> main() async {
   runApp(
     MyApp(),
   );
-  // await SentryFlutter.init(
-  //   (options) {
-  //     options.dsn = AppConfig.instance.getSentryDsn();
-  //   },
-  //   appRunner: () => runApp(
-  //     MyApp(),
-  //   ),
-  // );
+  if (!kDebugMode) {
+    await SentryFlutter.init(
+      (options) {
+        options.dsn = AppConfig.instance.getSentryDsn();
+      },
+      appRunner: () => runApp(
+        MyApp(),
+      ),
+    );
+  }
 }
 
 class MyApp extends StatelessWidget {
@@ -151,7 +153,21 @@ class MyApp extends StatelessWidget {
           theme: ThemeData(
             visualDensity: VisualDensity.adaptivePlatformDensity,
           ),
-          home: GlobeView(),
+          initialRoute: '/',
+          getPages: [
+            GetPage(
+              name: '/',
+              page: () => GlobeView(),
+            ),
+          ],
+          builder: (context, widget) {
+            ScreenUtil.setContext(context);
+            return MediaQuery(
+              //Setting font does not change with system font size
+              data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
+              child: widget ?? const SizedBox(),
+            );
+          },
         ),
       ),
     );
