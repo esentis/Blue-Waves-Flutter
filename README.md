@@ -9,10 +9,6 @@
 <a href="https://play.google.com/store/apps/details?id=gr.esentis.blue_waves_flutter"><img src="https://steverichey.github.io/google-play-badge-svg/img/el_get.svg" width="250" title="Blue Waves Open Beta" alt="Blue Waves Open Beta"></a>
 </p>
 
----
-
-> The app is currently in alpha
-
 https://user-images.githubusercontent.com/52862600/147743643-42abee16-c96c-40bc-93fc-b0d023bd8dae.mov
 
 ## Screenshots
