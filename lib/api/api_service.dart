@@ -158,6 +158,9 @@ class Api {
     return '';
   }
 
+  /// Returns all the images associated with a beach with ID [id]
+  ///
+  /// If there are no results an empty `List` is returned.
   Future<List<Photo>> getImages(int id) async {
     PostgrestResponse<dynamic> response;
 
