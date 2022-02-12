@@ -1,5 +1,6 @@
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/models/beach.dart';
+import 'package:blue_waves/models/favorite.dart';
 import 'package:blue_waves/models/member.dart';
 import 'package:blue_waves/models/photo.dart';
 import 'package:blue_waves/models/rating.dart';
@@ -155,6 +156,51 @@ class Api {
       }
     }
     log.wtf('User has already rated this beach');
+    return '';
+  }
+
+  /// Checks whether the user with [email] has already the beach with ID [beachId]
+  ///
+  /// at his favorites list.
+  Future<bool> checkFavorite(String email, int beachId) async {
+    PostgrestResponse<dynamic> response;
+    try {
+      response = await Supabase.instance.client
+          .from('favorites')
+          .select()
+          .eq('member', email)
+          .eq('beach', beachId)
+          .execute();
+
+      if (response.data == null || response.data.isEmpty) {
+        return true;
+      }
+      return false;
+    } on DioError catch (e) {
+      log.e(e.message);
+      return true;
+    }
+  }
+
+  /// Adds a beach in favorites list.
+  ///
+  /// [Favorite] has required [beach] id & [userMail].
+  Future<String> addFavorite(Favorite favorite) async {
+    PostgrestResponse<dynamic> response;
+    if (await checkFavorite(favorite.userMail, favorite.beachId)) {
+      try {
+        response = await Supabase.instance.client.from('favorites').insert({
+          'beach': favorite.beachId,
+          'member': favorite.userMail,
+        }).execute();
+        log.wtf(response.data);
+        return response.data.first['created_at'];
+      } on DioError catch (e) {
+        log.e(e.message);
+        return e.message;
+      }
+    }
+    log.wtf('User has already favorited this beach');
     return '';
   }
 
