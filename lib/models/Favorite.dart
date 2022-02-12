@@ -1,12 +1,24 @@
+import 'package:blue_waves/constants.dart';
+
 class Favorite {
-  final String? userId;
-  final String? beachId;
-  final String? id;
-  final String? beachName;
+  final int beachId;
+  final String userMail;
+  final String? date;
   const Favorite({
-    this.beachId,
-    this.userId,
-    this.id,
-    this.beachName,
+    required this.beachId,
+    required this.userMail,
+    this.date,
   });
+
+  factory Favorite.fromJson(Json json) => Favorite(
+        beachId: json['beach'],
+        date: json['created_at'],
+        userMail: json['member'],
+      );
+
+  Map<String, dynamic> toJson() => {
+        "beachId": beachId,
+        "date": date,
+        "userMail": userMail,
+      };
 }
