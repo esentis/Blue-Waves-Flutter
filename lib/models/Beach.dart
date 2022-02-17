@@ -8,7 +8,7 @@ import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 // ignore: implementation_imports
 import 'package:google_maps_flutter_platform_interface/src/types/location.dart';
 
-String beachToMap(Beach data) => json.encode(data.toMap());
+String beachToMap(Beach data) => json.encode(data.toJson());
 
 class Beach with ClusterItem {
   Beach({
@@ -55,7 +55,7 @@ class Beach with ClusterItem {
         ratingCount: json['ratingCount'] ?? 0,
       );
 
-  Map<String, dynamic> toMap() => {
+  Json toJson() => {
         'latitude': latitude,
         'description': description,
         'description_en': descriptionEn,

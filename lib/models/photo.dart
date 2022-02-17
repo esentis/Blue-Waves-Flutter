@@ -1,3 +1,5 @@
+import 'package:blue_waves/constants.dart';
+
 class Photo {
   final int id;
   final int beachId;
@@ -11,14 +13,14 @@ class Photo {
     required this.url,
   });
 
-  factory Photo.fromJson(Map<String, dynamic> json) => Photo(
+  factory Photo.fromJson(Json json) => Photo(
         beachId: json['beach'],
         createdAt: DateTime.parse(json['created_at']),
         id: json['id'],
         url: Uri.parse(json['url']),
       );
 
-  Map<String, dynamic> toJson() => {
+  Json toJson() => {
         "id": id,
         "beachId": beachId,
         "url": url,

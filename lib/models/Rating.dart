@@ -22,7 +22,7 @@ class Rating {
         review: json['review'],
       );
 
-  Map<String, dynamic> toJson() => {
+  Json toJson() => {
         "beachId": beachId,
         "date": date,
         "rating": rating,

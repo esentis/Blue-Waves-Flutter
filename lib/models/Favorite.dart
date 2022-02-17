@@ -16,7 +16,7 @@ class Favorite {
         userMail: json['member'],
       );
 
-  Map<String, dynamic> toJson() => {
+  Json toJson() => {
         "beachId": beachId,
         "date": date,
         "userMail": userMail,
