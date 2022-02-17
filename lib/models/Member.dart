@@ -29,4 +29,14 @@ class Member {
         role: json['role'],
         karma: json['karma'],
       );
+
+  Json toJson() => {
+        "id": id,
+        "email": email,
+        "displayName": displayName,
+        "role": role,
+        "photo": photoUrl,
+        "joinDate": joinDate,
+        "karma": karma,
+      };
 }
