@@ -35,7 +35,7 @@ Future<void> main() async {
   );
 
   AppConfig.instance.versionInformation = await PackageInfo.fromPlatform();
-  final RemoteConfig remoteConfig = RemoteConfig.instance;
+  final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
 
   await remoteConfig.setConfigSettings(
     RemoteConfigSettings(

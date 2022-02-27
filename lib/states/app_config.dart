@@ -8,7 +8,7 @@ class AppConfig {
   static final AppConfig instance = AppConfig._internal();
   AppConfig._internal();
 
-  RemoteConfig remoteConfig = RemoteConfig.instance;
+  FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
 
   PackageInfo? versionInformation;
 
