@@ -306,7 +306,9 @@ class _GlobeViewState extends State<GlobeView> {
               },
               icon: Icon(
                 Icons.menu,
-                color: kColorWhite,
+                color: ThemeState.of(context, listen: true).isDark
+                    ? kColorWhite
+                    : kColorBlueDark,
                 size: 45,
               ),
             ),
