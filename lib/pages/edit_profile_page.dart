@@ -27,7 +27,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
   @override
   void initState() {
-    WidgetsBinding.instance!.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
       getVersion();
     });
     super.initState();

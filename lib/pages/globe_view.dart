@@ -118,7 +118,7 @@ class _GlobeViewState extends State<GlobeView> {
         hasConn = result != ConnectivityResult.none;
       }
     });
-    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) {
+    WidgetsBinding.instance.addPostFrameCallback((timeStamp) {
       setMapStyle();
     });
   }

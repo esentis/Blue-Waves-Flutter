@@ -92,7 +92,7 @@ class _BeachPageState extends State<BeachPage> {
       markerId: const MarkerId('beachMarker'),
       position: LatLng(widget.beach.latitude!, widget.beach.longitude!),
     );
-    WidgetsBinding.instance!.addPostFrameCallback((_) async {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       await setMapStyle();
       images = await Api.instance.getImages(widget.beach.id);
       setState(() {});

@@ -57,6 +57,7 @@ Future<UserCredential?> googleSign() async {
     return user;
   } catch (error) {
     log.e(error);
+    return null;
   }
 }
 
