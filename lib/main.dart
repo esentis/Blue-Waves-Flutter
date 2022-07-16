@@ -24,14 +24,6 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
 
-  await Supabase.initialize(
-    url: 'https://xalypheaznoombgcgysf.supabase.co',
-    anonKey: AppConfig.instance.getSupabaseKey(),
-    // authCallbackUrlHostname: 'login-callback', // optional
-    debug: true // optional
-    ,
-  );
-
   AppConfig.instance.versionInformation = await PackageInfo.fromPlatform();
   final FirebaseRemoteConfig remoteConfig = FirebaseRemoteConfig.instance;
 
@@ -50,6 +42,13 @@ Future<void> main() async {
   }
   await remoteConfig.fetchAndActivate();
 
+  await Supabase.initialize(
+    url: 'https://xalypheaznoombgcgysf.supabase.co',
+    anonKey: AppConfig.instance.getSupabaseKey(),
+    // authCallbackUrlHostname: 'login-callback', // optional
+    debug: true // optional
+    ,
+  );
   //Remove this method to stop OneSignal Debugging
 //   OneSignal.shared.setLogLevel(OSLogLevel.verbose, OSLogLevel.none);
 //   OneSignal.shared.setAppId(AppConfig.instance.getOneSignalId());
@@ -123,7 +122,7 @@ class MyApp extends StatelessWidget {
     final analytics = FirebaseAnalytics.instance;
 
     return ScreenUtilInit(
-      builder: () => MultiProvider(
+      builder: (_, context) => MultiProvider(
         providers: [
           ListenableProvider<LoadingState>(
             create: (_) => LoadingState(
@@ -159,7 +158,6 @@ class MyApp extends StatelessWidget {
             ),
           ],
           builder: (context, widget) {
-            ScreenUtil.setContext(context);
             return MediaQuery(
               //Setting font does not change with system font size
               data: MediaQuery.of(context).copyWith(textScaleFactor: 1.0),
