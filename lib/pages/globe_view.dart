@@ -24,6 +24,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -40,6 +41,9 @@ class _GlobeViewState extends State<GlobeView> {
 
   bool isAdmin = false;
   bool? hasConn;
+  bool searching = false;
+
+  FocusNode _searchTextFocus = FocusNode();
 
   late GoogleMapController mapController;
   CameraPosition greeceCamera = const CameraPosition(
@@ -132,244 +136,330 @@ class _GlobeViewState extends State<GlobeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      key: _scaffoldKey,
-      drawer: AnimatedContainer(
-        duration: const Duration(milliseconds: 500),
-        decoration: BoxDecoration(
-          color: ThemeState.of(context, listen: true).isDark
-              ? kColorBlueDark2
-              : kColorBlueLight,
-          borderRadius: BorderRadius.only(
-            topRight: Radius.circular(22.r),
-            bottomRight: Radius.circular(22.r),
-          ),
-        ),
-        width: 200.w,
-        height: 450.h,
-        child: Padding(
-          padding: EdgeInsets.symmetric(
-            vertical: 12.0.h,
-            horizontal: 10.w,
-          ),
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  if (FirebaseAuth.instance.currentUser != null) ...[
-                    Text(
-                      S.current.logged_as,
-                      style: kStyleDefault.copyWith(
-                        fontSize: 13.sp,
-                      ),
+    return Material(
+      child: Stack(
+        children: [
+          Scaffold(
+            key: _scaffoldKey,
+            drawer: AnimatedContainer(
+              duration: const Duration(milliseconds: 500),
+              decoration: BoxDecoration(
+                color: ThemeState.of(context, listen: true).isDark
+                    ? kColorBlueDark2
+                    : kColorBlueLight,
+                borderRadius: BorderRadius.only(
+                  topRight: Radius.circular(22.r),
+                  bottomRight: Radius.circular(22.r),
+                ),
+              ),
+              width: 200.w,
+              height: 450.h,
+              child: Padding(
+                padding: EdgeInsets.symmetric(
+                  vertical: 12.0.h,
+                  horizontal: 10.w,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        if (FirebaseAuth.instance.currentUser != null) ...[
+                          Text(
+                            S.current.logged_as,
+                            style: kStyleDefault.copyWith(
+                              fontSize: 13.sp,
+                            ),
+                          ),
+                          Text(
+                            FirebaseAuth.instance.currentUser?.displayName ??
+                                '',
+                            style: kStyleDefault,
+                          ),
+                        ],
+                        if (FirebaseAuth.instance.currentUser != null)
+                          Padding(
+                            padding: EdgeInsets.only(top: 12.0.h),
+                            child: GestureDetector(
+                              onTap: () async {
+                                await FirebaseAuth.instance.signOut();
+                                setState(() {});
+                              },
+                              child: Text(
+                                S.current.logout,
+                                style: kStyleDefault.copyWith(
+                                  fontSize: 15.sp,
+                                ),
+                              ),
+                            ),
+                          ),
+                        if (FirebaseAuth.instance.currentUser == null)
+                          Text(
+                            S.current.notLogged,
+                            style: kStyleDefault.copyWith(
+                              fontSize: 15.sp,
+                            ),
+                          ),
+                      ],
                     ),
-                    Text(
-                      FirebaseAuth.instance.currentUser?.displayName ?? '',
-                      style: kStyleDefault,
-                    ),
-                  ],
-                  if (FirebaseAuth.instance.currentUser != null)
-                    Padding(
-                      padding: EdgeInsets.only(top: 12.0.h),
-                      child: GestureDetector(
-                        onTap: () async {
-                          await FirebaseAuth.instance.signOut();
-                          setState(() {});
+                    if (FirebaseAuth.instance.currentUser == null)
+                      TextButton(
+                        onPressed: () async {
+                          await Get.to(() => AuthPage());
                         },
                         child: Text(
-                          S.current.logout,
+                          S.current.login,
                           style: kStyleDefault.copyWith(
                             fontSize: 15.sp,
                           ),
                         ),
+                      )
+                    else
+                      Text(
+                        S.current.coming_soon,
+                        style: kStyleDefaultBold,
+                      ),
+                    if (false)
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          TextButton(
+                            onPressed: () async {
+                              await Get.to(() => RatedBeaches());
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.resolveWith(
+                                (states) => EdgeInsets.zero,
+                              ),
+                            ),
+                            child: Text(
+                              S.current.ratedBeaches,
+                              style: kStyleDefault.copyWith(
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await Get.to(() => FavoritesPage());
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.resolveWith(
+                                (states) => EdgeInsets.zero,
+                              ),
+                            ),
+                            child: Text(
+                              S.current.favoritedBeaches,
+                              style: kStyleDefault.copyWith(
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              await Get.to(() => EditProfilePage());
+                            },
+                            style: ButtonStyle(
+                              padding: MaterialStateProperty.resolveWith(
+                                (states) => EdgeInsets.zero,
+                              ),
+                            ),
+                            child: Text(
+                              S.current.editProfile,
+                              style: kStyleDefault.copyWith(
+                                fontSize: 15.sp,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    Center(
+                      child: Column(
+                        children: [
+                          GestureDetector(
+                            onTap: () async {
+                              _mapStyle = ThemeState.of(context).isDark
+                                  ? await rootBundle
+                                      .loadString('map_styles_light.txt')
+                                  : await rootBundle
+                                      .loadString('map_styles.txt');
+                              // ignore: use_build_context_synchronously
+                              ThemeState.of(context).toggleTheme();
+                              setState(() {});
+                            },
+                            child: SunMoon(
+                              isDark:
+                                  ThemeState.of(context, listen: true).isDark,
+                            ),
+                          ),
+                          Text(
+                            '${S.current.version} ${AppConfig.instance.versionInformation?.version}',
+                            style: kStyleDefault.copyWith(
+                              fontSize: 14.sp,
+                              color: kColorOrangeLight,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  if (FirebaseAuth.instance.currentUser == null)
-                    Text(
-                      S.current.notLogged,
-                      style: kStyleDefault.copyWith(
-                        fontSize: 15.sp,
-                      ),
-                    ),
-                ],
+                  ],
+                ),
               ),
-              if (FirebaseAuth.instance.currentUser == null)
-                TextButton(
-                  onPressed: () async {
-                    await Get.to(() => AuthPage());
-                  },
-                  child: Text(
-                    S.current.login,
-                    style: kStyleDefault.copyWith(
-                      fontSize: 15.sp,
+            ),
+            appBar: AppBar(
+              backgroundColor: ThemeState.of(context, listen: true).isDark
+                  ? kColorBlueDark2
+                  : const Color(0xffd8d0a8),
+              title: const BlueWavesTitle(),
+              leading: GestureDetector(
+                onTap: () => _scaffoldKey.currentState?.openDrawer(),
+                child: Icon(
+                  Icons.menu,
+                  size: 40,
+                  color: ThemeState.of(context, listen: true).isDark
+                      ? const Color(0xffd8d0a8)
+                      : kColorBlueDark2,
+                ),
+              ),
+              actions: [
+                Padding(
+                  padding: EdgeInsets.only(right: 8.0.w),
+                  child: GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        searching = true;
+                      });
+                    },
+                    child: Icon(
+                      Icons.search,
+                      size: 40,
+                      color: ThemeState.of(context, listen: true).isDark
+                          ? const Color(0xffd8d0a8)
+                          : kColorBlueDark2,
                     ),
                   ),
                 )
-              else
-                Text(
-                  S.current.coming_soon,
-                  style: kStyleDefaultBold,
-                ),
-              if (false)
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    TextButton(
-                      onPressed: () async {
-                        await Get.to(() => RatedBeaches());
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.resolveWith(
-                          (states) => EdgeInsets.zero,
-                        ),
-                      ),
-                      child: Text(
-                        S.current.ratedBeaches,
-                        style: kStyleDefault.copyWith(
-                          fontSize: 15.sp,
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        await Get.to(() => FavoritesPage());
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.resolveWith(
-                          (states) => EdgeInsets.zero,
-                        ),
-                      ),
-                      child: Text(
-                        S.current.favoritedBeaches,
-                        style: kStyleDefault.copyWith(
-                          fontSize: 15.sp,
-                        ),
-                      ),
-                    ),
-                    TextButton(
-                      onPressed: () async {
-                        await Get.to(() => EditProfilePage());
-                      },
-                      style: ButtonStyle(
-                        padding: MaterialStateProperty.resolveWith(
-                          (states) => EdgeInsets.zero,
-                        ),
-                      ),
-                      child: Text(
-                        S.current.editProfile,
-                        style: kStyleDefault.copyWith(
-                          fontSize: 15.sp,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              Center(
-                child: Column(
-                  children: [
-                    GestureDetector(
-                      onTap: () async {
-                        _mapStyle = ThemeState.of(context).isDark
-                            ? await rootBundle
-                                .loadString('map_styles_light.txt')
-                            : await rootBundle.loadString('map_styles.txt');
-                        // ignore: use_build_context_synchronously
-                        ThemeState.of(context).toggleTheme();
-                        setState(() {});
-                      },
-                      child: SunMoon(
-                        isDark: ThemeState.of(context, listen: true).isDark,
-                      ),
-                    ),
-                    Text(
-                      '${S.current.version} ${AppConfig.instance.versionInformation?.version}',
-                      style: kStyleDefault.copyWith(
-                        fontSize: 14.sp,
-                        color: kColorOrangeLight,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-      floatingActionButton: LoadingState.of(context, listen: true).isLoading!
-          ? const SizedBox.shrink()
-          : IconButton(
-              onPressed: () {
-                _scaffoldKey.currentState?.openDrawer();
-              },
-              icon: Icon(
-                Icons.menu,
-                color: ThemeState.of(context, listen: true).isDark
-                    ? kColorWhite
-                    : kColorBlueDark,
-                size: 45,
-              ),
+              ],
             ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      body: Stack(
-        children: [
-          if (LoadingState.of(context, listen: true).isLoading!)
-            const AnimatedBackground(),
-          if (LoadingState.of(context, listen: true).isLoading!)
-            const Center(child: Loader())
-          else
-            StreamBuilder<ConnectivityResult>(
-              stream: _connStream,
-              builder: (context, snapshot) {
-                final c = snapshot.data;
-                if (hasConn != null) {
-                  if (c == ConnectivityResult.none || !hasConn!) {
-                    return Positioned.fill(
-                      child: Container(
-                        color: kColorBlack.withOpacity(0.8),
-                        child: Center(
-                          child: Text(
-                            S.current.noConnection,
-                            style: kStyleDefault,
+            floatingActionButtonLocation:
+                FloatingActionButtonLocation.centerFloat,
+            body: Stack(
+              children: [
+                if (LoadingState.of(context, listen: true).isLoading!)
+                  const AnimatedBackground(),
+                if (LoadingState.of(context, listen: true).isLoading!)
+                  const Center(child: Loader())
+                else
+                  StreamBuilder<ConnectivityResult>(
+                    stream: _connStream,
+                    builder: (context, snapshot) {
+                      final c = snapshot.data;
+                      if (hasConn != null) {
+                        if (c == ConnectivityResult.none || !hasConn!) {
+                          return Positioned.fill(
+                            child: Container(
+                              color: kColorBlack.withOpacity(0.8),
+                              child: Center(
+                                child: Text(
+                                  S.current.noConnection,
+                                  style: kStyleDefault,
+                                ),
+                              ),
+                            ),
+                          );
+                        }
+                      }
+                      final Completer<GoogleMapController> _controller =
+                          Completer();
+                      return SizedBox(
+                        height: 1.sh,
+                        width: 1.sw,
+                        child: GoogleMap(
+                          key: ValueKey(
+                            ThemeState.of(context, listen: true).isDark,
                           ),
+                          markers: markers,
+                          onTap: (c) {
+                            if (searching) {
+                              setState(() {
+                                searching = !searching;
+                              });
+                            }
+                          },
+                          buildingsEnabled: false,
+                          myLocationButtonEnabled: false,
+                          initialCameraPosition: greeceCamera,
+                          zoomControlsEnabled: false,
+                          onCameraMove: _manager.onCameraMove,
+                          onCameraIdle: _manager.updateMap,
+                          onMapCreated: (GoogleMapController controller) {
+                            mapController = controller;
+                            _manager.setMapId(controller.mapId);
+                            mapController.setMapStyle(_mapStyle);
+                            _controller.complete(controller);
+                          },
                         ),
-                      ),
-                    );
-                  }
-                }
-                final Completer<GoogleMapController> _controller = Completer();
-                return SizedBox(
-                  height: 1.sh,
-                  width: 1.sw,
-                  child: GoogleMap(
-                    key: ValueKey(ThemeState.of(context, listen: true).isDark),
-                    markers: markers,
-                    buildingsEnabled: false,
-                    myLocationButtonEnabled: false,
-                    initialCameraPosition: greeceCamera,
-                    zoomControlsEnabled: false,
-                    onCameraMove: _manager.onCameraMove,
-                    onCameraIdle: _manager.updateMap,
-                    onMapCreated: (GoogleMapController controller) {
-                      mapController = controller;
-                      _manager.setMapId(controller.mapId);
-                      mapController.setMapStyle(_mapStyle);
-                      _controller.complete(controller);
+                      );
                     },
                   ),
-                );
-              },
-            ),
-          const SafeArea(
-            child: Align(
-              alignment: Alignment.topCenter,
-              child: BlueWavesTitle(
-                isBlurred: true,
-              ),
+              ],
             ),
           ),
+          if (searching)
+            SafeArea(
+              child: TypeAheadField<Beach>(
+                minCharsForSuggestions: 3,
+                textFieldConfiguration: TextFieldConfiguration(
+                  autofocus: true,
+                  focusNode: _searchTextFocus
+                    ..addListener(() {
+                      log.wtf('has focus ?${_searchTextFocus.hasFocus}');
+                      log.wtf(searching && !_searchTextFocus.hasFocus);
+                      if (!_searchTextFocus.hasFocus) {
+                        if (searching) {
+                          setState(() {
+                            searching = !searching;
+                          });
+                        }
+                      }
+                    }),
+                  style: kStyleDefault.copyWith(color: kColorBlack),
+                  decoration: InputDecoration(
+                    // suffix: GestureDetector(
+                    //   onTap: () {
+                    //     setState(() {
+                    //       searching = false;
+                    //     });
+                    //   },
+                    //   child: Icon(
+                    //     Icons.close,
+                    //     size: 40,
+                    //     color: kColorBlack,
+                    //   ),
+                    // ),
+                    border: OutlineInputBorder(),
+                    fillColor: Colors.white,
+                    filled: true,
+                  ),
+                ),
+                suggestionsCallback: (pattern) =>
+                    Api.instance.searchBeach(name: pattern),
+                itemBuilder: (context, Beach suggestion) {
+                  return Text(suggestion.name);
+                },
+                noItemsFoundBuilder: (c) => Text('No beaches found'),
+                onSuggestionSelected: (suggestion) async {
+                  setState(() {
+                    searching = false;
+                  });
+                  await mapController.animateCamera(
+                    CameraUpdate.newLatLngZoom(suggestion.location, 13),
+                  );
+                },
+              ),
+            )
         ],
       ),
     );
