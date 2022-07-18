@@ -12,31 +12,34 @@ String beachToMap(Beach data) => json.encode(data.toJson());
 
 class Beach with ClusterItem {
   Beach({
-    this.latitude,
-    this.description,
-    this.longitude,
+    required this.latitude,
+    required this.description,
+    required this.longitude,
     required this.id,
-    this.name,
+    required this.name,
+    required this.normalizedName,
     this.averageRating,
     this.ratingCount,
-    this.countryId,
-    this.descriptionEn,
+    required this.countryId,
+    required this.descriptionEn,
     this.descriptionSource,
     this.nameEn,
   });
 
-  double? latitude;
-  double? longitude;
+  double latitude;
+  double longitude;
 
   Uri? descriptionSource;
 
-  String? name;
+  String name;
+  String normalizedName;
   String? nameEn;
-  String? countryId;
-  String? description;
-  String? descriptionEn;
+
+  String description;
+  String descriptionEn;
 
   int id;
+  int countryId;
   int? ratingCount;
 
   num? averageRating;
@@ -50,7 +53,8 @@ class Beach with ClusterItem {
         id: json['id'],
         name: json['name'],
         nameEn: json['name_en'],
-        countryId: json['countryId'],
+        normalizedName: json['normalized_name'],
+        countryId: json['country'],
         averageRating: json['averageRating'] ?? 0.0,
         ratingCount: json['ratingCount'] ?? 0,
       );
@@ -65,10 +69,11 @@ class Beach with ClusterItem {
         'id': id,
         'name_el': name,
         'name_en': nameEn,
+        'normalized_name': normalizedName,
         'averageRating': averageRating,
         'ratingCount': ratingCount,
       };
 
   @override
-  LatLng get location => LatLng(latitude!, longitude!);
+  LatLng get location => LatLng(latitude, longitude);
 }
