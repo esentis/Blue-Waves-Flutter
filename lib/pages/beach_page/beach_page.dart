@@ -85,12 +85,12 @@ class _BeachPageState extends State<BeachPage> {
     if (Platform.isAndroid) WebView.platform = AndroidWebView();
 
     beachPlace = CameraPosition(
-      target: LatLng(widget.beach.latitude!, widget.beach.longitude!),
+      target: LatLng(widget.beach.latitude, widget.beach.longitude),
       zoom: 14.4746,
     );
     beachMarker = Marker(
       markerId: const MarkerId('beachMarker'),
-      position: LatLng(widget.beach.latitude!, widget.beach.longitude!),
+      position: LatLng(widget.beach.latitude, widget.beach.longitude),
     );
     WidgetsBinding.instance.addPostFrameCallback((_) async {
       await setMapStyle();
@@ -111,7 +111,7 @@ class _BeachPageState extends State<BeachPage> {
             : kColorGreelLight2.withOpacity(0.9),
         centerTitle: true,
         title: SelectableText(
-          widget.beach.name ?? '',
+          widget.beach.name,
           style: kStyleDefault.copyWith(
             fontSize: 23.sp,
             color: ThemeState.of(context, listen: true).isDark
@@ -277,7 +277,7 @@ class _BeachPageState extends State<BeachPage> {
                               horizontal: 8.0.w,
                             ),
                             child: SelectableText(
-                              widget.beach.description ?? '',
+                              widget.beach.description,
                               style: kStyleDefault.copyWith(
                                 height: 1.7,
                                 color:
