@@ -52,6 +52,33 @@ class Api {
     }
   }
 
+  /// Searches a beach with [name]
+  Future<List<Beach>> searchBeach({required String name}) async {
+    PostgrestResponse<dynamic> response;
+    try {
+      response = await Supabase.instance.client
+          .from('beaches')
+          .select()
+          .like(
+            'normalized_name',
+            '%$name%',
+          )
+          .execute();
+      log.wtf(
+        response.data.length,
+      );
+      return List<Beach>.generate(
+        response.data.length,
+        (index) => Beach.fromMap(
+          response.data[index],
+        ),
+      );
+    } on DioError catch (e) {
+      log.e(e.message);
+      return [];
+    }
+  }
+
   /// Registers the user in Firebase so as to Supabase.
   Future<String> registerUser(Member user) async {
     final userCredential =
