@@ -43,7 +43,7 @@ class _GlobeViewState extends State<GlobeView> {
   bool? hasConn;
   bool searching = false;
 
-  FocusNode _searchTextFocus = FocusNode();
+  final FocusNode _searchTextFocus = FocusNode();
 
   late GoogleMapController mapController;
   CameraPosition greeceCamera = const CameraPosition(
@@ -426,7 +426,7 @@ class _GlobeViewState extends State<GlobeView> {
                       }
                     }),
                   style: kStyleDefault.copyWith(color: kColorBlack),
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     // suffix: GestureDetector(
                     //   onTap: () {
                     //     setState(() {
@@ -449,7 +449,7 @@ class _GlobeViewState extends State<GlobeView> {
                 itemBuilder: (context, Beach suggestion) {
                   return Text(suggestion.name);
                 },
-                noItemsFoundBuilder: (c) => Text('No beaches found'),
+                noItemsFoundBuilder: (c) => const Text('No beaches found'),
                 onSuggestionSelected: (suggestion) async {
                   setState(() {
                     searching = false;
