@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ui' as ui;
 import 'dart:ui';
 
+import 'package:animations/animations.dart';
 import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
 import 'package:blue_waves/generated/l10n.dart';
@@ -313,6 +314,7 @@ class _GlobeViewState extends State<GlobeView> {
                   ? kColorBlueDark2
                   : const Color(0xffd8d0a8),
               title: const BlueWavesTitle(),
+              centerTitle: true,
               leading: GestureDetector(
                 onTap: () => _scaffoldKey.currentState?.openDrawer(),
                 child: Icon(
@@ -326,19 +328,96 @@ class _GlobeViewState extends State<GlobeView> {
               actions: [
                 Padding(
                   padding: EdgeInsets.only(right: 8.0.w),
-                  child: GestureDetector(
-                    onTap: () {
-                      setState(() {
-                        searching = true;
-                      });
+                  child: OpenContainer(
+                    openColor: kColorWhite,
+                    openBuilder: (BuildContext context, VoidCallback _) {
+                      return Scaffold(
+                        body: SafeArea(
+                          child: LayoutBuilder(
+                            builder: (context, constraints) => SizedBox(
+                              height: constraints.maxHeight,
+                              width: 1.sw,
+                              child: Stack(
+                                children: [
+                                  Positioned.fill(
+                                    child: GestureDetector(
+                                      behavior: HitTestBehavior.opaque,
+                                      onTap: () {
+                                        log.wtf('getting back');
+                                        Get.back();
+                                      },
+                                      child: Container(
+                                        color:
+                                            ThemeState.of(context, listen: true)
+                                                    .isDark
+                                                ? kColorBlueDark2
+                                                : const Color(0xffd8d0a8),
+                                      ),
+                                    ),
+                                  ),
+                                  TypeAheadField<Beach>(
+                                    minCharsForSuggestions: 3,
+                                    textFieldConfiguration:
+                                        TextFieldConfiguration(
+                                      autofocus: true,
+                                      focusNode: _searchTextFocus
+                                        ..addListener(() {
+                                          if (!_searchTextFocus.hasFocus) {
+                                            Get.back();
+                                          }
+                                        }),
+                                      style: kStyleDefault.copyWith(
+                                        color: kColorBlack,
+                                      ),
+                                      decoration: const InputDecoration(
+                                        border: OutlineInputBorder(),
+                                        fillColor: Colors.white,
+                                        filled: true,
+                                      ),
+                                    ),
+                                    suggestionsCallback: (pattern) =>
+                                        Api.instance.searchBeach(name: pattern),
+                                    itemBuilder: (context, Beach suggestion) {
+                                      return Text(suggestion.name);
+                                    },
+                                    noItemsFoundBuilder: (c) =>
+                                        const Text('No beaches found'),
+                                    onSuggestionSelected: (suggestion) async {
+                                      Get.back();
+                                      await mapController.animateCamera(
+                                        CameraUpdate.newLatLngZoom(
+                                          suggestion.location,
+                                          13,
+                                        ),
+                                      );
+                                    },
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                      );
                     },
-                    child: Icon(
-                      Icons.search,
-                      size: 40,
-                      color: ThemeState.of(context, listen: true).isDark
-                          ? const Color(0xffd8d0a8)
-                          : kColorBlueDark2,
+                    closedElevation: 12.0,
+                    closedColor: ThemeState.of(context, listen: true).isDark
+                        ? kColorBlueDark2
+                        : const Color(0xffd8d0a8),
+                    closedShape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(2.r),
                     ),
+                    closedBuilder:
+                        (BuildContext context, VoidCallback openContainer) {
+                      return Padding(
+                        padding: EdgeInsets.only(left: 5.w, right: 5.w),
+                        child: Icon(
+                          Icons.search,
+                          color: ThemeState.of(context, listen: true).isDark
+                              ? const Color(0xffd8d0a8)
+                              : kColorBlueDark2,
+                        ),
+                      );
+                    },
                   ),
                 )
               ],
@@ -407,59 +486,6 @@ class _GlobeViewState extends State<GlobeView> {
               ],
             ),
           ),
-          if (searching)
-            SafeArea(
-              child: TypeAheadField<Beach>(
-                minCharsForSuggestions: 3,
-                textFieldConfiguration: TextFieldConfiguration(
-                  autofocus: true,
-                  focusNode: _searchTextFocus
-                    ..addListener(() {
-                      log.wtf('has focus ?${_searchTextFocus.hasFocus}');
-                      log.wtf(searching && !_searchTextFocus.hasFocus);
-                      if (!_searchTextFocus.hasFocus) {
-                        if (searching) {
-                          setState(() {
-                            searching = !searching;
-                          });
-                        }
-                      }
-                    }),
-                  style: kStyleDefault.copyWith(color: kColorBlack),
-                  decoration: const InputDecoration(
-                    // suffix: GestureDetector(
-                    //   onTap: () {
-                    //     setState(() {
-                    //       searching = false;
-                    //     });
-                    //   },
-                    //   child: Icon(
-                    //     Icons.close,
-                    //     size: 40,
-                    //     color: kColorBlack,
-                    //   ),
-                    // ),
-                    border: OutlineInputBorder(),
-                    fillColor: Colors.white,
-                    filled: true,
-                  ),
-                ),
-                suggestionsCallback: (pattern) =>
-                    Api.instance.searchBeach(name: pattern),
-                itemBuilder: (context, Beach suggestion) {
-                  return Text(suggestion.name);
-                },
-                noItemsFoundBuilder: (c) => const Text('No beaches found'),
-                onSuggestionSelected: (suggestion) async {
-                  setState(() {
-                    searching = false;
-                  });
-                  await mapController.animateCamera(
-                    CameraUpdate.newLatLngZoom(suggestion.location, 13),
-                  );
-                },
-              ),
-            )
         ],
       ),
     );
