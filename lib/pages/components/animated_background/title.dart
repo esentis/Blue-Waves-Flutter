@@ -27,14 +27,14 @@ class BlueWavesTitle extends StatelessWidget {
               text: TextSpan(
                 text: 'Blue ',
                 style: kStyleDefaultBold.copyWith(
-                  fontSize: 45.sp,
+                  fontSize: 35.sp,
                   color: kColorBlue,
                 ),
                 children: <TextSpan>[
                   TextSpan(
                     text: 'Waves',
                     style: kStyleDefaultBold.copyWith(
-                      fontSize: 45.sp,
+                      fontSize: 35.sp,
                       color: kColorBlueLight2,
                     ),
                   ),
