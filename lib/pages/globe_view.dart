@@ -17,6 +17,7 @@ import 'package:blue_waves/pages/edit_profile_page.dart';
 import 'package:blue_waves/pages/favorites_page.dart';
 import 'package:blue_waves/pages/rated_beaches.dart';
 import 'package:blue_waves/pages/register_login_page/auth_page.dart';
+import 'package:blue_waves/pages/search_beach_page.dart';
 import 'package:blue_waves/states/app_config.dart';
 import 'package:blue_waves/states/loading_state.dart';
 import 'package:blue_waves/states/theme_state.dart';
@@ -25,7 +26,6 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_typeahead/flutter_typeahead.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_cluster_manager/google_maps_cluster_manager.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
@@ -43,8 +43,6 @@ class _GlobeViewState extends State<GlobeView> {
   bool isAdmin = false;
   bool? hasConn;
   bool searching = false;
-
-  final FocusNode _searchTextFocus = FocusNode();
 
   late GoogleMapController mapController;
   CameraPosition greeceCamera = const CameraPosition(
@@ -331,72 +329,15 @@ class _GlobeViewState extends State<GlobeView> {
                   child: OpenContainer(
                     openColor: kColorWhite,
                     openBuilder: (BuildContext context, VoidCallback _) {
-                      return Scaffold(
-                        body: SafeArea(
-                          child: LayoutBuilder(
-                            builder: (context, constraints) => SizedBox(
-                              height: constraints.maxHeight,
-                              width: 1.sw,
-                              child: Stack(
-                                children: [
-                                  Positioned.fill(
-                                    child: GestureDetector(
-                                      behavior: HitTestBehavior.opaque,
-                                      onTap: () {
-                                        log.wtf('getting back');
-                                        Get.back();
-                                      },
-                                      child: Container(
-                                        color:
-                                            ThemeState.of(context, listen: true)
-                                                    .isDark
-                                                ? kColorBlueDark2
-                                                : const Color(0xffd8d0a8),
-                                      ),
-                                    ),
-                                  ),
-                                  TypeAheadField<Beach>(
-                                    minCharsForSuggestions: 3,
-                                    textFieldConfiguration:
-                                        TextFieldConfiguration(
-                                      autofocus: true,
-                                      focusNode: _searchTextFocus
-                                        ..addListener(() {
-                                          if (!_searchTextFocus.hasFocus) {
-                                            Get.back();
-                                          }
-                                        }),
-                                      style: kStyleDefault.copyWith(
-                                        color: kColorBlack,
-                                      ),
-                                      decoration: const InputDecoration(
-                                        border: OutlineInputBorder(),
-                                        fillColor: Colors.white,
-                                        filled: true,
-                                      ),
-                                    ),
-                                    suggestionsCallback: (pattern) =>
-                                        Api.instance.searchBeach(name: pattern),
-                                    itemBuilder: (context, Beach suggestion) {
-                                      return Text(suggestion.name);
-                                    },
-                                    noItemsFoundBuilder: (c) =>
-                                        const Text('No beaches found'),
-                                    onSuggestionSelected: (suggestion) async {
-                                      Get.back();
-                                      await mapController.animateCamera(
-                                        CameraUpdate.newLatLngZoom(
-                                          suggestion.location,
-                                          13,
-                                        ),
-                                      );
-                                    },
-                                  ),
-                                ],
-                              ),
+                      return SearchBeachPage(
+                        onSearchItemTap: (beach) async {
+                          await mapController.animateCamera(
+                            CameraUpdate.newLatLngZoom(
+                              beach.location,
+                              13,
                             ),
-                          ),
-                        ),
+                          );
+                        },
                       );
                     },
                     closedElevation: 12.0,
@@ -419,7 +360,11 @@ class _GlobeViewState extends State<GlobeView> {
                       );
                     },
                   ),
-                )
+                ),
+                // IconButton(
+                //   onPressed: () => Get.to(() => LocateBeach()),
+                //   icon: Icon(Icons.textsms_sharp),
+                // ),
               ],
             ),
             floatingActionButtonLocation:
