@@ -52,6 +52,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "Δεν βρέθηκε ενεργή σύνδεση στο ίντερνετ"),
         "noDescription": MessageLookupByLibrary.simpleMessage(
             "Δεν βρέθηκε περιγραφή για τη παραλία"),
+        "no_beaches_found":
+            MessageLookupByLibrary.simpleMessage("Δεν βρέθηκαν παραλίες"),
         "notLogged":
             MessageLookupByLibrary.simpleMessage("Δεν είστε συνδεμένοι"),
         "or": MessageLookupByLibrary.simpleMessage("Ή"),
@@ -67,6 +69,7 @@ class MessageLookup extends MessageLookupByLibrary {
             MessageLookupByLibrary.simpleMessage("Τι είναι οι πόντοι ;"),
         "ratedBeaches":
             MessageLookupByLibrary.simpleMessage("Βαθμολογημένες παραλίες"),
+        "rating": MessageLookupByLibrary.simpleMessage("Βαθμολογία"),
         "register": MessageLookupByLibrary.simpleMessage("Εγγραφή"),
         "report": MessageLookupByLibrary.simpleMessage("Αναφορά"),
         "reportText": MessageLookupByLibrary.simpleMessage(

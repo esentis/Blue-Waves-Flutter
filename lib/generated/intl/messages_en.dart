@@ -50,6 +50,8 @@ class MessageLookup extends MessageLookupByLibrary {
             "No internet active internet connection found"),
         "noDescription": MessageLookupByLibrary.simpleMessage(
             "No description found for the beach"),
+        "no_beaches_found":
+            MessageLookupByLibrary.simpleMessage("No beaches found"),
         "notLogged": MessageLookupByLibrary.simpleMessage(
             "You\'re currently not logged"),
         "or": MessageLookupByLibrary.simpleMessage("Or"),
@@ -64,6 +66,7 @@ class MessageLookup extends MessageLookupByLibrary {
         "pointsQuestion":
             MessageLookupByLibrary.simpleMessage("What are points ?"),
         "ratedBeaches": MessageLookupByLibrary.simpleMessage("Rated beaches"),
+        "rating": MessageLookupByLibrary.simpleMessage("Rating"),
         "register": MessageLookupByLibrary.simpleMessage("Register"),
         "report": MessageLookupByLibrary.simpleMessage("Report"),
         "reportText":

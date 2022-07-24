@@ -409,6 +409,26 @@ class S {
       args: [],
     );
   }
+
+  /// `Rating`
+  String get rating {
+    return Intl.message(
+      'Rating',
+      name: 'rating',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `No beaches found`
+  String get no_beaches_found {
+    return Intl.message(
+      'No beaches found',
+      name: 'no_beaches_found',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
