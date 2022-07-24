@@ -34,5 +34,7 @@
     "contribute": "Do you want to contribute ?",
     "logged_as": "Logged in as",
     "source": "source",
-    "coming_soon": "New features coming soon..."
+    "coming_soon": "New features coming soon...",
+    "rating": "Rating",
+    "no_beaches_found": "No beaches found"
 }
