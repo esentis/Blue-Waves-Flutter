@@ -161,8 +161,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                           path: 'esentakos@yahoo.gr',
                           queryParameters: {'subject': S.current.reportText},
                         );
-                        if (await canLaunch(_emailLaunchUri.toString())) {
-                          await launch(_emailLaunchUri.toString());
+                        if (await canLaunchUrl(_emailLaunchUri)) {
+                          await launchUrl(_emailLaunchUri);
                         } else {
                           throw 'Could not launch $_emailLaunchUri';
                         }
