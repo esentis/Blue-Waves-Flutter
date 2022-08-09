@@ -1,15 +1,12 @@
 // ignore_for_file: use_build_context_synchronously
 
-import 'package:blue_waves/api/api_service.dart';
 import 'package:blue_waves/constants.dart';
-import 'package:blue_waves/models/rating.dart';
 import 'package:blue_waves/pages/components/animated_background/abyss.dart';
 import 'package:blue_waves/pages/components/animated_background/birds_stars.dart';
 import 'package:blue_waves/pages/components/animated_background/sun_moon.dart';
 import 'package:blue_waves/pages/components/animated_background/title.dart';
 import 'package:blue_waves/pages/components/animated_background/waves.dart';
 import 'package:blue_waves/states/theme_state.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
@@ -20,10 +17,14 @@ class AnimatedBackground extends StatefulWidget {
     this.showTitle,
     this.showBack = false,
     this.waveHeight = WaveHeight.big,
+    this.showBirds = true,
+    this.showSun = true,
   }) : super(key: key);
 
   final bool? showTitle;
   final bool showBack;
+  final bool showSun;
+  final bool showBirds;
   final WaveHeight waveHeight;
   @override
   _AnimatedBackgroundState createState() => _AnimatedBackgroundState();
@@ -57,38 +58,31 @@ class _AnimatedBackgroundState extends State<AnimatedBackground> {
         else
           const SizedBox(),
         const Abyss(),
-        Positioned(
-          right: ThemeState.of(context, listen: true).isDark ? 30.w : 30.w,
-          child: GestureDetector(
-            onTap: () async {
-              await Api.instance.addRating(
-                Rating(
-                  beachId: 1,
-                  rating: 10,
-                  userMail: FirebaseAuth.instance.currentUser?.email ?? '',
-                  review: 'This is like the best beach ever',
+        if (widget.showSun)
+          Positioned(
+            right: ThemeState.of(context, listen: true).isDark ? 30.w : 30.w,
+            child: GestureDetector(
+              onTap: () async {
+                ThemeState.of(context).toggleTheme();
+              },
+              child: SafeArea(
+                child: SunMoon(
+                  isDark: ThemeState.of(context, listen: true).isDark,
                 ),
-              );
-
-              ThemeState.of(context).toggleTheme();
-            },
-            child: SafeArea(
-              child: SunMoon(
+              ),
+            ),
+          ),
+        if (widget.showBirds)
+          Positioned(
+            top: ThemeState.of(context, listen: true).isDark ? -15 : -45,
+            right: 0,
+            left: 0,
+            child: IgnorePointer(
+              child: BirdsStars(
                 isDark: ThemeState.of(context, listen: true).isDark,
               ),
             ),
           ),
-        ),
-        Positioned(
-          top: ThemeState.of(context, listen: true).isDark ? -15 : -45,
-          right: 0,
-          left: 0,
-          child: IgnorePointer(
-            child: BirdsStars(
-              isDark: ThemeState.of(context, listen: true).isDark,
-            ),
-          ),
-        ),
         if (widget.showBack)
           Positioned(
             child: GestureDetector(

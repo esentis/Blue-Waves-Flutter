@@ -40,6 +40,8 @@ class RatedBeaches extends StatelessWidget {
         children: [
           const AnimatedBackground(
             showTitle: false,
+            showBirds: false,
+            showSun: false,
           ),
           Padding(
             padding:
