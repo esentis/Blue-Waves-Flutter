@@ -49,7 +49,7 @@ dependencies:
   intl_utils: ^2.4.0
   lint: ^1.6.0
   logger: ^1.0.0
-  lottie: ^1.0.0
+  lottie: ^2.0.0
   #onesignal_flutter: ^3.2.3
   package_info: ^2.0.0
   permission_handler: ^10.0.0
