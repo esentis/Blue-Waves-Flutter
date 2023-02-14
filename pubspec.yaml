@@ -21,12 +21,12 @@ environment:
   sdk: ">=2.17.0 <3.0.0"
 
 dependencies:
-  animate_do: ^2.0.0
+  animate_do: ^3.0.2
   animations: ^2.0.3
   cached_network_image: ^3.2.1
   connectivity_plus: ^3.0.2
   cupertino_icons: ^1.0.0
-  dio: ^4.0.0
+  dio: ^5.0.0
   firebase_analytics: ^10.0.2
   firebase_auth: ^4.0.2
   firebase_core: ^2.1.0
@@ -34,7 +34,7 @@ dependencies:
   firebase_remote_config: ^3.0.2
   flutter:
     sdk: flutter
-  flutter_launcher_icons: ^0.10.0
+  flutter_launcher_icons: ^0.11.0
   flutter_localizations:
     sdk: flutter
   flutter_rating_bar: ^4.0.0
@@ -47,7 +47,7 @@ dependencies:
   image_picker: ^0.8.0+3
   intl: ^0.17.0
   intl_utils: ^2.4.0
-  lint: ^1.6.0
+  lint: ^2.0.1
   logger: ^1.0.0
   lottie: ^2.0.0
   #onesignal_flutter: ^3.2.3
@@ -62,7 +62,7 @@ dependencies:
   url_launcher: ^6.0.2
   uuid: ^3.0.4
   wave: ^0.2.0
-  webview_flutter: ^3.0.0
+  webview_flutter: ^4.0.2
 
 dev_dependencies:
   flutter_test:

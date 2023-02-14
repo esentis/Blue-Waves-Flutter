@@ -156,15 +156,15 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     ),
                     TextButton(
                       onPressed: () async {
-                        final _emailLaunchUri = Uri(
+                        final emailLaunchUri = Uri(
                           scheme: 'mailto',
                           path: 'esentakos@yahoo.gr',
                           queryParameters: {'subject': S.current.reportText},
                         );
-                        if (await canLaunchUrl(_emailLaunchUri)) {
-                          await launchUrl(_emailLaunchUri);
+                        if (await canLaunchUrl(emailLaunchUri)) {
+                          await launchUrl(emailLaunchUri);
                         } else {
-                          throw 'Could not launch $_emailLaunchUri';
+                          throw 'Could not launch $emailLaunchUri';
                         }
                       },
                       child: Text(

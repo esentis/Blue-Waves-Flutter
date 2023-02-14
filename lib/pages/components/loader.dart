@@ -6,12 +6,12 @@ import 'package:lottie/lottie.dart';
 
 class Loader extends StatelessWidget {
   const Loader({
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return ColoredBox(
       color: Colors.transparent,
       child: Transform.scale(
         scale: 0.5,

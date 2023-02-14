@@ -10,8 +10,8 @@ class BWTextField extends StatefulWidget {
     this.type,
     this.isPassword = false,
     this.obscureText,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final TextEditingController? controller;
   final String labelText;

@@ -15,7 +15,7 @@ import 'package:string_extensions/string_extensions.dart';
 
 class Login extends StatelessWidget {
   const Login({
-    Key? key,
+    super.key,
     required this.emailController,
     required this.passwordController,
     required this.usernameController,
@@ -23,7 +23,7 @@ class Login extends StatelessWidget {
     required this.auth,
     required this.onRegisterTap,
     this.registering = false,
-  }) : super(key: key);
+  });
   final TextEditingController usernameController;
   final TextEditingController emailController;
   final TextEditingController passwordController;

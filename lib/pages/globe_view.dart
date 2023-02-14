@@ -106,7 +106,7 @@ class _GlobeViewState extends State<GlobeView> {
 
     super.initState();
     _connectionStatus = _connStream.listen((ConnectivityResult result) {
-      log.i('Conn Status Changed :${result.toString()}');
+      log.i('Conn Status Changed :$result');
       if (result == ConnectivityResult.none) {
         showSnack(
           title: S.current.error,
@@ -383,7 +383,7 @@ class _GlobeViewState extends State<GlobeView> {
                       if (hasConn != null) {
                         if (c == ConnectivityResult.none || !hasConn!) {
                           return Positioned.fill(
-                            child: Container(
+                            child: ColoredBox(
                               color: kColorBlack.withOpacity(0.8),
                               child: Center(
                                 child: Text(

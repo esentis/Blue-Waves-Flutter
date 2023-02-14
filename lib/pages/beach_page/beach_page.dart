@@ -1,7 +1,6 @@
 // ignore_for_file: dead_code
 
 import 'dart:async';
-import 'dart:io';
 
 import 'package:animate_do/animate_do.dart';
 import 'package:blue_waves/api/api_service.dart';
@@ -22,7 +21,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:get/get.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:string_extensions/string_extensions.dart';
-import 'package:webview_flutter/webview_flutter.dart';
 
 class BeachPage extends StatefulWidget {
   const BeachPage({required this.beach});
@@ -82,7 +80,6 @@ class _BeachPageState extends State<BeachPage> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) WebView.platform = AndroidWebView();
 
     beachPlace = CameraPosition(
       target: LatLng(widget.beach.latitude, widget.beach.longitude),
@@ -349,10 +346,6 @@ class _BeachPageState extends State<BeachPage> {
                                           ? kColorBlueDark2.withOpacity(0.5)
                                           : kColorGreelLight2.withOpacity(0.9),
                                   centerTitle: true,
-                                ),
-                                body: WebView(
-                                  initialUrl:
-                                      widget.beach.descriptionSource.toString(),
                                 ),
                               ),
                             );

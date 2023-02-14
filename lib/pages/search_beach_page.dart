@@ -13,8 +13,8 @@ import 'package:string_extensions/string_extensions.dart';
 class SearchBeachPage extends StatefulWidget {
   const SearchBeachPage({
     required this.onSearchItemTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final Function(Beach) onSearchItemTap;
   @override

@@ -13,13 +13,13 @@ import 'package:get/get.dart';
 
 class AnimatedBackground extends StatefulWidget {
   const AnimatedBackground({
-    Key? key,
+    super.key,
     this.showTitle,
     this.showBack = false,
     this.waveHeight = WaveHeight.big,
     this.showBirds = true,
     this.showSun = true,
-  }) : super(key: key);
+  });
 
   final bool? showTitle;
   final bool showBack;

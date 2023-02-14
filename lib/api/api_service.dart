@@ -17,17 +17,16 @@ class Api {
 
   /// Returns all beaches.
   Future<List<Beach>> getAllBeaches() async {
-    PostgrestResponse<dynamic> response;
+    List<dynamic> response;
     try {
-      response =
-          await Supabase.instance.client.from('beaches').select().execute();
+      response = await Supabase.instance.client.from('beaches').select();
 
-      if (response.data == null || response.data.isEmpty) {
+      if (response.isEmpty) {
         return [];
       }
       return List<Beach>.generate(
-        response.data.length,
-        (index) => Beach.fromMap(response.data[index]),
+        response.length,
+        (index) => Beach.fromMap(response[index]),
       );
     } on DioError catch (e) {
       log.e(e.message);
@@ -39,11 +38,8 @@ class Api {
   Future<Beach?> getBeach({required String id}) async {
     PostgrestResponse<dynamic> response;
     try {
-      response = await Supabase.instance.client
-          .from('beaches')
-          .select()
-          .eq('id', id)
-          .execute();
+      response =
+          await Supabase.instance.client.from('beaches').select().eq('id', id);
 
       return Beach.fromMap(response.data['results']);
     } on DioError catch (e) {
@@ -56,14 +52,10 @@ class Api {
   Future<List<Beach>> searchBeach({required String name}) async {
     PostgrestResponse<dynamic> response;
     try {
-      response = await Supabase.instance.client
-          .from('beaches')
-          .select()
-          .like(
+      response = await Supabase.instance.client.from('beaches').select().like(
             'normalized_name',
             '%$name%',
-          )
-          .execute();
+          );
       log.wtf(
         response.data.length,
       );
@@ -80,7 +72,7 @@ class Api {
   }
 
   /// Registers the user in Firebase so as to Supabase.
-  Future<String> registerUser(Member user) async {
+  Future<String?> registerUser(Member user) async {
     final userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: user.email!,
@@ -92,7 +84,7 @@ class Api {
         'externalId': userCredential.user!.uid,
         'username': user.displayName,
         'email': user.email,
-      }).execute();
+      });
       return response.data['createdAt'];
     } on DioError catch (e) {
       log.e(e.message);
@@ -101,7 +93,7 @@ class Api {
   }
 
   /// Starts Google Auth registration.
-  Future<String> registerGoogleUser({
+  Future<String?> registerGoogleUser({
     required String id,
     required String displayName,
   }) async {
@@ -111,7 +103,7 @@ class Api {
         'externalId': id,
         'username': displayName,
         'email': displayName,
-      }).execute();
+      });
 
       log.wtf(response.data);
       return 'ok';
@@ -123,15 +115,14 @@ class Api {
 
   /// Check if the user is already registered.
   Future<bool> checkUser(String email) async {
-    PostgrestResponse<dynamic> response;
+    List<dynamic> response;
     try {
       response = await Supabase.instance.client
           .from('members')
           .select()
-          .eq('email', email)
-          .execute();
+          .eq('email', email);
 
-      if (response.data == null || response.data.isEmpty) {
+      if (response.isEmpty) {
         return false;
       }
       return true;
@@ -149,8 +140,7 @@ class Api {
           .from('ratings')
           .select()
           .eq('member', email)
-          .eq('beach', beachId)
-          .execute();
+          .eq('beach', beachId);
 
       if (response.data == null || response.data.isEmpty) {
         return true;
@@ -165,7 +155,7 @@ class Api {
   /// Adds a new rating for the Beach.
   ///
   /// [Rating] has required [beach] id, [rating] & [userMail].
-  Future<String> addRating(Rating rating) async {
+  Future<String?> addRating(Rating rating) async {
     PostgrestResponse<dynamic> response;
     if (await checkRating(rating.userMail, rating.beachId)) {
       try {
@@ -174,7 +164,7 @@ class Api {
           'member': rating.userMail,
           'rating': rating.rating,
           'review': rating.review,
-        }).execute();
+        });
         log.wtf(response.data);
         return response.data.first['created_at'];
       } on DioError catch (e) {
@@ -196,8 +186,7 @@ class Api {
           .from('favorites')
           .select()
           .eq('member', email)
-          .eq('beach', beachId)
-          .execute();
+          .eq('beach', beachId);
 
       if (response.data == null || response.data.isEmpty) {
         return true;
@@ -212,14 +201,14 @@ class Api {
   /// Adds a beach in favorites list.
   ///
   /// [Favorite] has required [beach] id & [userMail].
-  Future<String> addFavorite(Favorite favorite) async {
+  Future<String?> addFavorite(Favorite favorite) async {
     PostgrestResponse<dynamic> response;
     if (await checkFavorite(favorite.userMail, favorite.beachId)) {
       try {
         response = await Supabase.instance.client.from('favorites').insert({
           'beach': favorite.beachId,
           'member': favorite.userMail,
-        }).execute();
+        });
         log.wtf(response.data);
         return response.data.first['created_at'];
       } on DioError catch (e) {
@@ -241,8 +230,7 @@ class Api {
       response = await Supabase.instance.client
           .from('images')
           .select()
-          .eq('beach', id)
-          .execute();
+          .eq('beach', id);
 
       log.wtf(response.data);
       if (response.data == null || response.data.isEmpty) {

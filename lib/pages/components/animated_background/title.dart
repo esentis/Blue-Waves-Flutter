@@ -16,7 +16,7 @@ class BlueWavesTitle extends StatelessWidget {
           sigmaX: isBlurred ? 5 : 0,
           sigmaY: isBlurred ? 5 : 0,
         ),
-        child: Container(
+        child: ColoredBox(
           color: isBlurred ? Colors.black.withOpacity(0.2) : Colors.transparent,
           child: Padding(
             padding: EdgeInsets.symmetric(
