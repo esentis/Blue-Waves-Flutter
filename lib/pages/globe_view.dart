@@ -13,9 +13,6 @@ import 'package:blue_waves/pages/components/animated_background/sun_moon.dart';
 import 'package:blue_waves/pages/components/animated_background/title.dart';
 import 'package:blue_waves/pages/components/loader.dart';
 import 'package:blue_waves/pages/components/snack_bar.dart';
-import 'package:blue_waves/pages/edit_profile_page.dart';
-import 'package:blue_waves/pages/favorites_page.dart';
-import 'package:blue_waves/pages/rated_beaches.dart';
 import 'package:blue_waves/pages/register_login_page/auth_page.dart';
 import 'package:blue_waves/pages/search_beach_page.dart';
 import 'package:blue_waves/states/app_config.dart';
@@ -220,60 +217,6 @@ class _GlobeViewState extends State<GlobeView> {
                         S.current.coming_soon,
                         style: kStyleDefaultBold,
                       ),
-                    if (false)
-                      Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          TextButton(
-                            onPressed: () async {
-                              await Get.to(() => RatedBeaches());
-                            },
-                            style: ButtonStyle(
-                              padding: MaterialStateProperty.resolveWith(
-                                (states) => EdgeInsets.zero,
-                              ),
-                            ),
-                            child: Text(
-                              S.current.ratedBeaches,
-                              style: kStyleDefault.copyWith(
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              await Get.to(() => FavoritesPage());
-                            },
-                            style: ButtonStyle(
-                              padding: MaterialStateProperty.resolveWith(
-                                (states) => EdgeInsets.zero,
-                              ),
-                            ),
-                            child: Text(
-                              S.current.favoritedBeaches,
-                              style: kStyleDefault.copyWith(
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                          ),
-                          TextButton(
-                            onPressed: () async {
-                              await Get.to(() => EditProfilePage());
-                            },
-                            style: ButtonStyle(
-                              padding: MaterialStateProperty.resolveWith(
-                                (states) => EdgeInsets.zero,
-                              ),
-                            ),
-                            child: Text(
-                              S.current.editProfile,
-                              style: kStyleDefault.copyWith(
-                                fontSize: 15.sp,
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
                     Center(
                       child: Column(
                         children: [
@@ -395,7 +338,7 @@ class _GlobeViewState extends State<GlobeView> {
                           );
                         }
                       }
-                      final Completer<GoogleMapController> _controller =
+                      final Completer<GoogleMapController> mapCompleter =
                           Completer();
                       return SizedBox(
                         height: 1.sh,
@@ -422,7 +365,7 @@ class _GlobeViewState extends State<GlobeView> {
                             mapController = controller;
                             _manager.setMapId(controller.mapId);
                             mapController.setMapStyle(_mapStyle);
-                            _controller.complete(controller);
+                            mapCompleter.complete(controller);
                           },
                         ),
                       );
