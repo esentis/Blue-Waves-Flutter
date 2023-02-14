@@ -44,7 +44,6 @@ dependencies:
   google_maps_cluster_manager: ^3.0.0+1
   google_maps_flutter: ^2.0.6
   google_sign_in: ^5.0.5
-  image_picker: ^0.8.0+3
   intl: ^0.17.0
   lint: ^2.0.1
   logger: ^1.0.0
@@ -55,7 +54,6 @@ dependencies:
   sentry_flutter: ^6.0.0
   string_extensions: ^0.6.2
   supabase_flutter: ^1.0.1
-  url_launcher: ^6.0.2
   wave: ^0.2.0
 
 dev_dependencies:
