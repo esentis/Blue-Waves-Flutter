@@ -34,7 +34,7 @@ dependencies:
   firebase_remote_config: ^5.1.2
   flutter:
     sdk: flutter
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.0
   flutter_localizations:
     sdk: flutter
   flutter_rating_bar: ^4.0.1
